@@ -1,0 +1,83 @@
+\documentclass[utf8]{beamer}
+\usecolortheme{seagull}
+\usecolortheme{nicole}
+\useinnertheme{nicole}
+\useoutertheme{nicole}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercovered{dynamic}
+\usepackage{color}
+
+
+\AtBeginPart{\frame{\partpage}}
+
+\author{~}
+\title{Homomorphic Event Sourcing}
+\subtitle{~}
+\institute{~}
+\date{7./8. December 2017}
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[scaled=0.82]{beramono} % bitstream vera sans mono
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,backgrounds,mindmap}
+
+\usepackage{eso-pic}
+\makeatletter
+\AddToShipoutPicture{%
+\begin{tikzpicture}%
+% put: x (from left) , y (from bottom)
+\put(240,10){\includegraphics[width=4cm]{./logos/Nicole.png}}%
+\end{tikzpicture}%
+}
+\makeatother
+
+\definecolor[named]{keywords}{HTML}{005D35}
+\definecolor[named]{comments}{HTML}{808080}
+\definecolor[named]{identifiers}{HTML}{FF0000}
+\colorlet{blockbackground}{black!5}
+\setbeamercolor{blockbackground}{bg=blockbackground}
+\definecolor[named]{strings}{HTML}{0000FF}
+
+\usepackage[final]{listings}
+\usepackage{textcomp} % for upquote in listings
+
+% \include{progressbar}
+
+\lstset{
+	keywordstyle=,%\bfseries,%RoyalBlue
+	basicstyle=\footnotesize\ttfamily,
+	%identifierstyle=\color{identifiers},
+	commentstyle=\color{comments}\ttfamily\itshape,%Green
+	stringstyle=\color{strings},
+	%numbers=left,
+	%numberstyle=\scriptsize,%\tiny
+	%stepnumber=1,
+	%numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ffff,
+	frame=single,
+	tabsize=4,
+	backgroundcolor=\color{blockbackground},
+	rulecolor=\color{blockbackground},
+	inputencoding=latin1,
+	emphstyle=\color{red},
+	texcl=true,
+	numbersep=0pt,
+	upquote=true
+}
+
+\lstnewenvironment{highlight}[1]{\lstset{basicstyle=\footnotesize\ttfamily\alt<#1>{}{\color{\greyedout}}}}{}
+
+\begin{document}
+{
+	\usebackgroundtemplate{} % required, otherwise the tikzpicture does not get displayed
+	\begin{frame}[t,plain]
+		\titlepage
+	\end{frame}
+}
+\include{contents}
+\end{document}
+
