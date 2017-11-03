@@ -15,7 +15,7 @@ export type GameDescription =
     { gameDescId : GameId
     , descNumberOfHumans : number
     , descNumberOfRobots : number
-    , descRegisteredHumans : PlayerName
+    , descRegisteredHumans : PlayerName[]
     , descLive : boolean
     }
 

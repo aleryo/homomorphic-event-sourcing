@@ -1,5 +1,5 @@
 import React from "react";
-import {GameDescription, GameState, Props} from "./types";
+import {GameDescription, Props} from "./types";
 import {createGame, joinGame, setNumPlayers, setNumRobots} from "./actions";
 
 export default ({model, dispatch}: Props) => {
@@ -41,7 +41,7 @@ const displayPossibleGames = (desc : GameDescription) => {
                 <span className="numPlayers humans">{desc.descNumberOfHumans}</span>
                 <span className="numPlayers robots">{desc.descNumberOfRobots}</span>
                 <ul className="players-list">
-                    {}
+                    {desc.descRegisteredHumans.map(name => <li>{name}</li>)}
                 </ul>
                 {desc.descLive ? null : <button onClick={e => dispatch(joinGame(desc.gameDescId))}>Join</button>}
             </div>

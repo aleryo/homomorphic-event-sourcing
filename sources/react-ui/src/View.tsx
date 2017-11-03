@@ -6,6 +6,7 @@ import Messages from "./Messages";
 import PlayerInput from "./PlayerInput";
 import ViewGameResult from "./ViewGameResult";
 import {Props} from "./types";
+import ViewGamesList from './ViewGamesList';
 
 /*
 view : Model -> Html Msg
@@ -27,9 +28,9 @@ export default ({model} : Props) => <div>
     <ViewTitle model={model} />
     <DisplayErrors model={model} />
     <PlayerInput model={model} />
+    <ViewGamesList model={model} />
     {
         /*
-    <ViewGamesList model={model} />
     <GameBoard model={model} />
         */
     }
