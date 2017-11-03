@@ -8,3 +8,5 @@ slides.pdf
 *.toc
 *.vrb
 .idea
+sources/react-ui/dist
+sources/react-ui/node_modules
