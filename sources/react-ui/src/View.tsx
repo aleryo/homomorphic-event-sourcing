@@ -24,19 +24,20 @@ view model =
 
 
 
-export default ({model} : Props) => <div>
-    <ViewTitle model={model} />
-    <DisplayErrors model={model} />
-    <PlayerInput model={model} />
-    <ViewGamesList model={model} />
-    {
-        /*
-    <GameBoard model={model} />
-        */
-    }
-    <ViewGameResult model={model} />
-    <Messages model={model} />
-</div>
+export default ({model} : Props) =>
+    <div>
+        <ViewTitle model={model} />
+        <DisplayErrors model={model} />
+        <PlayerInput model={model} />
+        <ViewGamesList model={model} />
+        {
+            /*
+        <GameBoard model={model} />
+            */
+        }
+        <ViewGameResult model={model} />
+        <Messages model={model} />
+    </div>
 
 
 /*

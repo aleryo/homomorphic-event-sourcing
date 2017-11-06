@@ -14,6 +14,7 @@
     "test-watch": "node_modules/.bin/mocha --watch --compilers js:babel-core/register --recursive test"
   },
   "devDependencies": {
+    "@types/core-js": "0.9.43",
     "@types/ramda": "0.25.0",
     "@types/react": "16.0.19",
     "@types/react-dom": "16.0.2",
@@ -26,6 +27,7 @@
     "babel-register": "6.24.1",
     "css-loader": "0.28.7",
     "enzyme": "2.9.1",
+    "file-loader": "1.1.5",
     "html-webpack-plugin": "2.29.0",
     "isdev": "1.0.1",
     "jsdom": "11.1.0",

@@ -1,33 +1,33 @@
-import React from "react";
-import * as R from "ramda";
-import {Player, Props} from "./types";
-import {reset} from "./actions";
-
+import {Map} from "core-js";
+import React from 'react';
+import * as R from 'ramda';
+import {Player, Players, Props} from './types';
+import {reset} from './actions';
 
 
 export default ({model: {game}, dispatch}: Props) => {
-    switch(game.gameType){
-        case "EndOfGame":
+    switch (game.gameType) {
+        case 'EndOfGame':
             return displayPlayerResults(game.gameResult, dispatch);
-            // TODO     displayPlayerResults (Dict.values g.gameResult)
+        // TODO     displayPlayerResults (Dict.values g.gameResult)
 
     }
     return null;
 }
 
-const displayPlayerResults = (players: Player[], dispatch: any) => {
-    const winners = R.sortBy(R.prop('ownedCash'), players);
+const displayPlayerResults = (players: Players, dispatch: any) => {
+    const winners = R.sortBy(R.prop('ownedCash'), [...players.values()]);
     return <div id="game-result-background">
         <div id="game-result">
             <h1>Players' Score</h1>
             <button onClick={() => dispatch(reset())}>Reset</button>
-            { winners.map((winner:Player) => <DisplayPlayerResult player={winner}/>)}
+            {winners.map((winner: Player) => <DisplayPlayerResult player={winner}/>)}
         </div>
-    </div>
+    </div>;
 };
 
-const DisplayPlayerResult = ({player}: {player: Player}) => (
-    <div className={"player " + player.playerType}>
+const DisplayPlayerResult = ({player}: { player: Player }) => (
+    <div className={'player ' + player.playerType}>
         <span className="name">{player.playerName}</span>
         <span className="cash">{player.ownedCash}</span>
     </div>
