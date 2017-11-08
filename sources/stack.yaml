@@ -1,0 +1,8 @@
+flags: {}
+packages:
+  - 'acquire'
+  - 'server'
+extra-deps:
+  - unagi-chan-0.4.0.0
+  - MonadPrompt-1.0.0.5
+resolver: nightly-2017-10-13

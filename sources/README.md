@@ -11,3 +11,28 @@
 
 1. `npm start` (on Windows: `npm start-win`) -- launches the webpack-dev-server
 1. Go to [localhost:3000](http://localhost:3000) to access the frontend
+
+## Haskell Backend
+
+### Installation Instructions
+
+This assumes you have [stack](http://docs.haskellstack.org) installed on your system. Please follow instructions on the website for how to install stack.
+
+Build the code:
+
+```
+$ stack setup
+# might take a little while...
+# ...
+$ stack test
+```
+
+### Running the server
+
+To start an acquire HTTP server on port 9000:
+
+```
+$ stack exec server -- 9000 react-ui
+```
+
+**TBD**: Then point browser at `http://localhost:9000/index.html` to load the UI
