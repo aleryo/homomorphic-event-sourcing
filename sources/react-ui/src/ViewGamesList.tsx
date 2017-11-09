@@ -1,15 +1,17 @@
 import React from "react";
+import * as R from "ramda";
 import {GameDescription, Props} from "./types";
 import {createGame, joinGame, setNumPlayers, setNumRobots} from "./actions";
 
 export default ({model, dispatch}: Props) => {
+    const displayGames = R.partial(displayPossibleGames, [dispatch]);
     switch(model.game.gameType){
         case "SelectGame":
         return (
             <div id="games-list">
                 <CreateGame model={model} dispatch={dispatch} />
                 <ul>
-                    { model.game.games.map(displayPossibleGames) }
+                    { model.game.games.map(displayGames) }
                 </ul>
                 }
             </div>
@@ -30,9 +32,8 @@ const CreateGame = ({model, dispatch} : Props) => {
     return null;
 };
 
-const displayPossibleGames = (desc : GameDescription) => {
+const displayPossibleGames = (dispatch: any, desc : GameDescription) => {
     let isLive = desc.descLive ? "live" : "";
-    let dispatch = (arg: any) => {}; // FIXME
 
     return (
         <li>

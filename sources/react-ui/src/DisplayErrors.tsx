@@ -1,9 +1,11 @@
-import React from "react";
-import {Props} from "./types";
+import React from 'react';
+import {Props} from './types';
 
-export default ({model: {errors}}: Props) => <div id="errors">
-    { errors.map(error => <div className="error">{error}</div>) }
-</div>
+export default ({model: {errors}}: Props) => (
+    <div id="errors">
+        {errors.map(error => <div className="error">{error}</div>)}
+    </div>
+)
 
 
 /*

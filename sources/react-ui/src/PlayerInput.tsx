@@ -10,7 +10,6 @@ export default ({model: {game}, dispatch}: Props) => {
             <span>Player Name</span>
             <input id="player-name" value={game.player.playerName} onInput={e => dispatch(setName(e.currentTarget.value))}/>
             <button onClick={() => dispatch(registerPlayer())}>Register</button>
-
         </div>
     }
     return null;

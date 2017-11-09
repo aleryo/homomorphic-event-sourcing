@@ -10,14 +10,12 @@ export default ({model: {game}, dispatch}: Props) => {
     switch (game.gameType) {
         case 'EndOfGame':
             return displayPlayerResults(game.gameResult, dispatch);
-        // TODO     displayPlayerResults (Dict.values g.gameResult)
-
     }
     return null;
 }
 
 const displayPlayerResults = (players: Players, dispatch: any) => {
-    const winners = R.sortBy(R.prop('ownedCash'), [...players.values()]);
+    const winners = R.sortBy(R.prop('ownedCash'), players.values());
     return <div id="game-result-background">
         <div id="game-result">
             <h1>Players' Score</h1>

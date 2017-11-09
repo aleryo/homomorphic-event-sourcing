@@ -4,11 +4,14 @@ import {GameState, Props} from "./types";
 
 function subtitleFor(game: GameState) {
     switch(game.gameType) {
+        case "Register":
+        case "SelectGame":
+            return game.player.playerName;
         case "PlayGame":
         case "EndOfGame":
             return game.player.playerName + "@" + game.gameId;
     }
-    return game.player.playerName;
+    return "ERROR: Unhandled game type in ViewTitle";
 }
 
 

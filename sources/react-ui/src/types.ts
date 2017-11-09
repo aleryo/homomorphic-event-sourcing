@@ -133,12 +133,6 @@ export type GameDescription =
         , descLive: boolean
     }
 
-/*
-export type GameState = { gameType: "Register", player: Player }
-| { gameType: "SelectGame", player: Player, games: GameDescription[], numPlayers: number, numRobots: number }
-| { gameType: "PlayGame", player: Player, gameId: GameId }
-| { gameType: "EndOfGame", player: Player, gameId: GameId, gameResult: any }
-*/
 
 export type GameState
     = { gameType: 'Register', player: Player }
