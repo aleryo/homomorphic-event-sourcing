@@ -158,7 +158,7 @@ export type Domain = { host: string, port: string }
 export interface Model {
     strings: string[]
     ,
-    showMessages: boolean
+    displayMessages: boolean
     ,
     errors: string[]
     ,

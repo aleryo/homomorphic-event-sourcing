@@ -1,12 +1,12 @@
 import React from "react";
 import {Props} from "./types";
-import {displayMessages, hideMessages} from "./actions";
+import {showMessages, hideMessages} from "./actions";
 
-export default ({model: {showMessages, strings}, dispatch}: Props) => {
-    const toggle = showMessages
+export default ({model: {displayMessages, strings}, dispatch}: Props) => {
+    const toggle = displayMessages
         ? <span className="fa fa-toggle-down" onClick={() => dispatch(hideMessages())}/>
-        : <span className="fa fa-toggle-right" onClick={() => dispatch(displayMessages())}/>;
-    const messages = showMessages
+        : <span className="fa fa-toggle-right" onClick={() => dispatch(showMessages())}/>;
+    const messages = displayMessages
         ? <div id="messages-content" style={{height: "10em"}}>
             <ul>
                 {strings.map(str => <ShowMessage text={str}/>)}

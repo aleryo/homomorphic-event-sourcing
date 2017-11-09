@@ -1,51 +1,72 @@
 import {GameId, Tile} from './types';
 
 
-export function setNumPlayers(num : string){
+export type Action
+    = { kind: 'Output', output: string }
+    | { kind: 'UseKey', key: string }
+    | { kind: 'SetName', name: string }
+    | { kind: 'RegisterPlayer' }
+    | { kind: 'ListGames' }
+    | { kind: 'Join', gameDescId: GameId }
+    | { kind: 'CreateGame' }
+    | { kind: 'Play', move: number }
+    | { kind: 'SetNumPlayers', num: string }
+    | { kind: 'SetNumRobots', num: string }
+    | { kind: 'ShowMessages' }
+    | { kind: 'HideMessages' }
+    | { kind: 'HighlightCell', tile: Tile }
+    | { kind: 'UnhighlightCell' }
+    | { kind: 'Reset' }
 
+// Output
+// UseKey
+
+export function setName(name: string): Action {
+    return {kind: 'SetName', name};
 }
 
-export function setNumRobots(num : string){
-
+export function registerPlayer(): Action {
+    return {kind: 'RegisterPlayer'};
 }
 
+// ListGames
 
-export function createGame(){
-
+export function joinGame(gameDescId: GameId): Action {
+    return {kind: 'Join', gameDescId};
 }
 
-export function reset(){
-
+export function createGame(): Action {
+    return {kind: 'CreateGame'};
 }
 
-export function setName(name : string){
-
+export function play(move: number): Action {
+    return {kind: 'Play', move};
 }
 
-export function registerPlayer(){
-
+export function setNumPlayers(num: string): Action {
+    return {kind: 'SetNumPlayers', num};
 }
 
-export function displayMessages(){
-
+export function setNumRobots(num: string): Action {
+    return {kind: 'SetNumRobots', num};
 }
 
-export function hideMessages(){
-
+export function showMessages(): Action {
+    return {kind: 'ShowMessages'};
 }
 
-export function joinGame(gameDescId: GameId) {
-
+export function hideMessages(): Action {
+    return {kind: 'HideMessages'};
 }
 
-export function play(num: number){
-
+export function highlightCell(tile: Tile): Action {
+    return {kind: 'HighlightCell', tile};
 }
 
-export function highlightCell(tile: Tile){
-
+export function unhighlightCell(): Action {
+    return {kind: 'UnhighlightCell'};
 }
 
-export function unhighlightCell(){
-
+export function reset(): Action {
+    return {kind: 'Reset'};
 }
