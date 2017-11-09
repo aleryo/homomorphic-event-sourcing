@@ -7,6 +7,7 @@ import PlayerInput from "./PlayerInput";
 import ViewGameResult from "./ViewGameResult";
 import {Props} from "./types";
 import ViewGamesList from './ViewGamesList';
+import GameBoard from './GameBoard';
 
 /*
 view : Model -> Html Msg
@@ -30,11 +31,7 @@ export default ({model} : Props) =>
         <DisplayErrors model={model} />
         <PlayerInput model={model} />
         <ViewGamesList model={model} />
-        {
-            /*
         <GameBoard model={model} />
-            */
-        }
         <ViewGameResult model={model} />
         <Messages model={model} />
     </div>

@@ -12,11 +12,16 @@ export class SimpleMap<K,V>{
     values(){
         return R.pluck('value')(this.elems);
     }
+
+    // FIXME! Exposes internals of Dict
+    toList(){
+        return this.elems;
+    }
 }
 
 export type Tile = { label: string, value: number }
 
-export type ChainName = String
+export type ChainName = string
 
 export type Content
     = { kind: 'Empty' }
