@@ -1,4 +1,18 @@
-import {Map} from "core-js";
+//import {Map} from "core-js";
+
+import * as R from 'ramda';
+
+export class SimpleMap<K,V>{
+    elems: {key:K, value:V}[];
+
+    constructor(){
+        this.elems = [];
+    }
+
+    values(){
+        return R.pluck('value')(this.elems);
+    }
+}
 
 export type Tile = { label: string, value: number }
 
@@ -16,7 +30,7 @@ export interface Cell {
     cellContent: Content
 }
 
-export type Stock = Map<ChainName, number>
+export type Stock = SimpleMap<ChainName, number>
 //    Dict.Dict ChainName Int
 
 export type PlayerName = string
@@ -38,7 +52,7 @@ export interface Player {
     ownedCash: number
 }
 
-export type Players = Map<PlayerName, Player>;
+export type Players = SimpleMap<PlayerName, Player>;
 //    Dict.Dict PlayerName Player
 
 
@@ -54,7 +68,7 @@ export interface HotelChain {
 }
 
 
-export type HotelChains = Map<ChainName, HotelChain>;
+export type HotelChains = SimpleMap<ChainName, HotelChain>;
 //    Dict.Dict ChainName HotelChain
 
 
@@ -99,8 +113,7 @@ export type Order
 
 export type GameId = string
 
-export type GameBoard = Map<Tile, Cell>
-
+export type GameBoard = SimpleMap<Tile, Cell>
 //    Dict.Dict Tile Cell
 
 export interface Game {
@@ -141,7 +154,7 @@ export type GameState
     | { gameType: 'EndOfGame', player: Player, gameId: GameId, board: GameBoard, gameResult: Players }
 
 
-export type Domain = { h: string, p: string } // FIXME names!
+export type Domain = { host: string, port: string }
 
 export interface Model {
     strings: string[]

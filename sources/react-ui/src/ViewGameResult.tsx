@@ -1,4 +1,5 @@
-import {Map} from "core-js";
+//import {Map} from "core-js";
+
 import React from 'react';
 import * as R from 'ramda';
 import {Player, Players, Props} from './types';
