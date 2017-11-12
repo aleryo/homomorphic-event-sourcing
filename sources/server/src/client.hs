@@ -14,9 +14,10 @@ import qualified Data.Text           as T
 import qualified Data.Text.IO        as T
 import           Network.Socket      (withSocketsDo)
 import qualified Network.WebSockets  as WS
+import           System.Environment  (getArgs)
 import           System.IO
-
 --------------------------------------------------------------------------------
+
 app :: WS.ClientApp ()
 app conn = do
     putStrLn "Connected!"
@@ -38,6 +39,7 @@ app conn = do
 --------------------------------------------------------------------------------
 main :: IO ()
 main = do
+  [ port ] <- getArgs
   hSetBuffering stdout LineBuffering
   hSetBuffering stderr LineBuffering
-  withSocketsDo $ WS.runClient "localhost" 9090 "/" app
+  withSocketsDo $ WS.runClient "localhost" (read port) "/" app
