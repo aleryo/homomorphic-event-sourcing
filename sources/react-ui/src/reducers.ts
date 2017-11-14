@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {ChainName, GameState, Model, Player, PlayerType, SimpleMap} from './types';
+import {ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d: Data, a: Action) => Data;
@@ -35,7 +35,9 @@ export const INITIAL_STATE: Model =
     };
 
 
-const strings = createReducer(INITIAL_STATE.strings, {});
+const strings = createReducer(INITIAL_STATE.strings, {
+    ['Reset']: (data: Messages, action: Action) => []
+});
 
 const displayMessages = createReducer(INITIAL_STATE.displayMessages, {
     ['ShowMessages']: (data: boolean, action: Action) => true,
@@ -80,29 +82,88 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
             switch (action.type) {
                 case 'SetNumPlayers': {
                     const number: number = parseInt(action.num, 10);
-                    if(isNaN(number)){
+                    if (isNaN(number)) {
                         return game;
                     }
 //                    return Object.assign({}, game, {numPlayers: number});
-                    return { type: game.type, player: game.player, games: game.games, numPlayers: number, numRobots: game.numRobots };
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        games: game.games,
+                        numPlayers: number,
+                        numRobots: game.numRobots
+                    };
                 }
                 case 'SetNumRobots': {
                     const number: number = parseInt(action.num, 10);
-                    if(isNaN(number)){
+                    if (isNaN(number)) {
                         return game;
                     }
-                    return { type: game.type, player: game.player, games: game.games, numPlayers: game.numPlayers, numRobots: number };
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        games: game.games,
+                        numPlayers: game.numPlayers,
+                        numRobots: number
+                    };
                 }
                 case 'CreateGame':
                     // TODO send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
+                    return game;
+                case 'ListGames':
+                    // TODO send to backend: sendCommand model List
+                    return game;
+                case 'Join':
+                    // TODO send to backend: sendCommand model (JoinGame { playerName = sg.player.playerName, gameId = g })
                     return game;
             }
             return game;
 
         case 'PlayGame':
+            switch (action.type) {
+                case 'Play':
+                    // TODO send to backend: sendCommand model (Action { selectedPlay = n })
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        gameId: game.gameId,
+                        board: game.board,
+                        possiblePlays: [],
+                        highlightedCell: game.highlightedCell
+                    };
+                case 'HighlightCell':
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        gameId: game.gameId,
+                        board: game.board,
+                        possiblePlays: game.possiblePlays,
+                        highlightedCell: action.tile
+                    };
+                case 'UnhighlightCell':
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        gameId: game.gameId,
+                        board: game.board,
+                        possiblePlays: game.possiblePlays,
+                        highlightedCell: null
+                    };
+            }
             return game;
 
         case 'EndOfGame':
+            switch (action.type) {
+                case 'Reset':
+                    // TODO send to backend: sendCommand model List
+                    return {
+                        type: 'SelectGame',
+                        player: game.player,
+                        games: [],
+                        numPlayers: 1,
+                        numRobots: 5
+                    };
+            }
             return game;
     }
     return game;
