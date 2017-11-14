@@ -140,17 +140,17 @@ export type GameDescription =
 
 
 export type GameState
-    = { gameType: 'Register', player: Player }
-    | { gameType: 'SelectGame', player: Player, games: GameDescription[], numPlayers: number, numRobots: number }
+    = { type: 'Register', player: Player }
+    | { type: 'SelectGame', player: Player, games: GameDescription[], numPlayers: number, numRobots: number }
     | {
-    gameType: 'PlayGame'
+    type: 'PlayGame'
     , player: Player
     , gameId: GameId
     , board: GameBoard
     , possiblePlays: Order[]
     , highlightedCell?: Tile
 }
-    | { gameType: 'EndOfGame', player: Player, gameId: GameId, board: GameBoard, gameResult: Players }
+    | { type: 'EndOfGame', player: Player, gameId: GameId, board: GameBoard, gameResult: Players }
 
 
 export type Domain = { host: string, port: string }

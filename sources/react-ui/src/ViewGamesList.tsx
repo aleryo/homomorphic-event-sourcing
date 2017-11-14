@@ -5,7 +5,7 @@ import {createGame, joinGame, setNumPlayers, setNumRobots} from "./actions";
 
 export default ({model, dispatch}: Props) => {
     const displayGames = R.partial(displayPossibleGames, [dispatch]);
-    switch(model.game.gameType){
+    switch(model.game.type){
         case "SelectGame":
         return (
             <div id="games-list">
@@ -21,7 +21,7 @@ export default ({model, dispatch}: Props) => {
 }
 
 const CreateGame = ({model, dispatch} : Props) => {
-    switch (model.game.gameType) {
+    switch (model.game.type) {
         case "SelectGame":
             return <div id="create-game">
                 <input type="number" onInput={e => dispatch(setNumPlayers(e.currentTarget.value))} min="0" max="6" value={model.game.numPlayers} />

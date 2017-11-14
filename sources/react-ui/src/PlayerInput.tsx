@@ -5,7 +5,7 @@ import {registerPlayer, setName} from "./actions";
 
 
 export default ({model: {game}, dispatch}: Props) => {
-    switch(game.gameType){
+    switch(game.type){
         case "Register": return <div id="player-id">
             <span>Player Name</span>
             <input id="player-name" value={game.player.playerName} onInput={e => dispatch(setName(e.currentTarget.value))}/>

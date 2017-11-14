@@ -7,7 +7,7 @@ import {reset} from './actions';
 
 
 export default ({model: {game}, dispatch}: Props) => {
-    switch (game.gameType) {
+    switch (game.type) {
         case 'EndOfGame':
             return displayPlayerResults(game.gameResult, dispatch);
     }

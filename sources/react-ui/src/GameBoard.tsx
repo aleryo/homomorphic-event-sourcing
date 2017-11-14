@@ -5,7 +5,7 @@ import {Cell, ChainName, Order, Props, Tile} from './types';
 import {highlightCell, play, unhighlightCell} from './actions';
 
 export default ({model: {game}}: Props) => {
-    switch (game.gameType) {
+    switch (game.type) {
         case 'PlayGame':
             const displayHighlightedCell = R.partialRight(displayCell, [game.highlightedCell]);
             return <div id="game-board">

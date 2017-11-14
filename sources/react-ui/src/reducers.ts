@@ -31,7 +31,7 @@ export const INITIAL_STATE: Model =
         , errors: ['An error!', 'And another!']
         , domain: {host: '0', port: '0'}
         , wsServerUrl: ''
-        , game: {gameType: 'Register', player: INITIAL_PLAYER}
+        , game: {type: 'Register', player: INITIAL_PLAYER}
     };
 
 

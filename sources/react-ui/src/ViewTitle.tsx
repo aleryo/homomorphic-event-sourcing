@@ -3,7 +3,7 @@ import {GameState, Props} from "./types";
 
 
 function subtitleFor(game: GameState) {
-    switch(game.gameType) {
+    switch(game.type) {
         case "Register":
         case "SelectGame":
             return game.player.playerName;
