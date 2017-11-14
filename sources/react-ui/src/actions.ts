@@ -18,6 +18,8 @@ export type Action
     | { type: 'UnhighlightCell' } // TODO
     | { type: 'Reset' } // TODO
 
+    | { type: 'InitialAction' }
+
 // Output
 // UseKey
 

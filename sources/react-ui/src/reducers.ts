@@ -10,7 +10,7 @@ interface Handlers<Data> {
 }
 
 function createReducer<Data>(initialState : Data, handlers : Handlers<Data>) : Handler<Data> {
-    return (state = initialState, action : Action) =>
+    return (state : Data = initialState, action : Action = { type: 'InitialAction' }) =>
         handlers.hasOwnProperty(action.type) ?
             handlers[action.type](state, action) :
             state
