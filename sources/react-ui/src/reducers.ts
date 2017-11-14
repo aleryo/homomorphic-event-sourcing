@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {ChainName, Game, GameState, Model, PlayerType, SimpleMap, Stock} from './types';
+import {ChainName, Game, GameState, Model, Player, PlayerType, SimpleMap, Stock} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d:Data, a:Action) => Data;
@@ -56,7 +56,25 @@ function isEmpty(str?: string) {
     return (!str || !str.trim());
 }
 
+const player = (name: string) : Player => ({
+    playerName: name,
+    playerType: PlayerType.Human,
+    tiles: [],
+    ownedStock: new SimpleMap<ChainName,number>(),
+    ownedCash: 6000
+});
+
 const game = createReducer(INITIAL_STATE.game, {
+    ['SetName']: (game:GameState, action:Action) => {
+        switch(game.type) {
+            case 'Register':
+                switch (action.type) { // FIXME: stupid hack to work around untyped action
+                    case 'SetName':
+                        return { type: 'Register', player: player(action.name) };
+                }
+        }
+        return game;
+    },
     ['RegisterPlayer']: (game:GameState, action:Action) => {
         switch (game.type){
             case 'Register':
