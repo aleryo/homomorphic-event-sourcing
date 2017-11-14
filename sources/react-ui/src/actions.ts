@@ -1,11 +1,10 @@
 import {GameId, Tile} from './types';
 
-''
 export type Action
     = { type: 'Output', output: string } // TODO
     | { type: 'UseKey', key: string } // TODO
     | { type: 'SetName', name: string } // TODO
-    | { type: 'RegisterPlayer' } // TODO
+    | { type: 'RegisterPlayer' }
     | { type: 'ListGames' } // TODO
     | { type: 'Join', gameDescId: GameId } // TODO
     | { type: 'CreateGame' } // TODO

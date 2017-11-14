@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {ChainName, Model, PlayerType, SimpleMap, Stock} from './types';
+import {ChainName, Game, GameState, Model, PlayerType, SimpleMap, Stock} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d:Data, a:Action) => Data;
@@ -52,7 +52,22 @@ const domain = createReducer(INITIAL_STATE.domain, {
 const wsServerUrl = createReducer(INITIAL_STATE.wsServerUrl, {
 });
 
+function isEmpty(str?: string) {
+    return (!str || !str.trim());
+}
+
 const game = createReducer(INITIAL_STATE.game, {
+    ['RegisterPlayer']: (game:GameState, action:Action) => {
+        switch (game.type){
+            case 'Register':
+                if (!isEmpty(game.player.playerName)) {
+                    // TODO send to backend
+                    return {type: 'SelectGame', player: game.player, games: [], numPlayers: 1, numRobots: 5};
+                }
+                break;
+        }
+        return game;
+    }
 });
 
 export default combineReducers({
