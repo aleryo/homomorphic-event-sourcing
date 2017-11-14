@@ -8,7 +8,7 @@ export default ({model: {game}, dispatch}: Props) => {
     switch(game.type){
         case "Register": return <div id="player-id">
             <span>Player Name</span>
-            <input id="player-name" value={game.player.playerName} onInput={e => dispatch(setName(e.currentTarget.value))}/>
+            <input id="player-name" value={game.player.playerName} onChange={e => dispatch(setName(e.currentTarget.value))}/>
             <button onClick={() => dispatch(registerPlayer())}>Register</button>
         </div>
     }

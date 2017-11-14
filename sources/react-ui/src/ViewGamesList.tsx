@@ -13,7 +13,6 @@ export default ({model, dispatch}: Props) => {
                 <ul>
                     { model.game.games.map(displayGames) }
                 </ul>
-                }
             </div>
         );
     }
@@ -26,7 +25,7 @@ const CreateGame = ({model, dispatch} : Props) => {
             return <div id="create-game">
                 <input type="number" onInput={e => dispatch(setNumPlayers(e.currentTarget.value))} min="0" max="6" value={model.game.numPlayers} />
                 <input type="number" onInput={e => dispatch(setNumRobots(e.currentTarget.value))} min="0" max="6" value={model.game.numRobots} />
-                <button onClick={() => dispatch(createGame())}></button>
+                <button onClick={() => dispatch(createGame())}>New GameState</button>
             </div>
     }
     return null;
