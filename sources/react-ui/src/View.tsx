@@ -27,8 +27,8 @@ view model =
 
 
 
-export const ViewComponent = ({model, dispatch} : Props) =>
-    <div>
+export const ViewComponent = ({model, dispatch} : Props) => {
+    return <div>
         <ViewTitle model={model} dispatch={dispatch} />
         <DisplayErrors model={model} dispatch={dispatch} />
         <PlayerInput model={model} dispatch={dispatch} />
@@ -37,8 +37,9 @@ export const ViewComponent = ({model, dispatch} : Props) =>
         <ViewGameResult model={model} dispatch={dispatch} />
         <Messages model={model} dispatch={dispatch} />
     </div>;
+}
 
-export default connect((state:Model) => state)(ViewComponent);
+export default connect((state:Model) => ({ model: state }))(ViewComponent);
 
 /*
 module View exposing (view)

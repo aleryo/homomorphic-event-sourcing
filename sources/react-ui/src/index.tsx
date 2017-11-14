@@ -7,7 +7,6 @@ import logger from "redux-logger";
 import reducers from "./reducers";
 
 import View from "./View";
-import {INITIAL_STATE} from "./reducers";
 
 
 const store = createStore(reducers,
@@ -18,7 +17,7 @@ const store = createStore(reducers,
 
 ReactDOM.render(
     <Provider store={store}>
-        <View model={INITIAL_STATE} />
+        <View />
     </Provider>
   , document.getElementById("start")
 );
