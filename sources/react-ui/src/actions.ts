@@ -2,71 +2,71 @@ import {GameId, Tile} from './types';
 
 ''
 export type Action
-    = { kind: 'Output', output: string } // TODO
-    | { kind: 'UseKey', key: string } // TODO
-    | { kind: 'SetName', name: string } // TODO
-    | { kind: 'RegisterPlayer' } // TODO
-    | { kind: 'ListGames' } // TODO
-    | { kind: 'Join', gameDescId: GameId } // TODO
-    | { kind: 'CreateGame' } // TODO
-    | { kind: 'Play', move: number } // TODO
-    | { kind: 'SetNumPlayers', num: string } // TODO
-    | { kind: 'SetNumRobots', num: string } // TODO
-    | { kind: 'ShowMessages' }
-    | { kind: 'HideMessages' }
-    | { kind: 'HighlightCell', tile: Tile } // TODO
-    | { kind: 'UnhighlightCell' } // TODO
-    | { kind: 'Reset' } // TODO
+    = { type: 'Output', output: string } // TODO
+    | { type: 'UseKey', key: string } // TODO
+    | { type: 'SetName', name: string } // TODO
+    | { type: 'RegisterPlayer' } // TODO
+    | { type: 'ListGames' } // TODO
+    | { type: 'Join', gameDescId: GameId } // TODO
+    | { type: 'CreateGame' } // TODO
+    | { type: 'Play', move: number } // TODO
+    | { type: 'SetNumPlayers', num: string } // TODO
+    | { type: 'SetNumRobots', num: string } // TODO
+    | { type: 'ShowMessages' }
+    | { type: 'HideMessages' }
+    | { type: 'HighlightCell', tile: Tile } // TODO
+    | { type: 'UnhighlightCell' } // TODO
+    | { type: 'Reset' } // TODO
 
 // Output
 // UseKey
 
 export function setName(name: string): Action {
-    return {kind: 'SetName', name};
+    return {type: 'SetName', name};
 }
 
 export function registerPlayer(): Action {
-    return {kind: 'RegisterPlayer'};
+    return {type: 'RegisterPlayer'};
 }
 
 // ListGames
 
 export function joinGame(gameDescId: GameId): Action {
-    return {kind: 'Join', gameDescId};
+    return {type: 'Join', gameDescId};
 }
 
 export function createGame(): Action {
-    return {kind: 'CreateGame'};
+    return {type: 'CreateGame'};
 }
 
 export function play(move: number): Action {
-    return {kind: 'Play', move};
+    return {type: 'Play', move};
 }
 
 export function setNumPlayers(num: string): Action {
-    return {kind: 'SetNumPlayers', num};
+    return {type: 'SetNumPlayers', num};
 }
 
 export function setNumRobots(num: string): Action {
-    return {kind: 'SetNumRobots', num};
+    return {type: 'SetNumRobots', num};
 }
 
 export function showMessages(): Action {
-    return {kind: 'ShowMessages'};
+    return {type: 'ShowMessages'};
 }
 
 export function hideMessages(): Action {
-    return {kind: 'HideMessages'};
+    return {type: 'HideMessages'};
 }
 
 export function highlightCell(tile: Tile): Action {
-    return {kind: 'HighlightCell', tile};
+    return {type: 'HighlightCell', tile};
 }
 
 export function unhighlightCell(): Action {
-    return {kind: 'UnhighlightCell'};
+    return {type: 'UnhighlightCell'};
 }
 
 export function reset(): Action {
-    return {kind: 'Reset'};
+    return {type: 'Reset'};
 }
