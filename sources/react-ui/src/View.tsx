@@ -5,9 +5,11 @@ import DisplayErrors from "./DisplayErrors";
 import Messages from "./Messages";
 import PlayerInput from "./PlayerInput";
 import ViewGameResult from "./ViewGameResult";
-import {Props} from "./types";
+import {Model, Props} from './types';
 import ViewGamesList from './ViewGamesList';
 import GameBoard from './GameBoard';
+
+import { connect } from "react-redux";
 
 /*
 view : Model -> Html Msg
@@ -25,17 +27,18 @@ view model =
 
 
 
-export default ({model} : Props) =>
+export const AppComponent = ({model, dispatch} : Props) =>
     <div>
-        <ViewTitle model={model} />
-        <DisplayErrors model={model} />
-        <PlayerInput model={model} />
-        <ViewGamesList model={model} />
-        <GameBoard model={model} />
-        <ViewGameResult model={model} />
-        <Messages model={model} />
+        <ViewTitle model={model} dispatch={dispatch} />
+        <DisplayErrors model={model} dispatch={dispatch} />
+        <PlayerInput model={model} dispatch={dispatch} />
+        <ViewGamesList model={model} dispatch={dispatch} />
+        <GameBoard model={model} dispatch={dispatch} />
+        <ViewGameResult model={model} dispatch={dispatch} />
+        <Messages model={model} dispatch={dispatch} />
     </div>
 
+export default connect((state:Model) => state)(AppComponent);
 
 /*
 module View exposing (view)
