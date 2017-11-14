@@ -78,6 +78,21 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
 
         case 'SelectGame':
             switch (action.type) {
+                case 'SetNumPlayers': {
+                    const number: number = parseInt(action.num, 10);
+                    if(isNaN(number)){
+                        return game;
+                    }
+//                    return Object.assign({}, game, {numPlayers: number});
+                    return { type: game.type, player: game.player, games: game.games, numPlayers: number, numRobots: game.numRobots };
+                }
+                case 'SetNumRobots': {
+                    const number: number = parseInt(action.num, 10);
+                    if(isNaN(number)){
+                        return game;
+                    }
+                    return { type: game.type, player: game.player, games: game.games, numPlayers: game.numPlayers, numRobots: number };
+                }
                 case 'CreateGame':
                     // TODO send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
                     return game;
