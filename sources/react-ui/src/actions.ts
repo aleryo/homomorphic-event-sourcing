@@ -1,22 +1,22 @@
 import {GameId, Tile} from './types';
 
-
+''
 export type Action
-    = { kind: 'Output', output: string }
-    | { kind: 'UseKey', key: string }
-    | { kind: 'SetName', name: string }
-    | { kind: 'RegisterPlayer' }
-    | { kind: 'ListGames' }
-    | { kind: 'Join', gameDescId: GameId }
-    | { kind: 'CreateGame' }
-    | { kind: 'Play', move: number }
-    | { kind: 'SetNumPlayers', num: string }
-    | { kind: 'SetNumRobots', num: string }
+    = { kind: 'Output', output: string } // TODO
+    | { kind: 'UseKey', key: string } // TODO
+    | { kind: 'SetName', name: string } // TODO
+    | { kind: 'RegisterPlayer' } // TODO
+    | { kind: 'ListGames' } // TODO
+    | { kind: 'Join', gameDescId: GameId } // TODO
+    | { kind: 'CreateGame' } // TODO
+    | { kind: 'Play', move: number } // TODO
+    | { kind: 'SetNumPlayers', num: string } // TODO
+    | { kind: 'SetNumRobots', num: string } // TODO
     | { kind: 'ShowMessages' }
     | { kind: 'HideMessages' }
-    | { kind: 'HighlightCell', tile: Tile }
-    | { kind: 'UnhighlightCell' }
-    | { kind: 'Reset' }
+    | { kind: 'HighlightCell', tile: Tile } // TODO
+    | { kind: 'UnhighlightCell' } // TODO
+    | { kind: 'Reset' } // TODO
 
 // Output
 // UseKey

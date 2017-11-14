@@ -1,5 +1,20 @@
+import {combineReducers} from 'redux';
 
 import {ChainName, Model, PlayerType, SimpleMap, Stock} from './types';
+import {Action} from './actions';
+
+type Handler<Data> = (d:Data, a:Action) => Data;
+
+interface Handlers<Data> {
+    [key:string] : Handler<Data>;
+}
+
+function createReducer<Data>(initialState : Data, handlers : Handlers<Data>) : Handler<Data> {
+    return (state = initialState, action : Action) =>
+        handlers.hasOwnProperty(action.kind) ?
+            handlers[action.kind](state, action) :
+            state
+}
 
 const INITIAL_PLAYER = {
     playerName: 'Fred',
@@ -18,3 +33,33 @@ export const INITIAL_STATE: Model =
         , wsServerUrl: ''
         , game: {gameType: 'Register', player: INITIAL_PLAYER}
     };
+
+
+const strings = createReducer(INITIAL_STATE.strings, {
+});
+
+const displayMessages = createReducer(INITIAL_STATE.displayMessages, {
+    ['ShowMessages']: (data:boolean, action:Action) => true,
+    ['HideMessages']: (data:boolean, action:Action) => false
+});
+
+const errors = createReducer(INITIAL_STATE.errors, {
+});
+
+const domain = createReducer(INITIAL_STATE.domain, {
+});
+
+const wsServerUrl = createReducer(INITIAL_STATE.wsServerUrl, {
+});
+
+const game = createReducer(INITIAL_STATE.game, {
+});
+
+export default combineReducers({
+    strings,
+    displayMessages,
+    errors,
+    domain,
+    wsServerUrl,
+    game
+});
