@@ -79,10 +79,18 @@ const game = createReducer(INITIAL_STATE.game, {
         switch (game.type){
             case 'Register':
                 if (!isEmpty(game.player.playerName)) {
-                    // TODO send to backend
+                    // TODO send to backend: sendCommand model List
                     return {type: 'SelectGame', player: game.player, games: [], numPlayers: 1, numRobots: 5};
                 }
                 break;
+        }
+        return game;
+    },
+    ['CreateGame']: (game:GameState, action:Action) => {
+        switch(game.type) {
+            case 'SelectGame':
+                // TODO send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
+                return game;
         }
         return game;
     }
