@@ -155,16 +155,20 @@ export type GameState
 
 export type Domain = { host: string, port: string }
 
+export type Messages = string[];
+export type Errors = string[];
+export type URL = string;
+
 export interface Model {
-    strings: string[]
+    strings: Messages
     ,
     displayMessages: boolean
     ,
-    errors: string[]
+    errors: Errors
     ,
     domain: Domain
     ,
-    wsServerUrl: string
+    wsServerUrl: URL
     ,
     game: GameState
 }
