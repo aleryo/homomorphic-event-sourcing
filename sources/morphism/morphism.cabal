@@ -23,6 +23,7 @@ library
   exposed-modules:
       Morphism
   other-modules:
+      Input
       Paths_morphism
   default-language: Haskell2010
 
@@ -41,5 +42,7 @@ test-suite tests
     , QuickCheck
     , text
   other-modules:
+      Game
+      InputSpec
       MorphismSpec
   default-language: Haskell2010
