@@ -2,6 +2,7 @@ flags: {}
 packages:
   - 'acquire'
   - 'server'
+  - 'morphism'
 extra-deps:
   - unagi-chan-0.4.0.0
   - MonadPrompt-1.0.0.5

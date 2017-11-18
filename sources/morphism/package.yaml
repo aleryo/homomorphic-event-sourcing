@@ -1,0 +1,37 @@
+name: morphism
+synopsis:  Morphisms Types and generators
+ghc-options: -Wall -fno-warn-orphans -Werror
+
+library:
+    source-dirs:
+      - src
+    exposed-modules:
+      - Morphism
+    dependencies:
+      - acquire
+      - aeson
+      - base
+      - bytestring
+      - containers
+      - text
+    default-extensions:
+      - OverloadedStrings
+      - RecordWildCards
+      - ScopedTypeVariables
+      - DeriveGeneric
+      - DeriveAnyClass
+      - GADTs
+      - MultiParamTypeClasses
+
+tests:
+  tests:
+    main: Tests.hs
+    source-dirs: test
+    dependencies:
+      - aeson
+      - base
+      - hspec
+      - hspec-discover
+      - morphism
+      - QuickCheck
+      - text
