@@ -121,7 +121,6 @@ readSavedGames = do
 --  * game thread is set to nothing
 garbageCollector :: Server -> IO ()
 garbageCollector server = forever $ do
-  trace $ "garbage collecting"
   tids <- liftIO $ atomically $ do
     gamesMap <- readTVar server
     cleanedGames <- mapM cleanupStoppedGames (M.elems gamesMap)
