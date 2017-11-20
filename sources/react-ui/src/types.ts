@@ -5,11 +5,16 @@ import * as R from 'ramda';
 export class SimpleMap<K,V>{
     elems: {key:K, value:V}[];
 
-    constructor(){
+    constructor(entries:any[]){
         this.elems = [];
+        this._addAll(entries);
     }
 
-    add(key:K, value:V){
+    _addAll (entries:any[]) {
+        entries.forEach(([k,v]) => this._add(k,v));
+    }
+
+    _add(key:K, value:V){
         this.elems.push({key, value});
     }
 
@@ -124,12 +129,6 @@ export type GameId = string
 
 export type GameBoard = SimpleMap<Tile, Cell>
 //    Dict.Dict Tile Cell
-
-export function toBoard (boardList:any[]) : GameBoard {
-    let gameBoard = new SimpleMap<Tile, Cell>();
-    boardList.forEach(([t,c]) => gameBoard.add(t,c));
-    return gameBoard
-}
 
 export interface Game {
     gameId: GameId

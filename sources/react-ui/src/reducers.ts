@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {Cell, ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile, toBoard} from './types';
+import {Cell, ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d: Data, a: Action) => Data;
@@ -20,7 +20,7 @@ const INITIAL_PLAYER = {
     playerName: 'Fred',
     playerType: PlayerType.Human,
     tiles: [],
-    ownedStock: new SimpleMap<ChainName, number>(),
+    ownedStock: new SimpleMap<ChainName, number>([]),
     ownedCash: 0
 };
 
@@ -58,7 +58,7 @@ const player = (name: string): Player => ({
     playerName: name,
     playerType: PlayerType.Human,
     tiles: [],
-    ownedStock: new SimpleMap<ChainName, number>(),
+    ownedStock: new SimpleMap<ChainName, number>([]),
     ownedCash: 6000
 });
 
@@ -128,7 +128,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         type: 'PlayGame'
                         , player: game.player
                         , gameId: action.gameId
-                        , board: new SimpleMap<Tile, Cell>()
+                        , board: new SimpleMap<Tile, Cell>([])
                         , possiblePlays: []
                         , highlightedCell: null                    }
             }
@@ -169,7 +169,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         type: game.type,
                         player: action.player,
                         gameId: game.gameId,
-                        board: toBoard(action.board),
+                        board: new SimpleMap<Tile, Cell>(action.board),
                         possiblePlays: action.playables,
                         highlightedCell: game.highlightedCell
                     };
