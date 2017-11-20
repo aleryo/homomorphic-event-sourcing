@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap} from './types';
+import {Cell, ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile, toBoard} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d: Data, a: Action) => Data;
@@ -73,7 +73,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                     if (isEmpty(game.player.playerName)) {
                         return game;
                     }
-                    // TODO send to backend: sendCommand model List
+                    // DONE send to backend: sendCommand model List
                     return {type: 'SelectGame', player: game.player, games: [], numPlayers: 1, numRobots: 5};
             }
             return game;
@@ -108,14 +108,29 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                     };
                 }
                 case 'CreateGame':
-                    // TODO send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
-                    return game;
-                case 'ListGames':
-                    // TODO send to backend: sendCommand model List
+                    // DONE send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
                     return game;
                 case 'Join':
                     // TODO send to backend: sendCommand model (JoinGame { playerName = sg.player.playerName, gameId = g })
                     return game;
+
+                // from backend:
+                case 'GamesList':
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        games: action.games,
+                        numPlayers: game.numPlayers,
+                        numRobots: game.numRobots
+                    };
+                case 'GameStarts':
+                    return {
+                        type: 'PlayGame'
+                        , player: game.player
+                        , gameId: action.gameId
+                        , board: new SimpleMap<Tile, Cell>()
+                        , possiblePlays: []
+                        , highlightedCell: null                    }
             }
             return game;
 
@@ -149,13 +164,22 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         possiblePlays: game.possiblePlays,
                         highlightedCell: null
                     };
+                case 'GameUpdated':
+                    return {
+                        type: game.type,
+                        player: action.player,
+                        gameId: game.gameId,
+                        board: toBoard(action.board),
+                        possiblePlays: action.playables,
+                        highlightedCell: game.highlightedCell
+                    };
             }
             return game;
 
         case 'EndOfGame':
             switch (action.type) {
                 case 'Reset':
-                    // TODO send to backend: sendCommand model List
+                    // DONE send to backend: sendCommand model List
                     return {
                         type: 'SelectGame',
                         player: game.player,

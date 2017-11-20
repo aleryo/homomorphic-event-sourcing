@@ -1,23 +1,50 @@
-import {GameId, Tile} from './types';
+import {Game, GameBoard, GameDescription, GameId, Order, Player, Tile, URL} from './types';
 
 export type Action
-    = { type: 'Output', output: string } // TODO
-    | { type: 'UseKey', key: string } // TODO
-    | { type: 'SetName', name: string } // TODO
+    = { type: 'InitialAction' }
+
+    // frontend-only actions:
+    | { type: 'SetName', name: string }
     | { type: 'RegisterPlayer' }
-    | { type: 'ListGames' } // TODO
-    | { type: 'Join', gameDescId: GameId } // TODO
-    | { type: 'CreateGame' } // TODO
-    | { type: 'Play', move: number } // TODO
-    | { type: 'SetNumPlayers', num: string } // TODO
-    | { type: 'SetNumRobots', num: string } // TODO
+    | { type: 'SetNumPlayers', num: string }
+    | { type: 'SetNumRobots', num: string }
+
+    | { type: 'CreateGame' }
+
+    | { type: 'Join', gameDescId: GameId }
+    | { type: 'Play', move: number }
+
     | { type: 'ShowMessages' }
     | { type: 'HideMessages' }
-    | { type: 'HighlightCell', tile: Tile } // TODO
-    | { type: 'UnhighlightCell' } // TODO
-    | { type: 'Reset' } // TODO
+    | { type: 'HighlightCell', tile: Tile }
+    | { type: 'UnhighlightCell' }
+    | { type: 'Reset' }
 
-    | { type: 'InitialAction' }
+    // frontend -> backend:
+    // List
+    // NewGame
+    // JoinGame
+    // Action
+    // Bye
+
+    // backend -> frontend:
+    | { type: 'GamesList', games: GameDescription[] }
+    // PlayerRegistered
+    | { type: 'NewGameStarted', gameId: GameId } // not handled in reducers
+    | { type: 'GameStarts', gameId: GameId }
+    | { type: 'GameUpdated', board: any[], playables: Order[], player: Player }
+    // ErrorMessage
+    // GameUpdated
+    // Played
+    // GameEnds
+
+    // ???
+    | { type: 'Output', output: string } // TODO
+    | { type: 'UseKey', key: string } // TODO
+
+    // technical stuff for webservices
+    | { type: 'ConnectWS', url: URL }
+
 
 // Output
 // UseKey
@@ -30,26 +57,24 @@ export function registerPlayer(): Action {
     return {type: 'RegisterPlayer'};
 }
 
-// ListGames
-
-export function joinGame(gameDescId: GameId): Action {
-    return {type: 'Join', gameDescId};
-}
-
-export function createGame(): Action {
-    return {type: 'CreateGame'};
-}
-
-export function play(move: number): Action {
-    return {type: 'Play', move};
-}
-
 export function setNumPlayers(num: string): Action {
     return {type: 'SetNumPlayers', num};
 }
 
 export function setNumRobots(num: string): Action {
     return {type: 'SetNumRobots', num};
+}
+
+export function createGame(): Action {
+    return {type: 'CreateGame'};
+}
+
+export function joinGame(gameDescId: GameId): Action {
+    return {type: 'Join', gameDescId};
+}
+
+export function play(move: number): Action {
+    return {type: 'Play', move};
 }
 
 export function showMessages(): Action {
@@ -71,3 +96,5 @@ export function unhighlightCell(): Action {
 export function reset(): Action {
     return {type: 'Reset'};
 }
+
+// Actions that talk to the backend

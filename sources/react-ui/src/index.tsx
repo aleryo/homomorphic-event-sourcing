@@ -5,13 +5,14 @@ import {createStore, compose, applyMiddleware} from "redux";
 import logger from "redux-logger";
 
 import reducers from "./reducers";
+import socketMiddleware from './socketMiddleware'
 
 import View from "./View";
 
 
 const store = createStore(reducers,
     compose(
-        applyMiddleware(logger)
+        applyMiddleware(logger, socketMiddleware)
     )
 );
 
