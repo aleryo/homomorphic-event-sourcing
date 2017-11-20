@@ -12,7 +12,7 @@ export default ({model: {game}}: Props) => {
                 <div className="player">
                     <h1>Player's Hand</h1>
                     <span className="cash">game.player.ownedCash</span>
-                    <div>Stock</div>
+                    <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
                 </div>
                 <div className="plays">
                     <h1>Possible Plays</h1>
@@ -26,7 +26,6 @@ export default ({model: {game}}: Props) => {
     }
     return null;
 }
-                    //TODO <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
 
 function displayStock({key, value}: { key: ChainName, value: number }) {
     <span className={key}>

@@ -35,6 +35,8 @@ const socketMiddleware = (function(){
                 store.dispatch({ type: 'GameStarts', gameId: msg.contents });
                 break;
             case 'GameState':
+                // FIXME mutation!
+                msg.gsPlayer.ownedStock = new SimpleMap<ChainName, number>(msg.gsPlayer.ownedStock.stock);
                 store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), playables: msg.gsPlayables, player: msg.gsPlayer });
                 break;
             default:
