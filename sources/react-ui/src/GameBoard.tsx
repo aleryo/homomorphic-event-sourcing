@@ -136,7 +136,7 @@ function displayCell({key: tile, value: cell}: { key: Tile, value: Cell }, highl
         return tile.row + "-" + tile.col;
     }
     function c2s(cell:Cell):string {
-        return cell.cellContent.tag; // TODO
+        return cell.cellContent.tag[0]; // TODO
     }
     switch (cell.cellContent.tag) {
         case 'Empty':
