@@ -109,6 +109,11 @@ const socketMiddleware = (function(){
                 socket.send(JSON.stringify({tag: "JoinGame", playerName: game.player.playerName, gameId: action.gameDescId }));
                 break;
             }
+
+            case 'Play': {
+                socket.send(JSON.stringify({tag: "Action", selectedPlay: action.move}));
+                break;
+            }
         }
         // pass the actions to the next handler (we need to send them to the redux store)
         return next(action);
