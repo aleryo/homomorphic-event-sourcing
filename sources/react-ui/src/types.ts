@@ -7,7 +7,9 @@ export class SimpleMap<K,V>{
 
     constructor(entries:any[]){
         this.elems = [];
-        this._addAll(entries);
+        if(entries){
+            this._addAll(entries);
+        }
     }
 
     _addAll (entries:any[]) {

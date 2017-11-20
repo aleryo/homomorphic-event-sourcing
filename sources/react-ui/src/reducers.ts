@@ -169,7 +169,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         type: game.type,
                         player: action.player,
                         gameId: game.gameId,
-                        board: new SimpleMap<Tile, Cell>(action.board),
+                        board: action.board,
                         possiblePlays: action.playables,
                         highlightedCell: game.highlightedCell
                     };

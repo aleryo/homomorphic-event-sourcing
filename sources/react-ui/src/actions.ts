@@ -32,7 +32,7 @@ export type Action
     // PlayerRegistered
     | { type: 'NewGameStarted', gameId: GameId } // not handled in reducers
     | { type: 'GameStarts', gameId: GameId }
-    | { type: 'GameUpdated', board: any[], playables: Order[], player: Player }
+    | { type: 'GameUpdated', board: GameBoard, playables: Order[], player: Player }
     // ErrorMessage
     // GameUpdated
     // Played

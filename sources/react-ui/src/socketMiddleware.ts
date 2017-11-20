@@ -1,4 +1,5 @@
 import actions from './actions'
+import {Cell, ChainName, SimpleMap, Tile} from './types';
 
 const socketMiddleware = (function(){
     let socket:any = null;
@@ -34,7 +35,7 @@ const socketMiddleware = (function(){
                 store.dispatch({ type: 'GameStarts', gameId: msg.contents });
                 break;
             case 'GameState':
-                store.dispatch({ type: 'GameUpdated', board: msg.gsBoard, playables: msg.gsPlayables, player: msg.gsPlayer });
+                store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), playables: msg.gsPlayables, player: msg.gsPlayer });
                 break;
             default:
                 console.log("Received unknown message type: '" + msg.tag + "'");
