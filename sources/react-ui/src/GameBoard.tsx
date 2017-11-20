@@ -35,7 +35,6 @@ function displayStock({key, value}: { key: ChainName, value: number }) {
 }
 
 function displayPlay(dispatch:any, order: Order, n: number) {
-console.log("play: ", JSON.stringify(order), n)
     switch (order.tag) {
         case 'Place':
             return <span className="cell empty"

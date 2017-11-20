@@ -16,13 +16,13 @@ const socketMiddleware = (function(){
         //Tell the store we've disconnected
         console.log("disconnected");
         //store.dispatch(actions.disconnected());
+        // reconnect again:
         store.dispatch({type: 'ConnectWS', url: "ws://localhost:9000/FOO"});
     };
 
     const onMessage = (ws:any,store:any) => (evt:any) => {
         //Parse the JSON message received on the websocket
         const msg = JSON.parse(evt.data);
-        console.log("Received message ", msg);
         switch(msg.tag) {
             case "GamesList":
                 //Dispatch an action that adds the received message to our state
@@ -41,8 +41,24 @@ const socketMiddleware = (function(){
                     switch(tag){
                         case 'Place':
                             return {tag: 'Place', playerName: contents[0], tile: contents[1]};
+                        case 'Merge':
+                            return { tag: 'Merge', playerName: contents[0], tile: contents[1], fromChain: contents[2], toChain: contents[3] };
+                        case 'Fund':
+                            return { tag: 'Fund', playerName: contents[0], chainName: contents[1], tile: contents[2] };
+                        case 'BuyStock':
+                            return { tag: 'BuyStock', playerName: contents[0], chainName: contents[1] };
+                        case 'SellStock':
+                            return { tag: 'SellStock', playerName: contents[0], chainName: contents[1], amount: contents[2], todo: contents[3] }; // FIXME param name
+                        case 'ExchangeStock':
+                            return { tag: 'ExchangeStock', playerName: contents[0], fromChain: contents[1], toChain: contents[2], amount: contents[3] };
+                        case 'Pass':
+                            return { tag: 'Pass' };
+                        case 'EndGame':
+                            return { tag: 'EndGame' };
+                        case 'Cancel':
+                            return { tag: 'Cancel' };
                         default:
-                            console.log("Unknown play tag " + tag);
+                            console.log("Unknown play tag " + tag + " with ", contents);
                     }
                 });
                 store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), possiblePlays, player: msg.gsPlayer });
@@ -58,7 +74,6 @@ const socketMiddleware = (function(){
 
             //The user wants us to connect
             case 'ConnectWS':
-                console.log("CONNECT")
                 //Start a new connection to the server
                 if(socket != null) {
                     socket.close();
@@ -76,7 +91,6 @@ const socketMiddleware = (function(){
 
             //The user wants us to disconnect
             case 'DISCONNECT':
-                console.log("DISCONNECT")
                 if(socket != null) {
                     socket.close();
                 }
@@ -90,12 +104,10 @@ const socketMiddleware = (function(){
             case 'RegisterPlayer':
             case 'NewGameStarted':
             case 'Reset':
-                console.log("RegisterPlayer or Reset")
                 socket.send(JSON.stringify({tag: "List"}));
                 break;
 
             case 'CreateGame': {
-                console.log("CreateGame")
                 const {game} = store.getState();
                 // caution: only works in SelectGame state...
                 socket.send(JSON.stringify({tag: "NewGame", numHumans: game.numPlayers, numRobots: game.numRobots}));
@@ -103,7 +115,6 @@ const socketMiddleware = (function(){
             }
 
             case 'Join': {
-                console.log("Join")
                 const {game} = store.getState();
                 // caution: only works in SelectGame state...
                 socket.send(JSON.stringify({tag: "JoinGame", playerName: game.player.playerName, gameId: action.gameDescId }));

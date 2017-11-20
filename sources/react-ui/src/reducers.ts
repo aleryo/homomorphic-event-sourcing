@@ -111,7 +111,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                     // DONE send to backend: sendCommand model (NewGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
                     return game;
                 case 'Join':
-                    // TODO send to backend: sendCommand model (JoinGame { playerName = sg.player.playerName, gameId = g })
+                    // DONE send to backend: sendCommand model (JoinGame { playerName = sg.player.playerName, gameId = g })
                     return game;
 
                 // from backend:
