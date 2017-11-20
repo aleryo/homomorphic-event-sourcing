@@ -1,15 +1,15 @@
-import React from "react";
+import React, {Component} from 'react';
 
-import ViewTitle from "./ViewTitle";
-import DisplayErrors from "./DisplayErrors";
-import Messages from "./Messages";
-import PlayerInput from "./PlayerInput";
-import ViewGameResult from "./ViewGameResult";
+import ViewTitle from './ViewTitle';
+import DisplayErrors from './DisplayErrors';
+import Messages from './Messages';
+import PlayerInput from './PlayerInput';
+import ViewGameResult from './ViewGameResult';
 import {Model, Props} from './types';
 import ViewGamesList from './ViewGamesList';
 import GameBoard from './GameBoard';
 
-import { connect } from "react-redux";
+import {connect} from 'react-redux';
 
 /*
 view : Model -> Html Msg
@@ -26,20 +26,27 @@ view model =
  */
 
 
+export class ViewComponent extends Component<Props> {
 
-export const ViewComponent = ({model, dispatch} : Props) => {
-    return <div>
-        <ViewTitle model={model} dispatch={dispatch} />
-        <DisplayErrors model={model} dispatch={dispatch} />
-        <PlayerInput model={model} dispatch={dispatch} />
-        <ViewGamesList model={model} dispatch={dispatch} />
-        <GameBoard model={model} dispatch={dispatch} />
-        <ViewGameResult model={model} dispatch={dispatch} />
-        <Messages model={model} dispatch={dispatch} />
-    </div>;
+    componentWillMount() {
+        this.props.dispatch({type: 'ConnectWS', url: "ws://localhost:9000/FOO"});
+    }
+
+    render() {
+        const {model, dispatch} = this.props;
+        return <div>
+            <ViewTitle model={model} dispatch={dispatch}/>
+            <DisplayErrors model={model} dispatch={dispatch}/>
+            <PlayerInput model={model} dispatch={dispatch}/>
+            <ViewGamesList model={model} dispatch={dispatch}/>
+            <GameBoard model={model} dispatch={dispatch}/>
+            <ViewGameResult model={model} dispatch={dispatch}/>
+            <Messages model={model} dispatch={dispatch}/>
+        </div>;
+    }
 }
 
-export default connect((state:Model) => ({ model: state }))(ViewComponent);
+export default connect((state: Model) => ({model: state}))(ViewComponent);
 
 /*
 module View exposing (view)
