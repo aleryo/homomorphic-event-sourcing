@@ -170,7 +170,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         player: action.player,
                         gameId: game.gameId,
                         board: action.board,
-                        possiblePlays: action.playables,
+                        possiblePlays: action.possiblePlays,
                         highlightedCell: game.highlightedCell
                     };
             }

@@ -4,10 +4,11 @@ import {Chain} from 'ramda';
 import {Cell, ChainName, Order, Props, Tile} from './types';
 import {highlightCell, play, unhighlightCell} from './actions';
 
-export default ({model: {game}}: Props) => {
+export default ({model: {game}, dispatch}: Props) => {
     switch (game.type) {
         case 'PlayGame':
-            const displayHighlightedCell = R.partialRight(displayCell, [game.highlightedCell]);
+            const displayCellWithHighlighted = R.partialRight(displayCell, [game.highlightedCell]);
+            const displayPlayWithDispatch = R.partial(displayPlay, [dispatch]);
             return <div id="game-board">
                 <div className="player">
                     <h1>Player's Hand</h1>
@@ -16,11 +17,11 @@ export default ({model: {game}}: Props) => {
                 </div>
                 <div className="plays">
                     <h1>Possible Plays</h1>
-                    {game.possiblePlays.map(displayPlay)}
+                    {game.possiblePlays.map(displayPlayWithDispatch)}
                 </div>
                 <div className="board">
                     <h1>Current Board</h1>
-                    {game.board.toList().map(displayHighlightedCell)}
+                    {game.board.toList().map(displayCellWithHighlighted)}
                 </div>
             </div>;
     }
@@ -28,17 +29,14 @@ export default ({model: {game}}: Props) => {
 }
 
 function displayStock({key, value}: { key: ChainName, value: number }) {
-    <span className={key}>
+    return <span className={key}>
         <span className="stock-count">{value}</span>
     </span>;
 }
 
-function displayPlay(order: Order, n: number) {
-
-    const dispatch = (x: any) => {
-    }; // FIXME
-
-    switch (order.kind) {
+function displayPlay(dispatch:any, order: Order, n: number) {
+console.log("play: ", JSON.stringify(order), n)
+    switch (order.tag) {
         case 'Place':
             return <span className="cell empty"
                          onClick={() => dispatch(play(n + 1))}

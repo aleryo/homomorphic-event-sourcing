@@ -116,15 +116,15 @@ export type Turn =
 
 
 export type Order
-    = { kind: 'Place', playerName: PlayerName, tile: Tile }
-    | { kind: 'Merge', playerName: PlayerName, tile: Tile, fromChain: ChainName, toChain: ChainName }
-    | { kind: 'Fund', playerName: PlayerName, chainName: ChainName, tile: Tile }
-    | { kind: 'BuyStock', playerName: PlayerName, chainName: ChainName }
-    | { kind: 'SellStock', playerName: PlayerName, chainName: ChainName, amount: number, todo: number } // FIXME param name
-    | { kind: 'ExchangeStock', playerName: PlayerName, fromChain: ChainName, toChain: ChainName, amount: number }
-    | { kind: 'Pass' }
-    | { kind: 'EndGame' }
-    | { kind: 'Cancel' }
+    = { tag: 'Place', playerName: PlayerName, tile: Tile }
+    | { tag: 'Merge', playerName: PlayerName, tile: Tile, fromChain: ChainName, toChain: ChainName }
+    | { tag: 'Fund', playerName: PlayerName, chainName: ChainName, tile: Tile }
+    | { tag: 'BuyStock', playerName: PlayerName, chainName: ChainName }
+    | { tag: 'SellStock', playerName: PlayerName, chainName: ChainName, amount: number, todo: number } // FIXME param name
+    | { tag: 'ExchangeStock', playerName: PlayerName, fromChain: ChainName, toChain: ChainName, amount: number }
+    | { tag: 'Pass' }
+    | { tag: 'EndGame' }
+    | { tag: 'Cancel' }
 
 
 export type GameId = string

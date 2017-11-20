@@ -37,7 +37,15 @@ const socketMiddleware = (function(){
             case 'GameState':
                 // FIXME mutation!
                 msg.gsPlayer.ownedStock = new SimpleMap<ChainName, number>(msg.gsPlayer.ownedStock.stock);
-                store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), playables: msg.gsPlayables, player: msg.gsPlayer });
+                const possiblePlays = msg.gsPlayables.map(({tag, contents}:{tag:string, contents:any[]}) => {
+                    switch(tag){
+                        case 'Place':
+                            return {tag: 'Place', playerName: contents[0], tile: contents[1]};
+                        default:
+                            console.log("Unknown play tag " + tag);
+                    }
+                });
+                store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), possiblePlays, player: msg.gsPlayer });
                 break;
             default:
                 console.log("Received unknown message type: '" + msg.tag + "'");
