@@ -15,6 +15,7 @@ const socketMiddleware = (function(){
         //Tell the store we've disconnected
         console.log("disconnected");
         //store.dispatch(actions.disconnected());
+        store.dispatch({type: 'ConnectWS', url: "ws://localhost:9000/FOO"});
     };
 
     const onMessage = (ws:any,store:any) => (evt:any) => {
