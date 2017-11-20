@@ -35,13 +35,13 @@ const displayPossibleGames = (dispatch: any, desc : GameDescription) => {
     let isLive = desc.descLive ? "live" : "";
 
     return (
-        <li>
+        <li key={desc.gameDescId}>
             <div className={"game-description " + isLive}>
                 <span className="game-id">{desc.gameDescId}</span>
                 <span className="numPlayers humans">{desc.descNumberOfHumans}</span>
                 <span className="numPlayers robots">{desc.descNumberOfRobots}</span>
                 <ul className="players-list">
-                    {desc.descRegisteredHumans.map(name => <li>{name}</li>)}
+                    {desc.descRegisteredHumans.map(name => <li key={name}>{name}</li>)}
                 </ul>
                 {desc.descLive ? null : <button onClick={e => dispatch(joinGame(desc.gameDescId))}>Join</button>}
             </div>

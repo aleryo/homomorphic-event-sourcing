@@ -9,6 +9,10 @@ export class SimpleMap<K,V>{
         this.elems = [];
     }
 
+    add(key:K, value:V){
+        this.elems.push({key, value});
+    }
+
     values(){
         return R.pluck('value')(this.elems);
     }
@@ -19,15 +23,15 @@ export class SimpleMap<K,V>{
     }
 }
 
-export type Tile = { label: string, value: number }
+export type Tile = { row: string, col: number }
 
 export type ChainName = string
 
 export type Content
-    = { kind: 'Empty' }
-    | { kind: 'Playable' } // -- ^Used for highlighting purpose
-    | { kind: 'Neutral', tile: Tile }
-    | { kind: 'Chain', chainName: ChainName }
+    = { tag: 'Empty' }
+    | { tag: 'Playable' } // -- ^Used for highlighting purpose
+    | { tag: 'Neutral', tile: Tile }
+    | { tag: 'Chain', chainName: ChainName }
 
 export interface Cell {
     cellCoord: Tile
@@ -121,6 +125,12 @@ export type GameId = string
 export type GameBoard = SimpleMap<Tile, Cell>
 //    Dict.Dict Tile Cell
 
+export function toBoard (boardList:any[]) : GameBoard {
+    let gameBoard = new SimpleMap<Tile, Cell>();
+    boardList.forEach(([t,c]) => gameBoard.add(t,c));
+    return gameBoard
+}
+
 export interface Game {
     gameId: GameId
     ,
@@ -141,6 +151,7 @@ export type GameDescription =
 
 export type GameState
     = { type: 'Register', player: Player }
+    // TODO numPlayers -> numHumans
     | { type: 'SelectGame', player: Player, games: GameDescription[], numPlayers: number, numRobots: number }
     | {
     type: 'PlayGame'

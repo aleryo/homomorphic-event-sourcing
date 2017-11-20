@@ -23,7 +23,7 @@ module.exports = {
         port: localPort,
         hot: true,       // hot module replacement
         historyApiFallback: true,
-        proxy: { "/": proxiedServer }
+        //proxy: { "/": proxiedServer }
     },
     devtool: "inline-source-map",
     output: {

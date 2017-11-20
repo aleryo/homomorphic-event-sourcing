@@ -12,7 +12,7 @@ export default ({model: {game}}: Props) => {
                 <div className="player">
                     <h1>Player's Hand</h1>
                     <span className="cash">game.player.ownedCash</span>
-                    <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
+                    <div>Stock</div>
                 </div>
                 <div className="plays">
                     <h1>Possible Plays</h1>
@@ -26,6 +26,7 @@ export default ({model: {game}}: Props) => {
     }
     return null;
 }
+                    //TODO <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
 
 function displayStock({key, value}: { key: ChainName, value: number }) {
     <span className={key}>
@@ -46,7 +47,7 @@ function displayPlay(order: Order, n: number) {
                          onMouseLeave={() => dispatch(unhighlightCell())}
             >
             <span className="cell-content">
-                <span>{order.tile.label + '-' + order.tile.value}</span></span>
+                <span>{order.tile.row + '-' + order.tile.col}</span></span>
         </span>;
 
         case 'BuyStock':
@@ -131,21 +132,27 @@ function displayCell({key: tile, value: cell}: { key: Tile, value: Cell }, highl
                 highlighted
 
      */
-    switch (cell.cellContent.kind) {
+    function t2s(tile:Tile):string {
+        return tile.row + "-" + tile.col;
+    }
+    function c2s(cell:Cell):string {
+        return cell.cellContent.tag; // TODO
+    }
+    switch (cell.cellContent.tag) {
         case 'Empty':
             return <span className={'cell' + hlClass}>
                     <span className="cell-content">
-                        <span>{tile + '-' + cell}</span></span></span>;
+                        <span>{t2s(tile) + '-' + c2s(cell)}</span></span></span>;
 
         case 'Neutral':
             return <span className="cell neutral">
                     <span className="cell-content">
-                        <span>{tile + '-' + cell}</span></span></span>;
+                        <span>{t2s(tile) + '-' + c2s(cell)}</span></span></span>;
 
         case 'Chain':
             return <span className={'cell ' + cell.cellContent.chainName}>
                     <span className="cell-content">
-                        <span>{tile + '-' + cell}</span></span></span>;
+                        <span>{t2s(tile) + '-' + c2s(cell)}</span></span></span>;
     }
     return null;
 }
