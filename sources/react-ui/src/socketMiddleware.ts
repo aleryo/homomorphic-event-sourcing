@@ -1,5 +1,38 @@
 import actions from './actions'
-import {Cell, ChainName, SimpleMap, Tile} from './types';
+import {Cell, ChainName, Player, SimpleMap, Tile} from './types';
+
+const decodeOrder = ({tag, contents}:{tag:string, contents:any[]}) => {
+    switch(tag){
+        case 'Place':
+            return { tag: 'Place', playerName: contents[0], tile: contents[1]};
+        case 'Merge':
+            return { tag: 'Merge', playerName: contents[0], tile: contents[1], fromChain: contents[2], toChain: contents[3] };
+        case 'Fund':
+            return { tag: 'Fund', playerName: contents[0], chainName: contents[1], tile: contents[2] };
+        case 'BuyStock':
+            return { tag: 'BuyStock', playerName: contents[0], chainName: contents[1] };
+        case 'SellStock':
+            return { tag: 'SellStock', playerName: contents[0], chainName: contents[1], amount: contents[2], todo: contents[3] }; // FIXME param name
+        case 'ExchangeStock':
+            return { tag: 'ExchangeStock', playerName: contents[0], fromChain: contents[1], toChain: contents[2], amount: contents[3] };
+        case 'Pass':
+            return { tag: 'Pass' };
+        case 'EndGame':
+            return { tag: 'EndGame' };
+        case 'Cancel':
+            return { tag: 'Cancel' };
+        default:
+            console.log("Unknown play tag " + tag + " with ", contents);
+    }
+};
+
+const decodePlayer = ({playerName, playerType, tiles, ownedStock, ownedCash}: any) =>
+    ({playerName, playerType, tiles, ownedStock: new SimpleMap<ChainName, number>(ownedStock.stock), ownedCash});
+
+const decodeBoard = (board: any) => new SimpleMap<Tile, Cell>(board);
+
+const decodeGame = ({gameId, gameBoard, players}: any) =>
+    ({gameId, gameBoard: decodeBoard(gameBoard), players: players.map(decodePlayer)});
 
 const socketMiddleware = (function(){
     let socket:any = null;
@@ -38,42 +71,14 @@ const socketMiddleware = (function(){
                 store.dispatch({ type: 'GameStarts', gameId: msg.contents });
                 break;
             case 'GameState':
-                // TODO convert!
-                // FIXME mutation!
-                msg.gsPlayer.ownedStock = new SimpleMap<ChainName, number>(msg.gsPlayer.ownedStock.stock);
-                const possiblePlays = msg.gsPlayables.map(({tag, contents}:{tag:string, contents:any[]}) => {
-                    switch(tag){
-                        case 'Place':
-                            return { tag: 'Place', playerName: contents[0], tile: contents[1]};
-                        case 'Merge':
-                            return { tag: 'Merge', playerName: contents[0], tile: contents[1], fromChain: contents[2], toChain: contents[3] };
-                        case 'Fund':
-                            return { tag: 'Fund', playerName: contents[0], chainName: contents[1], tile: contents[2] };
-                        case 'BuyStock':
-                            return { tag: 'BuyStock', playerName: contents[0], chainName: contents[1] };
-                        case 'SellStock':
-                            return { tag: 'SellStock', playerName: contents[0], chainName: contents[1], amount: contents[2], todo: contents[3] }; // FIXME param name
-                        case 'ExchangeStock':
-                            return { tag: 'ExchangeStock', playerName: contents[0], fromChain: contents[1], toChain: contents[2], amount: contents[3] };
-                        case 'Pass':
-                            return { tag: 'Pass' };
-                        case 'EndGame':
-                            return { tag: 'EndGame' };
-                        case 'Cancel':
-                            return { tag: 'Cancel' };
-                        default:
-                            console.log("Unknown play tag " + tag + " with ", contents);
-                    }
-                });
-                store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), possiblePlays, player: msg.gsPlayer });
+                console.log("GameState", msg)
+                store.dispatch({ type: 'GameUpdated', board: decodeBoard(msg.gsBoard), possiblePlays: msg.gsPlayables.map(decodeOrder), player: decodePlayer(msg.gsPlayer) });
                 break;
             case "Played":
-                // TODO convert!
-                // TODO dispatch!
+                store.dispatch({ type: 'Played', playerName: msg.gsPlayerName, board: decodeBoard(msg.gsBoard), played: decodeOrder(msg.gsPlayed) });
                 break;
             case "GameEnds":
-                // TODO convert!
-                // TODO dispatch!
+                store.dispatch({ type: 'GameEnds', endGame: decodeGame(msg.gsEndGame) });
                 break;
             case "ErrorMessage":
                 store.dispatch({ type: 'ErrorMessage', message: msg.contents[0] });
