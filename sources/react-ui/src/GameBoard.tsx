@@ -12,7 +12,7 @@ export default ({model: {game}, dispatch}: Props) => {
             return <div id="game-board">
                 <div className="player">
                     <h1>Player's Hand</h1>
-                    <span className="cash">game.player.ownedCash</span>
+                    <span className="cash">{game.player.ownedCash}</span>
                     <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
                 </div>
                 <div className="plays">
