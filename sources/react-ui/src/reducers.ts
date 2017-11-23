@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
-import R from 'ramda';
+import * as R from 'ramda';
 
-import {Cell, ChainName, Errors, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile} from './types';
+import {Cell, ChainName, Errors, GameState, Messages, Model, Order, Player, PlayerType, SimpleMap, Tile} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d: Data, a: Action) => Data;
@@ -36,9 +36,15 @@ export const INITIAL_STATE: Model =
     };
 
 
-const strings = createReducer(INITIAL_STATE.strings, {
-    ['Reset']: (data: Messages, action: Action) => []
-});
+function strings(strings: Errors = INITIAL_STATE.strings, action: Action = {type: 'InitialAction'}) {
+    switch(action.type){
+        case 'Reset':
+            return [];
+        case 'Played':
+            return R.prepend(showOrder(action.played), strings);
+    }
+    return strings;
+}
 
 const displayMessages = createReducer(INITIAL_STATE.displayMessages, {
     ['ShowMessages']: (data: boolean, action: Action) => true,
@@ -68,6 +74,39 @@ const player = (name: string): Player => ({
     ownedStock: new SimpleMap<ChainName, number>([]),
     ownedCash: 6000
 });
+
+const showTile = (tile:Tile) : string => tile.row + "-" + tile.col
+
+const showOrder = (order:Order) : string => {
+    switch (order.tag) {
+        case 'Place':
+            return order.playerName + " plays @" + showTile(order.tile);
+        case 'Merge':
+            return order.playerName + " merges " + order.fromChain + " into " + order.toChain + " @" + showTile(order.tile);
+        case 'Fund':
+            return order.playerName + " founds " + order.chainName + " @" + showTile(order.tile);
+        case 'BuyStock':
+            return order.playerName + " buys 1 share of " + order.chainName;
+        case 'SellStock':
+            return order.playerName + " sells "
+                + order.amount + " share" + (order.amount > 1 ? "s" : "")
+                + " of " + order.chainName + " at " + order.todo + "$";
+        case 'ExchangeStock':
+            return order.playerName + " exchanges "
+                + order.amount + "share" + (order.amount > 1 ? "s" : "")
+                + " of " + order.fromChain + " against "
+                + (order.amount/2) + " share" + ((order.amount/2) > 1 ? "s" : "")
+                + " of " + order.toChain;
+        case 'Pass':
+            return "pass";
+        case 'EndGame':
+            return "end game";
+        case 'Cancel':
+            return "cancel";
+    }
+};
+
+
 
 function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'InitialAction'}) {
     switch (game.type) {
@@ -178,6 +217,15 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         gameId: game.gameId,
                         board: action.board,
                         possiblePlays: action.possiblePlays,
+                        highlightedCell: game.highlightedCell
+                    };
+                case 'Played':
+                    return {
+                        type: game.type,
+                        player: game.player,
+                        gameId: game.gameId,
+                        board: action.board,
+                        possiblePlays: [],
                         highlightedCell: game.highlightedCell
                     };
             }

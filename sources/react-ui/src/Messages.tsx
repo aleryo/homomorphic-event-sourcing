@@ -9,7 +9,7 @@ export default ({model: {displayMessages, strings}, dispatch}: Props) => {
     const messages = displayMessages
         ? <div id="messages-content" style={{height: "10em"}}>
             <ul>
-                {strings.map(str => <ShowMessage text={str}  key={str}/>)}
+                {strings.map((str, index) => <ShowMessage text={str}  key={index}/>)}
             </ul>
         </div>
         : null;

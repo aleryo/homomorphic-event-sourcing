@@ -34,7 +34,8 @@ export type Action
     | { type: 'GameStarts', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possiblePlays: Order[], player: Player }
     | { type: 'ErrorMessage', message: string }
-    | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order } // TODO handle in reducers
+    // TODO playerName is not used anywhere:
+    | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order }
     | { type: 'GameEnds', endGame: GameBoard } // TODO handle in reducers
 
     // ???
