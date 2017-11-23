@@ -28,7 +28,7 @@ export type Action
     // Bye
 
     // middleware -> frontend: (emitted from the middleware on reception of a backend message)
-    | { type: 'PlayerRegistered', playerName: PlayerName, gameId: GameId } // TODO handle in reducers
+    | { type: 'PlayerRegistered', playerName: PlayerName, gameId: GameId } // is not handled in reducers, only triggers loading of games list
     | { type: 'GamesList', games: GameDescription[] }
     | { type: 'NewGameStarted', gameId: GameId } // not handled in reducers
     | { type: 'GameStarts', gameId: GameId }

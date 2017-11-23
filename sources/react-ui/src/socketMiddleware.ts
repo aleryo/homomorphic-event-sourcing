@@ -58,6 +58,7 @@ const socketMiddleware = (function(){
         const msg = JSON.parse(evt.data);
         switch(msg.tag) {
             case "PlayerRegistered":
+                // TODO does backend actually send this?
                 store.dispatch({ type: "PlayerRegistered", playerName: msg.contents[0], gameId: msg.contents[1] });
                 break;
             case "GamesList":
@@ -122,6 +123,7 @@ const socketMiddleware = (function(){
 
             //Send actions down the websocket to the server
             case 'RegisterPlayer':
+            case 'PlayerRegistered':
             case 'NewGameStarted':
             case 'Reset':
                 socket.send(JSON.stringify({tag: "List", contents: []}));
