@@ -37,8 +37,8 @@ export type ChainName = string
 export type Content
     = { tag: 'Empty' }
     | { tag: 'Playable' } // -- ^Used for highlighting purpose
-    | { tag: 'Neutral', tile: Tile }
-    | { tag: 'Chain', chainName: ChainName }
+    | { tag: 'Neutral', contents: Tile }
+    | { tag: 'Chain', contents: ChainName }
 
 export interface Cell {
     cellCoord: Tile

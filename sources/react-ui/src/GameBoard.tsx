@@ -146,7 +146,7 @@ function displayCell({key: tile, value: cell}: { key: Tile, value: Cell }, highl
                         <span>{t2s(tile)}</span></span></span>;
 
         case 'Chain':
-            return <span className={'cell ' + cell.cellContent.chainName}>
+            return <span className={'cell ' + cell.cellContent.contents}>
                     <span className="cell-content">
                         <span>{t2s(tile)}</span></span></span>;
     }
