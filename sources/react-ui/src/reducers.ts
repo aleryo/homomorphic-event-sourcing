@@ -27,9 +27,9 @@ const INITIAL_PLAYER = {
 
 export const INITIAL_STATE: Model =
     {
-        strings: ['A string!', 'And another!']
+        strings: []
         , displayMessages: true
-        , errors: ['An error!', 'And another!']
+        , errors: []
         , domain: {host: '0', port: '0'}
         , wsServerUrl: ''
         , game: {type: 'Register', player: INITIAL_PLAYER}
