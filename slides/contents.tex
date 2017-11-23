@@ -81,12 +81,18 @@ Experiment Ideas to Improve Code \& Design
   \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Base Event Loop}
+\begin{center}
+\includegraphics[width=\textwidth]{./images/event-loop.pdf}
+\end{center}
+\end{frame}
+
 \begin{frame}[fragile]{Language}
   \begin{itemize}
-  \item $C$ is the set of all Commands, $E$ the set of all Events, $X$ the set of errors, $S$ the set of states
-  \item $$\delta : S \times C \times (E^* + X) \rightarrow S$$ a transition function between states $S$
-  \item The language of a component $L \subseteq (C \times (E^* + X))^*$ is a \textbf{transduction}
-  \item We can simplify to $L \subseteq ((C + \epsilon) \times (E + X))^*$
+  \item $C$ is the set of all Commands, $E$ the set of all Events, $S$ the set of states
+  \item $$\delta : S \times C \times E^* \rightarrow S$$ a transition function between states $S$
+  \item The language of a component $L \subseteq (C \times E^*)^*$ is a \textbf{transduction}
+  \item We can simplify to $L \subseteq ((C + \epsilon) \times E)^*$
   \end{itemize}
 \end{frame}
 
@@ -103,28 +109,36 @@ Experiment Ideas to Improve Code \& Design
 \begin{frame}[fragile]{Interacting Components}
   \begin{itemize}
   \item What happens when 2 event-sourced components have to interact?
-  \item Some commands $C_1$ from first component must be transduced into $C_2$, and some events $E_2$ into $E_1$
+  \item Events  $E_1$ from first component must be transduced into commands $C_2$, and some events $E_2$ into $C_1$
   \item Modelling interaction as a \emph{transformation} of languages
   \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Base Event Loop}
+\begin{center}
+\includegraphics[height=.8\textheight]{./images/interaction-loop.pdf}
+\end{center}
+\end{frame}
+
 \begin{frame}[fragile]{Homomorphism}
-  \begin{definition}
-    Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\tau : L_1 \rightarrow L_2$ is a homomorphism iff
-    $$
-    \foreach w_1, w_2 \in L_1, \tau (w_1 . w_2) = \tau (w_1) . \tau (w_2)
-    $$
-  \end{definition}
+
+Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\tau : L_1 \rightarrow L_2$ is a homomorphism iff
+
+  \[
+  \forall w_1, w_2 \in L_1, \tau (w_1 . w_2) = \tau (w_1) . \tau (w_2)
+  \]
+
   In other words, a \emph{homomorphism} is a structure-preserving map between two languages. This practically means it is enough to
   define $\tau$ on $\Sigma_1$
+
 \end{frame}
 
 \begin{frame}[fragile]{Homomorphic Event Sourcing}
   \begin{itemize}
-  \item Define mappings from UI commands to backend commands: A
-    command can map to nothing meaning there is not interaction with
+  \item Define mappings from UI events to backend commands: An event
+    can map to nothing meaning there is not interaction with
     the backend
-  \item Define mappings from backend events to UI events: Defines how
+  \item Define mappings from backend commands to UI events: Defines how
     backend's replies are interpreted in the UI, some events might not
     be reflected in the UI (why?)
   \end{itemize}
@@ -144,6 +158,19 @@ Experiment Ideas to Improve Code \& Design
   \item Safer interactions: Define language and homomorphism in a
     single place then generate the other side
   \item Generalization to $n$ components, e.g. hexagonal architecture
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Beyond Homomorphism}
+  \begin{itemize}
+  \item Homomorphism do not account for \emph{current state}, e.g. what happened in the past
+  \item Some events might be meaningfully interpreted only after some other events happened
+  \item \emph{Homomorphism} $\longrightarrow$ \emph{Transduction}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Transductions}
+  \begin{itemize}
   \end{itemize}
 \end{frame}
 
