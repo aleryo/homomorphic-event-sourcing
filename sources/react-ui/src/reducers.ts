@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
+import R from 'ramda';
 
-import {Cell, ChainName, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile} from './types';
+import {Cell, ChainName, Errors, GameState, Messages, Model, Player, PlayerType, SimpleMap, Tile} from './types';
 import {Action} from './actions';
 
 type Handler<Data> = (d: Data, a: Action) => Data;
@@ -44,7 +45,13 @@ const displayMessages = createReducer(INITIAL_STATE.displayMessages, {
     ['HideMessages']: (data: boolean, action: Action) => false
 });
 
-const errors = createReducer(INITIAL_STATE.errors, {});
+function errors(errors: Errors = INITIAL_STATE.errors, action: Action = {type: 'InitialAction'}) {
+    switch(action.type){
+        case 'ErrorMessage':
+            return R.prepend(action.message, errors);
+    }
+    return errors;
+}
 
 const domain = createReducer(INITIAL_STATE.domain, {});
 

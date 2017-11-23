@@ -33,7 +33,7 @@ export type Action
     | { type: 'NewGameStarted', gameId: GameId } // not handled in reducers
     | { type: 'GameStarts', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possiblePlays: Order[], player: Player }
-    | { type: 'ErrorMessage', message: string } // TODO handle in reducers
+    | { type: 'ErrorMessage', message: string }
     | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order } // TODO handle in reducers
     | { type: 'GameEnds', endGame: GameBoard } // TODO handle in reducers
 
