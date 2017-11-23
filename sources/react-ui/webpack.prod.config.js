@@ -4,7 +4,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: [
-        "./src/index"
+      "./src/index.tsx",
+      "./css/acquire.css",
+      "./css/font-awesome.css"
     ],
     output: {
         path: path.join(__dirname, "build"),
@@ -24,10 +26,12 @@ module.exports = {
     ],
   module: {
     rules: [
-      { test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [{loader: "babel-loader"}]
-      }
+      { test: /\.tsx?$/, exclude: /node_modules/, use: [{loader: "ts-loader"}] },
+      { test: /\.css$/, use: [ { loader: "style-loader" }, { loader: "css-loader" } ] },
+      { test: /\.(svg|woff2?|eot|ttf)$/, use: [ { loader: "url-loader" } ] }
     ]
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"]
   }
 };

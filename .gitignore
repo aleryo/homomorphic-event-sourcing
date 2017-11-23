@@ -10,3 +10,4 @@ slides.pdf
 .idea
 sources/react-ui/dist
 sources/react-ui/node_modules
+sources/react-ui/build
