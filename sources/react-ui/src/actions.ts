@@ -36,7 +36,7 @@ export type Action
     | { type: 'ErrorMessage', message: string }
     // TODO playerName is not used anywhere:
     | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order }
-    | { type: 'GameEnds', endGame: GameBoard } // TODO handle in reducers
+    | { type: 'GameEnds', endGame: Game }
 
     // ???
     | { type: 'Output', output: string } // TODO

@@ -228,6 +228,14 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         possiblePlays: [],
                         highlightedCell: game.highlightedCell
                     };
+                case 'GameEnds':
+                    // TODO compare action.endGame.gameId??
+                    return { type: 'EndOfGame',
+                        player: game.player,
+                        gameId: game.gameId,
+                        board: action.endGame.gameBoard,
+                        gameResult: action.endGame.players
+                    };
             }
             return game;
 
