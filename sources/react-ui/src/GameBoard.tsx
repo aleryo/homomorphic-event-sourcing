@@ -1,6 +1,5 @@
 import React from 'react';
 import * as R from 'ramda';
-import {Chain} from 'ramda';
 import {Cell, ChainName, Order, Props, Tile} from './types';
 import {highlightCell, play, unhighlightCell} from './actions';
 
