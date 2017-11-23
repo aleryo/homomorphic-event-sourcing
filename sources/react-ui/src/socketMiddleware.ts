@@ -24,6 +24,9 @@ const socketMiddleware = (function(){
         //Parse the JSON message received on the websocket
         const msg = JSON.parse(evt.data);
         switch(msg.tag) {
+            case "PlayerRegistered":
+                store.dispatch({ type: "PlayerRegistered", playerName: msg.contents[0], gameId: msg.contents[1] });
+                break;
             case "GamesList":
                 //Dispatch an action that adds the received message to our state
                 store.dispatch({ type: 'GamesList', games: msg.contents });
@@ -35,12 +38,13 @@ const socketMiddleware = (function(){
                 store.dispatch({ type: 'GameStarts', gameId: msg.contents });
                 break;
             case 'GameState':
+                // TODO convert!
                 // FIXME mutation!
                 msg.gsPlayer.ownedStock = new SimpleMap<ChainName, number>(msg.gsPlayer.ownedStock.stock);
                 const possiblePlays = msg.gsPlayables.map(({tag, contents}:{tag:string, contents:any[]}) => {
                     switch(tag){
                         case 'Place':
-                            return {tag: 'Place', playerName: contents[0], tile: contents[1]};
+                            return { tag: 'Place', playerName: contents[0], tile: contents[1]};
                         case 'Merge':
                             return { tag: 'Merge', playerName: contents[0], tile: contents[1], fromChain: contents[2], toChain: contents[3] };
                         case 'Fund':
@@ -62,6 +66,17 @@ const socketMiddleware = (function(){
                     }
                 });
                 store.dispatch({ type: 'GameUpdated', board: new SimpleMap<Tile, Cell>(msg.gsBoard), possiblePlays, player: msg.gsPlayer });
+                break;
+            case "Played":
+                // TODO convert!
+                // TODO dispatch!
+                break;
+            case "GameEnds":
+                // TODO convert!
+                // TODO dispatch!
+                break;
+            case "ErrorMessage":
+                store.dispatch({ type: 'ErrorMessage', message: msg.contents[0] });
                 break;
             default:
                 console.log("Received unknown message type: '" + msg.tag + "'");
@@ -104,7 +119,7 @@ const socketMiddleware = (function(){
             case 'RegisterPlayer':
             case 'NewGameStarted':
             case 'Reset':
-                socket.send(JSON.stringify({tag: "List"}));
+                socket.send(JSON.stringify({tag: "List", contents: []}));
                 break;
 
             case 'CreateGame': {

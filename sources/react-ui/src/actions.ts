@@ -1,4 +1,4 @@
-import {Game, GameBoard, GameDescription, GameId, Order, Player, Tile, URL} from './types';
+import {Game, GameBoard, GameDescription, GameId, Order, Player, PlayerName, Tile, URL} from './types';
 
 export type Action
     = { type: 'InitialAction' }
@@ -27,16 +27,15 @@ export type Action
     // Action
     // Bye
 
-    // backend -> frontend:
+    // middleware -> frontend: (emitted from the middleware on reception of a backend message)
+    | { type: 'PlayerRegistered', playerName: PlayerName, gameId: GameId } // TODO handle in reducers
     | { type: 'GamesList', games: GameDescription[] }
-    // PlayerRegistered
     | { type: 'NewGameStarted', gameId: GameId } // not handled in reducers
     | { type: 'GameStarts', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possiblePlays: Order[], player: Player }
-    // ErrorMessage
-    // GameUpdated
-    // Played
-    // GameEnds
+    | { type: 'ErrorMessage', message: string } // TODO handle in reducers
+    | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order } // TODO handle in reducers
+    | { type: 'GameEnds', endGame: GameBoard } // TODO handle in reducers
 
     // ???
     | { type: 'Output', output: string } // TODO
