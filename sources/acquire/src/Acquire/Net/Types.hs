@@ -22,7 +22,7 @@ data Command = NewGame Int Int             -- ^Starts a game with given number o
              deriving (Show, Read, Generic)
 
 data Result = PlayerRegistered PlayerName GameId
-            | NewGameStarted GameId
+            | NewGameCreated GameId
             | GameStarts GameId
             | GamesList [GameDescription]
             | ErrorMessage String
@@ -64,7 +64,7 @@ instance Pretty GameDescription where
 
 instance Pretty Result where
   pretty (PlayerRegistered playerName gameId) = text "registered player" <+> text playerName <+> text "with game" <+> text gameId
-  pretty (NewGameStarted gameId)              = text "created new game" <+> text gameId
+  pretty (NewGameCreated gameId)              = text "created new game" <+> text gameId
   pretty (GameStarts gameId)                  = text "starting game" <+> text gameId
   pretty (GamesList descs)                    = text "list of games:" <$$> vcat (map pretty descs)
   pretty (ErrorMessage msg)                   = text msg

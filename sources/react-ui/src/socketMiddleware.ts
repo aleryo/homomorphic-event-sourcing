@@ -65,8 +65,8 @@ const socketMiddleware = (function(){
                 //Dispatch an action that adds the received message to our state
                 store.dispatch({ type: 'GamesList', games: msg.contents });
                 break;
-            case 'NewGameStarted':
-                store.dispatch({ type: 'NewGameStarted', gameId: msg.contents });
+            case 'NewGameCreated':
+                store.dispatch({ type: 'NewGameCreated', gameId: msg.contents });
                 break;
             case 'GameStarts':
                 store.dispatch({ type: 'GameStarts', gameId: msg.contents });
@@ -124,7 +124,7 @@ const socketMiddleware = (function(){
             //Send actions down the websocket to the server
             case 'RegisterPlayer':
             case 'PlayerRegistered':
-            case 'NewGameStarted':
+            case 'NewGameCreated':
             case 'Reset':
                 socket.send(JSON.stringify({tag: "List", contents: []}));
                 break;

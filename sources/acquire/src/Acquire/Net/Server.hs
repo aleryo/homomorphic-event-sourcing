@@ -184,7 +184,7 @@ startNewGame numh numr = do
   newId <- liftIO randomGameId
   let emptyGame = ActiveGame newId numh numr M.empty [] Nothing
   liftIO $ atomically $ modifyTVar' activeGames  (M.insert newId emptyGame)
-  return $ Just $ NewGameStarted newId
+  return $ Just $ NewGameCreated newId
 
 randomGameId :: IO GameId
 randomGameId = newStdGen >>= return . take 8 . randomRs ('A','Z')
