@@ -55,6 +55,7 @@ Test-Suite tests
    type:              exitcode-stdio-1.0
    main-is:           tests.hs
    ghc-options:       -threaded -Wall -Werror -fno-warn-orphans -rtsopts
+   other-modules: GameTest
    default-extensions:  OverloadedStrings
                       , RecordWildCards
                       , ScopedTypeVariables

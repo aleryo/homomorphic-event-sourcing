@@ -28,6 +28,52 @@ executables:
       - OverloadedStrings
       - RecordWildCards
       - ScopedTypeVariables
+  mock:
+    source-dirs:
+      - src
+    main: mock.hs
+    dependencies:
+      - acquire
+      - aeson
+      - async
+      - base
+      - bytestring
+      - containers
+      - http-types
+      - ioautomata
+      - network
+      - stm
+      - text
+      - unagi-chan
+      - wai
+      - wai-middleware-static
+      - wai-websockets
+      - websockets
+      - warp
+    default-extensions:
+      - OverloadedStrings
+      - RecordWildCards
+      - ScopedTypeVariables
+  wsclient:
+    source-dirs:
+      - src
+    main: wsclient.hs
+    dependencies:
+      - acquire
+      - aeson
+      - base
+      - bytestring
+      - containers
+      - ioautomata
+      - mtl
+      - network
+      - text
+      - wai-websockets
+      - websockets
+    default-extensions:
+      - OverloadedStrings
+      - RecordWildCards
+      - ScopedTypeVariables
   client:
     source-dirs:
       - src

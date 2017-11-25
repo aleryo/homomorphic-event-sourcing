@@ -2,7 +2,11 @@ flags: {}
 packages:
   - 'acquire'
   - 'server'
-  - 'morphism'
+  - location:
+      git: 'https://github.com/abailly/ioautomata.git'
+      commit: 56383a7f653df51e6df4ac611aa50e0d4d62642b
+    extra-dep: true
+
 extra-deps:
   - unagi-chan-0.4.0.0
   - MonadPrompt-1.0.0.5
