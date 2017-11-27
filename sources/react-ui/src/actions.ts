@@ -31,7 +31,7 @@ export type Action
     | { type: 'PlayerRegistered', playerName: PlayerName, gameId: GameId } // is not handled in reducers, only triggers loading of games list
     | { type: 'GamesList', games: GameDescription[] }
     | { type: 'NewGameCreated', gameId: GameId } // not handled in reducers
-    | { type: 'GameStarts', gameId: GameId }
+    | { type: 'GameStarted', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possiblePlays: Order[], player: Player }
     | { type: 'ErrorMessage', message: string }
     // TODO playerName is not used anywhere:

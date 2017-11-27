@@ -169,7 +169,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         numPlayers: game.numPlayers,
                         numRobots: game.numRobots
                     };
-                case 'GameStarts':
+                case 'GameStarted':
                     return {
                         type: 'PlayGame'
                         , player: game.player

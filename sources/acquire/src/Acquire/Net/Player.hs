@@ -59,7 +59,7 @@ readResult h player io@InOut{..} = do
   let res :: Result = read  ln
   outputResult res
   case res of
-   GameStarts _ -> hFlush h >> askForPlay player h io
+   GameStarted _ -> hFlush h >> askForPlay player h io
    _            -> readResult h player io
 
 askForPlay :: PlayerName -> Handle -> InOut -> IO ()

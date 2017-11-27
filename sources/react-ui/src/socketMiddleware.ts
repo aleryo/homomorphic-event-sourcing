@@ -68,8 +68,8 @@ const socketMiddleware = (function(){
             case 'NewGameCreated':
                 store.dispatch({ type: 'NewGameCreated', gameId: msg.contents });
                 break;
-            case 'GameStarts':
-                store.dispatch({ type: 'GameStarts', gameId: msg.contents });
+            case 'GameStarted':
+                store.dispatch({ type: 'GameStarted', gameId: msg.contents });
                 break;
             case 'GameState':
                 console.log("GameState", msg)

@@ -236,6 +236,6 @@ runGameServer gid numRobots clients  = do
 notifyStartup :: GameId -> Connections -> [ ThreadId ]  -> IO ()
 notifyStartup gid cnx threads = do
   mytid <- myThreadId
-  forM_ (M.elems cnx) (\ (Cnx _ hout) -> hPutStrLn hout $ show (GameStarts gid))
+  forM_ (M.elems cnx) (\ (Cnx _ hout) -> hPutStrLn hout $ show (GameStarted gid))
   forM_ threads (\ tid -> when (tid /= mytid) $  -- we don't kill the thread we are running in...
                           trace ("killing thread " ++ show tid ++ " for game " ++ gid) >> killThread tid)
