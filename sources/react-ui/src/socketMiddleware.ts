@@ -139,7 +139,7 @@ const socketMiddleware = (function(){
                 break;
             }
 
-            case 'Join': {
+            case 'JoinGame': {
                 const {game} = store.getState();
                 // caution: only works in SelectGame state...
                 socket.send(JSON.stringify({tag: "JoinGame", playerName: game.player.playerName, gameId: action.gameDescId }));

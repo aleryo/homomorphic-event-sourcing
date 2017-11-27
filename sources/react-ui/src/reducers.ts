@@ -156,7 +156,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                 case 'CreateGame':
                     // DONE send to backend: sendCommand model (CreateGame { numHumans = sg.numPlayers, numRobots = sg.numRobots })
                     return game;
-                case 'Join':
+                case 'JoinGame':
                     // DONE send to backend: sendCommand model (JoinGame { playerName = sg.player.playerName, gameId = g })
                     return game;
 
