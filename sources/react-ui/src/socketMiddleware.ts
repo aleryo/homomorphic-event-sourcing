@@ -22,7 +22,7 @@ const decodeOrder = ({tag, contents}:{tag:string, contents:any[]}) => {
         case 'Cancel':
             return { tag: 'Cancel' };
         default:
-            console.log("Unknown play tag " + tag + " with ", contents);
+            console.log("Unknown move tag " + tag + " with ", contents);
     }
 };
 
@@ -73,7 +73,7 @@ const socketMiddleware = (function(){
                 break;
             case 'GameState':
                 console.log("GameState", msg)
-                store.dispatch({ type: 'GameUpdated', board: decodeBoard(msg.gsBoard), possiblePlays: msg.gsPlayables.map(decodeOrder), player: decodePlayer(msg.gsPlayer) });
+                store.dispatch({ type: 'GameUpdated', board: decodeBoard(msg.gsBoard), possibleMoves: msg.gsPlayables.map(decodeOrder), player: decodePlayer(msg.gsPlayer) });
                 break;
             case "Played":
                 store.dispatch({ type: 'Played', playerName: msg.gsPlayerName, board: decodeBoard(msg.gsBoard), played: decodeOrder(msg.gsPlayed) });
@@ -146,7 +146,7 @@ const socketMiddleware = (function(){
                 break;
             }
 
-            case 'Play': {
+            case 'Move': {
                 socket.send(JSON.stringify({tag: "Action", selectedPlay: action.move}));
                 break;
             }

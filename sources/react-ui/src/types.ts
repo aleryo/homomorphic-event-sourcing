@@ -159,7 +159,7 @@ export type GameState
     , player: Player
     , gameId: GameId
     , board: GameBoard
-    , possiblePlays: Order[]
+    , possibleMoves: Order[]
     , highlightedCell?: Tile
 }
     | { type: 'EndOfGame', player: Player, gameId: GameId, board: GameBoard, gameResult: Players }

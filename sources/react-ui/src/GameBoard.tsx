@@ -1,6 +1,6 @@
 import React from 'react';
 import {Cell, ChainName, Order, Props, Tile} from './types';
-import {highlightCell, play, unhighlightCell} from './actions';
+import {highlightCell, move, unhighlightCell} from './actions';
 
 export default ({model: {game}, dispatch}: Props) => {
     switch (game.type) {
@@ -11,9 +11,9 @@ export default ({model: {game}, dispatch}: Props) => {
                     <span className="cash">{game.player.ownedCash}</span>
                     <div className="stock">{game.player.ownedStock.toList().map(displayStock)}</div>
                 </div>
-                <div className="plays">
-                    <h1>Possible Plays</h1>
-                    {game.possiblePlays.map((play, index) => displayPlay(dispatch, play, index))}
+                <div className="moves">
+                    <h1>Possible Moves</h1>
+                    {game.possibleMoves.map((move, index) => displayMove(dispatch, move, index))}
                 </div>
                 <div className="board">
                     <h1>Current Board</h1>
@@ -30,11 +30,11 @@ function displayStock({key, value}: { key: ChainName, value: number }) {
     </span>;
 }
 
-function displayPlay(dispatch:any, order: Order, n: number) {
+function displayMove(dispatch:any, order: Order, n: number) {
     switch (order.tag) {
         case 'Place':
             return <span className="cell empty"
-                         onClick={() => dispatch(play(n + 1))}
+                         onClick={() => dispatch(move(n + 1))}
                          onMouseEnter={() => dispatch(highlightCell(order.tile))}
                          onMouseLeave={() => dispatch(unhighlightCell())}
             >
@@ -44,19 +44,19 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'BuyStock':
             return <span className={'cell chain ' + order.chainName}
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-usd"></span></span></span>;
 
         case 'SellStock':
             return <span className={'cell chain ' + order.chainName}
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-usd"></span></span></span>;
 
         case 'ExchangeStock':
             return <span className="cell exchange"
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className={'buyee-' + order.fromChain}></span>
                     <span className={'buyer-' + order.toChain}></span>
@@ -66,7 +66,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'Fund':
             return <span className={'cell chain ' + order.chainName}
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-building-o"></span>
                 </span>
@@ -74,7 +74,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'Merge':
             return <span className="cell merge"
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className={'buyee-' + order.fromChain}></span>
                     <span className={'buyer-' + order.toChain}></span>
@@ -84,7 +84,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'Pass':
             return <span className="cell"
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-refresh"></span>
                 </span>
@@ -92,7 +92,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'EndGame':
             return <span className="cell"
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-stop"></span>
                 </span>
@@ -100,7 +100,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 
         case 'Cancel':
             return <span className="cell"
-                         onClick={() => dispatch(play(n + 1))}>
+                         onClick={() => dispatch(move(n + 1))}>
                 <span className="cell-content">
                     <span className="fa fa-lg fa-backward"></span>
                 </span>

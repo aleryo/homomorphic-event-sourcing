@@ -12,7 +12,7 @@ export type Action
     | { type: 'CreateGame' }
 
     | { type: 'Join', gameDescId: GameId }
-    | { type: 'Play', move: number }
+    | { type: 'Move', move: number }
 
     | { type: 'ShowMessages' }
     | { type: 'HideMessages' }
@@ -32,7 +32,7 @@ export type Action
     | { type: 'GamesList', games: GameDescription[] }
     | { type: 'NewGameCreated', gameId: GameId } // not handled in reducers
     | { type: 'GameStarted', gameId: GameId }
-    | { type: 'GameUpdated', board: GameBoard, possiblePlays: Order[], player: Player }
+    | { type: 'GameUpdated', board: GameBoard, possibleMoves: Order[], player: Player }
     | { type: 'ErrorMessage', message: string }
     // TODO playerName is not used anywhere:
     | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order }
@@ -73,8 +73,8 @@ export function joinGame(gameDescId: GameId): Action {
     return {type: 'Join', gameDescId};
 }
 
-export function play(move: number): Action {
-    return {type: 'Play', move};
+export function move(move: number): Action {
+    return {type: 'Move', move};
 }
 
 export function showMessages(): Action {

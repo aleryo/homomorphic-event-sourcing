@@ -175,21 +175,21 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         , player: game.player
                         , gameId: action.gameId
                         , board: new SimpleMap<Tile, Cell>([])
-                        , possiblePlays: []
+                        , possibleMoves: []
                         , highlightedCell: null                    }
             }
             return game;
 
         case 'PlayGame':
             switch (action.type) {
-                case 'Play':
+                case 'Move':
                     // DONE send to backend: sendCommand model (Action { selectedPlay = n })
                     return {
                         type: game.type,
                         player: game.player,
                         gameId: game.gameId,
                         board: game.board,
-                        possiblePlays: [],
+                        possibleMoves: [],
                         highlightedCell: game.highlightedCell
                     };
                 case 'HighlightCell':
@@ -198,7 +198,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         player: game.player,
                         gameId: game.gameId,
                         board: game.board,
-                        possiblePlays: game.possiblePlays,
+                        possibleMoves: game.possibleMoves,
                         highlightedCell: action.tile
                     };
                 case 'UnhighlightCell':
@@ -207,7 +207,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         player: game.player,
                         gameId: game.gameId,
                         board: game.board,
-                        possiblePlays: game.possiblePlays,
+                        possibleMoves: game.possibleMoves,
                         highlightedCell: null
                     };
                 case 'GameUpdated':
@@ -216,7 +216,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         player: action.player,
                         gameId: game.gameId,
                         board: action.board,
-                        possiblePlays: action.possiblePlays,
+                        possibleMoves: action.possibleMoves,
                         highlightedCell: game.highlightedCell
                     };
                 case 'Played':
@@ -225,7 +225,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                         player: game.player,
                         gameId: game.gameId,
                         board: action.board,
-                        possiblePlays: [],
+                        possibleMoves: [],
                         highlightedCell: game.highlightedCell
                     };
                 case 'GameEnds':
