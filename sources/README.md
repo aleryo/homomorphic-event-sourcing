@@ -36,3 +36,28 @@ $ stack exec server -- 9000 react-ui
 ```
 
 **TBD**: Then point browser at `http://localhost:9000/index.html` to load the UI
+
+### Running mock server
+
+To run a mock websocket server on port 9000 against which to test a client:
+
+```
+$ stack exec wsmock -- 9000
+```
+
+**WORK IN PROGRESS**: This server implements an `IOAutomaton` based protocol.
+
+### Testing mock WS server
+
+There is a very simple client program that can be used to test the mock WS server:
+
+```
+$ stack exec wsclient -- 127.0.0.1 9000 foo
+Connected!
+{"tag": "List"}
+{"reason":"command List not handled"}
+{"tag":"Bye"}
+wsclient: CloseRequest 1000 "Bye"
+^C
+$
+```

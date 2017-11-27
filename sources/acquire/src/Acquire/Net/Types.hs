@@ -26,7 +26,7 @@ data Result = PlayerRegistered PlayerName GameId
             | GameStarted GameId
             | GamesListed [GameDescription]
             | ErrorMessage String
-            deriving (Show, Read, Generic)
+            deriving (Eq, Show, Read, Generic)
 
 instance ToJSON Result
 
