@@ -72,7 +72,7 @@ function displayPlay(dispatch:any, order: Order, n: number) {
                 </span>
             </span>;
 
-        case 'Merge': // _ _ cf ct ->
+        case 'Merge':
             return <span className="cell merge"
                          onClick={() => dispatch(play(n + 1))}>
                 <span className="cell-content">
