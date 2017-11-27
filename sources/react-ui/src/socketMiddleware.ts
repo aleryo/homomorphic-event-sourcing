@@ -79,6 +79,7 @@ const socketMiddleware = (function(){
                 store.dispatch({ type: 'Played', playerName: msg.gsPlayerName, board: decodeBoard(msg.gsBoard), played: decodeOrder(msg.gsPlayed) });
                 break;
             case "GameEnds":
+                // FIXME decodeGame bails out here because players is not a list
                 store.dispatch({ type: 'GameEnds', endGame: decodeGame(msg.gsEndGame) });
                 break;
             case "ErrorMessage":
