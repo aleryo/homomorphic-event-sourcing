@@ -1,13 +1,10 @@
 import React from 'react';
-import * as R from 'ramda';
 import {Cell, ChainName, Order, Props, Tile} from './types';
 import {highlightCell, play, unhighlightCell} from './actions';
 
 export default ({model: {game}, dispatch}: Props) => {
     switch (game.type) {
         case 'PlayGame':
-            const displayCellWithHighlighted = R.partialRight(displayCell, [game.highlightedCell]);
-            const displayPlayWithDispatch = R.partial(displayPlay, [dispatch]);
             return <div id="game-board">
                 <div className="player">
                     <h1>Player's Hand</h1>
@@ -16,11 +13,11 @@ export default ({model: {game}, dispatch}: Props) => {
                 </div>
                 <div className="plays">
                     <h1>Possible Plays</h1>
-                    {game.possiblePlays.map(displayPlayWithDispatch)}
+                    {game.possiblePlays.map((play, index) => displayPlay(dispatch, play, index))}
                 </div>
                 <div className="board">
                     <h1>Current Board</h1>
-                    {game.board.toList().map(displayCellWithHighlighted)}
+                    {game.board.toList().map(cell => displayCell(cell, game.highlightedCell))}
                 </div>
             </div>;
     }
@@ -116,20 +113,8 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 function displayCell({key: tile, value: cell}: { key: Tile, value: Cell }, highlightedCell?: Tile) {
     const hlClass = highlightedCell
       && highlightedCell.row === tile.row
-      && highlightedCell.col === tile.col ? " highlighted" : " empty";
-    // FIXME
-    /*
-            hlClass =
-            maybe " empty"
-                (\hlTile ->
-                    if hlTile == tile then
-                        " highlighted"
-                    else
-                        " empty"
-                )
-                highlighted
+      && highlightedCell.col === tile.col ? "highlighted" : "empty";
 
-     */
     function t2s(tile:Tile):string {
         return tile.row + "-" + tile.col;
     }
