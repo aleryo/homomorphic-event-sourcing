@@ -135,7 +135,7 @@ const socketMiddleware = (function(){
             case 'CreateGame': {
                 const {game} = store.getState();
                 // caution: only works in SelectGame state...
-                socket.send(JSON.stringify({tag: "NewGame", numHumans: game.numPlayers, numRobots: game.numRobots}));
+                socket.send(JSON.stringify({tag: "CreateGame", numHumans: game.numPlayers, numRobots: game.numRobots}));
                 break;
             }
 

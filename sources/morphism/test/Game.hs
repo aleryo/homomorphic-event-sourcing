@@ -17,5 +17,5 @@ data Front = SetPlayerName
            | CreateGame
   deriving (Eq, Show, Data, Typeable, Generic, ToJSON, FromJSON)
 
-data Back = List | NewGame
+data Back = List | CreateGame
   deriving (Eq, Show, Data, Typeable, Generic, ToJSON, FromJSON)

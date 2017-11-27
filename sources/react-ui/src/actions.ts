@@ -22,7 +22,7 @@ export type Action
 
     // frontend -> backend:
     // List
-    // NewGame
+    // CreateGame
     // JoinGame
     // Action
     // Bye

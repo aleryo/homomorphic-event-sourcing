@@ -12,7 +12,7 @@ spec = describe "Morphism" $ do
                             , Tr (State 0) (In RegisterPlayer)  (Com List)    (State 1)
                             , Tr (State 1) (In SetNumRobots  )   Eps          (State 1)
                             , Tr (State 1) (In SetNumPlayers )   Eps          (State 1)
-                            , Tr (State 1) (In CreateGame    )  (Com NewGame) (State 1)
+                            , Tr (State 1) (In CreateGame    )  (Com CreateGame) (State 1)
                             ]
 
     morphism `morph` [ SetPlayerName, SetPlayerName, RegisterPlayer ]

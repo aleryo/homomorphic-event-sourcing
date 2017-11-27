@@ -15,7 +15,7 @@ import           Data.Maybe               (isJust)
 import           GHC.Generics
 import           System.IO                (Handle)
 
-data Command = NewGame Int Int             -- ^Starts a game with given number of human players and robots
+data Command = CreateGame Int Int             -- ^Starts a game with given number of human players and robots
              | StartingGame PlayerName     -- ^Notification from player he is joining runnable game
              | JoinGame PlayerName GameId  -- ^Player joins an existing game
              | ListGames

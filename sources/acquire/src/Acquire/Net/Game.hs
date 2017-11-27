@@ -19,7 +19,7 @@ connectTo host port = do
 runNewGame :: String -> PortNumber -> Int -> Int -> IO Result
 runNewGame host port numHumans numRobots = do
   h <- connectTo host port
-  let command = NewGame numHumans numRobots
+  let command = CreateGame numHumans numRobots
   hPrint h command
   res :: Result <- read `fmap` hGetLine h
   hClose h

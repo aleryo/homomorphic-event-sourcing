@@ -170,7 +170,7 @@ interpretClientCommand handle = do
     readClientCommand = try . hGetLine
 
 handleCommand :: Handle -> Command -> ReaderT Server IO (Maybe Result)
-handleCommand _ (NewGame numHumans numRobots) = startNewGame numHumans numRobots
+handleCommand _ (CreateGame numHumans numRobots) = startNewGame numHumans numRobots
 handleCommand h (JoinGame player game)        = joinGame h player game
 handleCommand _ (StartingGame _)              = return Nothing
 handleCommand _ ListGames                     = do

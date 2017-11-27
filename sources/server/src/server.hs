@@ -148,7 +148,7 @@ handleClient channels p connection =
     handleCommand List = do
       r <- listGames "localhost" p
       sendTextData connection (encode r)
-    handleCommand (NewGame numHumans numRobots) = do
+    handleCommand (CreateGame numHumans numRobots) = do
       r <- runNewGame "localhost" p numHumans numRobots
       sendTextData connection (encode r)
     handleCommand (JoinGame playerName gameId) =
