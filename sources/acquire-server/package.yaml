@@ -1,4 +1,4 @@
-name: server
+name: acquire-server
 synopsis:  Game Server for Acquire
 ghc-options: -Wall -fno-warn-orphans
 
@@ -8,13 +8,15 @@ executables:
       - src
     main: server.hs
     dependencies:
-      - acquire
+      - acquire-tcp
+      - acquire-game
       - aeson
       - async
       - base
       - bytestring
       - containers
       - http-types
+      - ioautomata
       - network
       - stm
       - text
@@ -33,7 +35,8 @@ executables:
       - src
     main: mock.hs
     dependencies:
-      - acquire
+      - acquire-tcp
+      - acquire-game
       - aeson
       - async
       - base
@@ -59,7 +62,8 @@ executables:
       - src
     main: wsclient.hs
     dependencies:
-      - acquire
+      - acquire-game
+      - acquire-tcp
       - aeson
       - base
       - bytestring
@@ -69,23 +73,6 @@ executables:
       - network
       - text
       - wai-websockets
-      - websockets
-    default-extensions:
-      - OverloadedStrings
-      - RecordWildCards
-      - ScopedTypeVariables
-  client:
-    source-dirs:
-      - src
-    main: client.hs
-    dependencies:
-      - acquire
-      - aeson
-      - base
-      - bytestring
-      - mtl
-      - network
-      - text
       - websockets
     default-extensions:
       - OverloadedStrings

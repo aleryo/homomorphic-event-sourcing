@@ -1,0 +1,42 @@
+-- This file has been generated from package.yaml by hpack version 0.17.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           acquire-game
+version:        0.1.0
+synopsis:       Core rules and types for Acquire game
+author:         Arnaud Bailly <arnaud.oqube@gmail.com>
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+library
+  hs-source-dirs:
+      src
+  default-extensions: OverloadedStrings RecordWildCards ScopedTypeVariables MultiParamTypeClasses
+  ghc-options: -Wall -Werror -fno-warn-orphans
+  build-depends:
+      aeson
+    , array
+    , base
+    , bytestring
+    , containers
+    , data-default
+    , directory
+    , MonadPrompt
+    , mtl
+    , random
+    , random-shuffle
+    , text
+  exposed-modules:
+      Acquire.Game
+  other-modules:
+      Acquire.Game.Cells
+      Acquire.Game.Core
+      Acquire.Game.Hotels
+      Acquire.Game.Play
+      Acquire.Game.Player
+      Acquire.Game.Tiles
+      Acquire.Game.Turn
+      Paths_acquire_game
+  default-language: Haskell2010

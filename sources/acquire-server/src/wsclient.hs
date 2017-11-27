@@ -17,6 +17,7 @@ import           Messages
 import           Network.Socket      (withSocketsDo)
 import qualified Network.WebSockets  as WS
 import           System.Environment  (getArgs)
+import           System.IO
 
 
 --------------------------------------------------------------------------------
@@ -42,4 +43,6 @@ app conn = do
 main :: IO ()
 main = do
   [host, port, path] <- getArgs
+  hSetBuffering stdout LineBuffering
+  hSetBuffering stderr LineBuffering
   withSocketsDo $ WS.runClient host (read port) ("/" <> path) app

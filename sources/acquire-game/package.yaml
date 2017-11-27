@@ -1,0 +1,30 @@
+name: acquire-game
+version: 0.1.0
+license-file:         LICENSE
+author: Arnaud Bailly <arnaud.oqube@gmail.com>
+synopsis:  Core rules and types for Acquire game
+ghc-options: -Wall -Werror -fno-warn-orphans
+
+library:
+  source-dirs:
+    - src
+  dependencies:
+    - aeson
+    - array
+    - base
+    - bytestring
+    - containers
+    - data-default
+    - directory
+    - MonadPrompt
+    - mtl
+    - random
+    - random-shuffle
+    - text
+  exposed-modules:
+    - Acquire.Game
+  default-extensions:
+    - OverloadedStrings
+    - RecordWildCards
+    - ScopedTypeVariables
+    - MultiParamTypeClasses
