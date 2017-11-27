@@ -1,4 +1,4 @@
-import actions from './actions'
+import actions, {Action} from './actions';
 import {Cell, ChainName, Player, SimpleMap, Tile} from './types';
 
 const decodeOrder = ({tag, contents}:{tag:string, contents:any[]}) => {
@@ -91,7 +91,7 @@ const socketMiddleware = (function(){
         }
     };
 
-    return (store:any) => (next:any) => (action:any) => {
+    return (store:any) => (next:any) => (action:Action) => {
         switch(action.type) {
 
             //The user wants us to connect
@@ -107,11 +107,12 @@ const socketMiddleware = (function(){
                 socket = new WebSocket(action.url);
                 socket.onmessage = onMessage(socket,store);
                 socket.onclose = onClose(socket,store);
-                socket.onopen = onOpen(socket,store,action.token);
+                socket.onopen = onOpen(socket,store,action.type);
 
                 break;
 
             //The user wants us to disconnect
+                /*
             case 'DISCONNECT':
                 if(socket != null) {
                     socket.close();
@@ -121,6 +122,7 @@ const socketMiddleware = (function(){
                 //Set our state to disconnected
                 // store.dispatch(actions.disconnected());
                 break;
+                */
 
             //Send actions down the websocket to the server
             case 'RegisterPlayer':
