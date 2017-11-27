@@ -1,14 +1,20 @@
-{-# LANGUAGE DeriveGeneric       #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
 module Main where
 
+import           Acquire.Net                    (Result)
 import           Acquire.Trace
+import           AcquireSpec
 import           Control.Concurrent.Async       (Async, cancel)
 import           Control.Concurrent.Chan.Unagi  (InChan, OutChan, newChan)
 import           Control.Concurrent.STM
-import           Control.Exception              (catch)
-import           Data.Aeson
+import           Control.Exception              (catch, throwIO)
+import           Control.Monad.Reader           (ReaderT (..), ask)
+import           Control.Monad.Trans            (liftIO)
+import           Data.Aeson                     hiding (Result)
 import qualified Data.ByteString                as SBS
 import           Data.Functor
 import           Data.IORef
@@ -16,6 +22,7 @@ import qualified Data.Map                       as M
 import           Data.Monoid                    ((<>))
 import           Data.Text.Lazy                 (Text)
 import           GHC.Generics
+import           IOAutomaton
 import           Messages
 import           Network.HTTP.Types.Status
 import           Network.Wai                    (Application, responseLBS)
@@ -31,6 +38,7 @@ import           Network.WebSockets             (Connection,
                                                  pendingRequest,
                                                  receiveDataMessage, sendClose,
                                                  sendTextData)
+import           Prelude                        hiding (init)
 import           System.Environment
 
 newtype CommandError = CommandError { reason :: String }
@@ -74,22 +82,26 @@ handleWS cnxs pending = do
             trace $ "reusing old channels with key " ++ show key
             return r
 
+instance Interactive (ReaderT Connection IO) Message Result where
+  request = ask >>= \ connection -> liftIO $ do
+    Text message _ <- receiveDataMessage connection
+    trace $ "received message: " ++ show message
+    case eitherDecode message of
+      Left e  -> throwIO $ userError $ "cannot decode properly " <> show message <> ": " <> e
+      Right c -> pure c
+
+  reply msg = ask >>= \ connection -> liftIO $ sendTextData connection (encode msg)
 
 handleClient :: IORef ClientConnection -> Connection ->  IO ()
 handleClient channels connection =
-  let clientLoop = do
-        Text message _ <- receiveDataMessage connection
-        trace $ "received message: " ++ show message
-        case eitherDecode message of
-          Left e  -> sendTextData connection (encode $ CommandError e)
-          Right c -> handleCommand c
-        clientLoop
+  let clientLoop = runReaderT (mockModel (init :: GameState) (T [])) connection
 
-  in clientLoop `catch` (\ (e :: ConnectionException) -> do
-                            trace $ "client error: " <> show e <>", closing everything"
-                            cleanup)
+  in (clientLoop >>= dumpResult) `catch` (\ (e :: ConnectionException) -> do
+                                             trace $ "client error: " <> show e <>", closing everything"
+                                             cleanup)
 
   where
+    dumpResult result = trace $ "completed mock run with " <> show result
 
     cleanup = do
       ClientConnection _w _r cnx sp cp <- readIORef channels
@@ -97,11 +109,6 @@ handleClient channels connection =
       maybe (return ()) cancel sp
       maybe (return ()) cancel cp
       modifyIORef channels ( \ c -> c { serverPump = Nothing, clientPump = Nothing })
-
-    notHandled c = sendTextData connection (encode $ CommandError $ "command " <> show c <> " not handled")
-
-    handleCommand Bye = sendClose connection ("Bye" :: Text)
-    handleCommand c   = notHandled c
 
 main :: IO ()
 main = do

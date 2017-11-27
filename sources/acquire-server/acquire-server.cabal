@@ -24,6 +24,7 @@ executable mock
     , containers
     , http-types
     , ioautomata
+    , mtl
     , network
     , stm
     , text

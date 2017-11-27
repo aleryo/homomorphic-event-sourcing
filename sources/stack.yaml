@@ -3,10 +3,7 @@ packages:
   - 'acquire-game'
   - 'acquire-tcp'
   - 'acquire-server'
-  - location:
-      git: 'https://github.com/abailly/ioautomata.git'
-      commit: 56383a7f653df51e6df4ac611aa50e0d4d62642b
-    extra-dep: true
+  - 'ioautomata'
 
 extra-deps:
   - unagi-chan-0.4.0.0

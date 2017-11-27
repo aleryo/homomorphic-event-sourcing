@@ -1,0 +1,3 @@
+[submodule "sources/ioautomata"]
+	path = sources/ioautomata
+	url = git@github.com:abailly/ioautomata.git

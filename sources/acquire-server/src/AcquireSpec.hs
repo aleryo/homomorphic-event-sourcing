@@ -13,7 +13,8 @@ Model is currently incomplete:
 module AcquireSpec where
 
 import           Acquire.Game hiding (GameState, Message, newGame)
-import           Acquire.Net  (GameDescription (..), Result (..))
+import           Acquire.Net  (GameDescription (..), Result)
+import qualified Acquire.Net  as Net
 import           IOAutomaton
 import           Messages
 
@@ -37,27 +38,27 @@ instance IOAutomaton GameState AcquireState Message Result where
   action     = acquire
 
 acquire :: Message -> GameState -> (Maybe Result, GameState)
-acquire NewGame{..}  = newGame numHumans numRobots
-acquire List         = list
-acquire JoinGame{..} = joinGame playerName gameId
-acquire Action{..}   = playAction selectedPlay
-acquire Bye          = \ (GameState _state _) -> (Nothing, GameState GameEnded Nothing)
+acquire CreateGame{..} = newGame numHumans numRobots
+acquire List           = list
+acquire JoinGame{..}   = joinGame playerName gameId
+acquire Action{..}     = playAction selectedPlay
+acquire Bye            = \ (GameState _state _) -> (Nothing, GameState GameEnded Nothing)
 
 newGame :: Int -> Int ->  GameState -> (Maybe Result, GameState)
-newGame h r (GameState Init _) = (Just $ NewGameStarted "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))
+newGame h r (GameState Init _) = (Just $ Net.NewGameCreated "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))
   -- dummy GameId -> inject stdgen to generate a valid game id
 newGame _ _ g                  = (Nothing, g)
 
 list :: GameState -> (Maybe Result, GameState)
-list curState@(GameState _state (Just gstate)) = (Just $ GamesList [ gstate ], curState)
-list curState@(GameState _state Nothing)       = (Just $ GamesList [ ], curState)
+list curState@(GameState _state (Just gstate)) = (Just $ Net.GamesListed [ gstate ], curState)
+list curState@(GameState _state Nothing)       = (Just $ Net.GamesListed [ ], curState)
 
 joinGame :: PlayerName -> GameId -> GameState -> (Maybe Result, GameState)
 joinGame _pname _gid (GameState GameCreated (Just desc @ (GameDescription "12345678" 1 _robots [] False)))
-  = (Just $ GameStarts "12345678", GameState GameStarted (Just $ desc { descLive = True } ))
+  = (Just $ Net.GameStarted "12345678", GameState GameStarted (Just $ desc { descLive = True } ))
 joinGame _     _   g = (Nothing, g)
 
 playAction :: Int -> GameState -> (Maybe Result, GameState)
 playAction _actionNum (GameState GameStarted (Just desc @ (GameDescription "12345678" 1 _ [] False)))
-  = (Just $ ErrorMessage "unsupported action pending model completion -- should be Played xxx", GameState GameStarted (Just $ desc { descLive = True } ))
+  = (Just $ Net.ErrorMessage "unsupported action pending model completion -- should be Played xxx", GameState GameStarted (Just $ desc { descLive = True } ))
 playAction _         g = (Nothing, g)
