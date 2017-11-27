@@ -61,9 +61,9 @@ const socketMiddleware = (function(){
                 // TODO does backend actually send this?
                 store.dispatch({ type: "PlayerRegistered", playerName: msg.contents[0], gameId: msg.contents[1] });
                 break;
-            case "GamesList":
+            case "GamesListed":
                 //Dispatch an action that adds the received message to our state
-                store.dispatch({ type: 'GamesList', games: msg.contents });
+                store.dispatch({ type: 'GamesListed', games: msg.contents });
                 break;
             case 'NewGameCreated':
                 store.dispatch({ type: 'NewGameCreated', gameId: msg.contents });

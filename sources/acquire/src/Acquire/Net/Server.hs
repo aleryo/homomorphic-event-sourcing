@@ -176,7 +176,7 @@ handleCommand _ (StartingGame _)              = return Nothing
 handleCommand _ ListGames                     = do
   activeGames <- ask
   games <- liftIO $ atomically $ readTVar activeGames
-  return $ Just $ GamesList $ map gamesList (M.elems games)
+  return $ Just $ GamesListed $ map gamesList (M.elems games)
 
 startNewGame :: Int -> Int -> ReaderT Server IO (Maybe Result)
 startNewGame numh numr = do

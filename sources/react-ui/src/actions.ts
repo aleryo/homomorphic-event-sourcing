@@ -29,7 +29,7 @@ export type Action
 
     // middleware -> frontend: (emitted from the middleware on reception of a backend message)
     | { type: 'PlayerRegistered', playerName: PlayerName, gameId: GameId } // is not handled in reducers, only triggers loading of games list
-    | { type: 'GamesList', games: GameDescription[] }
+    | { type: 'GamesListed', games: GameDescription[] }
     | { type: 'NewGameCreated', gameId: GameId } // not handled in reducers
     | { type: 'GameStarted', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possibleMoves: Order[], player: Player }

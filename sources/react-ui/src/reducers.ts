@@ -161,7 +161,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                     return game;
 
                 // from backend:
-                case 'GamesList':
+                case 'GamesListed':
                     return {
                         type: game.type,
                         player: game.player,
