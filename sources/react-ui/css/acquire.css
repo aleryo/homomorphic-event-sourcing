@@ -411,7 +411,7 @@ span.cell:after {
     top:0; bottom:0; left:0; right:0;
     text-align: center;
     font-size: 1.4rem;
-} 
+}
 
 .cell-content span {
     display: block;
@@ -497,7 +497,7 @@ span.stock-count {
   border-bottom: thin solid black;
 }
 .player:first-of-type {
-  border-top: thin solid black;  
+  border-top: thin solid black;
 }
 .name {
   padding:.3em;
@@ -512,12 +512,12 @@ span.stock-count {
 @media (max-width: 700px) {
     .cell-content {
         font-size: 1.2rem;
-    }    
+    }
 
     .American:before {
         font-size: 1.5em;
     }
-    
+
     .Tower:before {
         font-size: 1.5em;
     }
@@ -546,12 +546,12 @@ span.stock-count {
 @media (max-width: 550px) {
     .cell-content {
         font-size: 1rem;
-    }    
+    }
 
     .American:before {
         font-size: 1.2rem;
     }
-    
+
     .Tower:before {
         font-size: 1.2rem;
     }
