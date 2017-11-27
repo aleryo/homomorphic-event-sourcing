@@ -109,32 +109,31 @@ function displayPlay(dispatch:any, order: Order, n: number) {
 }
 
 
-// FIXME determine CSS class based on cell content, then generate HTML only once
 function displayCell({key: tile, value: cell}: { key: Tile, value: Cell }, highlightedCell?: Tile) {
-    const hlClass = highlightedCell
-      && highlightedCell.row === tile.row
-      && highlightedCell.col === tile.col ? "highlighted" : "empty";
 
     function t2s(tile:Tile):string {
         return tile.row + "-" + tile.col;
     }
-    switch (cell.cellContent.tag) {
-        case 'Empty':
-            return <span className={'cell ' + hlClass}>
-                    <span className="cell-content">
-                        <span>{t2s(tile)}</span></span></span>;
 
-        case 'Neutral':
-            return <span className="cell neutral">
-                    <span className="cell-content">
-                        <span>{t2s(tile)}</span></span></span>;
+    function cellClass(cell:Cell, tile:Tile, highlightedCell?:Tile): string {
+        switch (cell.cellContent.tag) {
+            case 'Empty':
+                return highlightedCell
+                && highlightedCell.row === tile.row
+                && highlightedCell.col === tile.col ? "highlighted" : "empty";
 
-        case 'Chain':
-            return <span className={'cell ' + cell.cellContent.contents}>
-                    <span className="cell-content">
-                        <span>{t2s(tile)}</span></span></span>;
+            case 'Neutral':
+                return "neutral";
+
+            case 'Chain':
+                return cell.cellContent.contents;
+        }
+        return '';
     }
-    return null;
+
+    return <span className={'cell ' + cellClass(cell, tile, highlightedCell)}>
+                    <span className="cell-content">
+                        <span>{t2s(tile)}</span></span></span>;
 }
 
 /*
