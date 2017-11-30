@@ -3,6 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
+import           Acquire.Messages
 import           Acquire.Net                    (InOut (..), listGames,
                                                  runNewGame, runPlayer,
                                                  runServer)
@@ -20,7 +21,6 @@ import           Data.IORef
 import qualified Data.Map                       as M
 import           Data.Text.Lazy                 (Text)
 import           GHC.Generics
-import           Messages
 import           Network.HTTP.Types.Status
 import           Network.Socket
 import           Network.Wai                    (Application, responseLBS)

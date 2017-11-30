@@ -2,14 +2,31 @@ name: acquire-server
 synopsis:  Game Server for Acquire
 ghc-options: -Wall -fno-warn-orphans
 
+library:
+  source-dirs: src
+  dependencies:
+    - acquire-game
+    - acquire-tcp
+    - aeson
+    - base
+    - ioautomata
+  exposed-modules:
+    - Acquire.Model
+    - Acquire.Messages
+  default-extensions:
+    - OverloadedStrings
+    - RecordWildCards
+    - ScopedTypeVariables
+
 executables:
   server:
     source-dirs:
-      - src
+      - main
     main: server.hs
     dependencies:
       - acquire-tcp
       - acquire-game
+      - acquire-server
       - aeson
       - async
       - base
@@ -26,17 +43,14 @@ executables:
       - wai-websockets
       - websockets
       - warp
-    default-extensions:
-      - OverloadedStrings
-      - RecordWildCards
-      - ScopedTypeVariables
   mock:
     source-dirs:
-      - src
+      - main
     main: mock.hs
     dependencies:
       - acquire-tcp
       - acquire-game
+      - acquire-server
       - aeson
       - async
       - base
@@ -60,11 +74,12 @@ executables:
       - ScopedTypeVariables
   wsclient:
     source-dirs:
-      - src
+      - main
     main: wsclient.hs
     dependencies:
       - acquire-game
       - acquire-tcp
+      - acquire-server
       - aeson
       - base
       - bytestring
@@ -79,3 +94,22 @@ executables:
       - OverloadedStrings
       - RecordWildCards
       - ScopedTypeVariables
+
+
+tests:
+  hspec:
+    source-dirs:
+      - test
+    main: Spec.hs
+    dependencies:
+      - acquire-game
+      - acquire-server
+      - base
+      - containers
+      - data-reify
+      - hspec
+      - hspec-discover
+      - ioautomata
+      - mtl
+      - QuickCheck
+      - random

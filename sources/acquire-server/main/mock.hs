@@ -5,9 +5,10 @@
 {-# LANGUAGE ScopedTypeVariables   #-}
 module Main where
 
+import           Acquire.Messages
+import           Acquire.Model
 import           Acquire.Net                    (Result)
 import           Acquire.Trace
-import           AcquireSpec
 import           Control.Concurrent.Async       (Async, cancel)
 import           Control.Concurrent.Chan.Unagi  (InChan, OutChan, newChan)
 import           Control.Concurrent.STM
@@ -23,7 +24,6 @@ import           Data.Monoid                    ((<>))
 import           Data.Text.Lazy                 (Text)
 import           GHC.Generics
 import           IOAutomaton
-import           Messages
 import           Network.HTTP.Types.Status
 import           Network.Wai                    (Application, responseLBS)
 import           Network.Wai.Handler.Warp       (run)

@@ -10,13 +10,13 @@ Model is currently incomplete:
  * does not handle game play
 
 -}
-module AcquireSpec where
+module Acquire.Model where
 
-import           Acquire.Game hiding (GameState, Message, newGame)
-import           Acquire.Net  (GameDescription (..), Result)
-import qualified Acquire.Net  as Net
-import           IOAutomaton
-import           Messages
+import           Acquire.Game     hiding (GameState, Message, newGame)
+import           Acquire.Messages
+import           Acquire.Net      (GameDescription (..), Result)
+import qualified Acquire.Net      as Net
+import           IOutomaton
 
 data GameState = GameState { acquireState :: AcquireState
                            , gameState    :: Maybe GameDescription
@@ -43,6 +43,7 @@ acquire List           = list
 acquire JoinGame{..}   = joinGame playerName gameId
 acquire Action{..}     = playAction selectedPlay
 acquire Bye            = \ (GameState _state _) -> (Nothing, GameState GameEnded Nothing)
+                                                   -- missing a result to indicate termination of game? -> we need a fully initiated game
 
 newGame :: Int -> Int ->  GameState -> (Maybe Result, GameState)
 newGame h r (GameState Init _) = (Just $ Net.NewGameCreated "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))

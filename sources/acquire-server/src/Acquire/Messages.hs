@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Messages where
+module Acquire.Messages where
 
 import           Data.Aeson
 import           GHC.Generics

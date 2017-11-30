@@ -6,18 +6,21 @@ module Main
 
 
 --------------------------------------------------------------------------------
+import           Acquire.Messages
 import           Control.Concurrent  (forkIO)
 import           Control.Monad       (forever, unless)
 import           Control.Monad.Trans (liftIO)
-import           Data.Text           (Text)
+import           Data.Aeson          (encode)
+import           Data.Monoid         ((<>))
 import qualified Data.Text           as T
 import qualified Data.Text.IO        as T
 import           Network.Socket      (withSocketsDo)
 import qualified Network.WebSockets  as WS
 import           System.Environment  (getArgs)
 import           System.IO
---------------------------------------------------------------------------------
 
+
+--------------------------------------------------------------------------------
 app :: WS.ClientApp ()
 app conn = do
     putStrLn "Connected!"
@@ -29,17 +32,17 @@ app conn = do
 
     -- Read from stdin and write to WS
     let loop = do
-          line <- T.getLine
-          unless (T.null line) $ WS.sendTextData conn line >> loop
+            line <- T.getLine
+            unless (T.null line) $ WS.sendTextData conn line >> loop
 
     loop
-    WS.sendClose conn ("Bye!" :: Text)
+    WS.sendClose conn (encode Bye)
 
 
 --------------------------------------------------------------------------------
 main :: IO ()
 main = do
-  [ port ] <- getArgs
+  [host, port, path] <- getArgs
   hSetBuffering stdout LineBuffering
   hSetBuffering stderr LineBuffering
-  withSocketsDo $ WS.runClient "localhost" (read port) "/" app
+  withSocketsDo $ WS.runClient host (read port) ("/" <> path) app
