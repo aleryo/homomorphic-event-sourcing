@@ -1,4 +1,7 @@
+{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NamedFieldPuns        #-}
+{-# LANGUAGE TupleSections         #-}
 {- | A specificaction of `Acquire.Game` interactions in terms of `IOAutomaton`
 
 '''Work in progress'''
@@ -12,11 +15,14 @@ Model is currently incomplete:
 -}
 module Acquire.Model where
 
-import           Acquire.Game     hiding (GameState, Message, newGame)
+import           Acquire.Game             hiding (GameState, Message)
 import           Acquire.Messages
-import           Acquire.Net      (GameDescription (..), Result)
-import qualified Acquire.Net      as Net
-import           IOutomaton
+import           Acquire.Net              (GameDescription (..), Result)
+import qualified Acquire.Net              as Net
+import           Control.Concurrent.Async (Async, cancel)
+import           Control.Monad.Reader
+import           IOAutomaton
+import           Network.Socket           (socketPort)
 
 data GameState = GameState { acquireState :: AcquireState
                            , gameState    :: Maybe GameDescription
@@ -37,18 +43,92 @@ instance IOAutomaton GameState AcquireState Message Result where
   update a q = a { acquireState = q }
   action     = acquire
 
+    -- startGame _p playerName gameId = do
+    --   (w,r)   <- newChan
+    --   (w',r') <- newChan
+
+    --   -- we run 2 asyncs, one for handling player commands and general game play,
+    --   -- the other to pump server's response to WS connection. This seems necessary because
+    --   -- we have 2 connections to handle:
+    --   --
+    --   --  * WS Connection between remote client's UI and this server code,
+    --   --  * Chan-based connection between player's proxy and main server
+    --   --
+    --   -- There should be a way to greatly simplify this code using directly pure version of the game
+    --   -- instead of wrapping the CLI server.
+    --   toServer <- async $ do
+    --     trace $ "starting game loop for player " ++ playerName ++ " @" ++ gameId
+    --     runPlayer "localhost" p playerName gameId (io (w,r'))
+    --     trace $ "stopping game loop for player " ++ playerName ++ " @" ++ gameId
+
+    --   toClient <- async $ do
+    --     trace $ "starting response sender for player " ++ playerName ++ " @" ++ gameId
+    --     forever $ do
+    --       v <- readChan r
+    --       cnx <- clientConnection <$> readIORef channels
+    --       sendTextData cnx v
+    --         `catch` (\ (e :: ConnectionException) -> trace $ "response sender error: " ++ (show e))
+
+    --   -- we set the write channel to the other end of the pipe used by player loop for
+    --   -- reading. This channel will be used by subsequent commands sent by client and
+    --   -- "pumped" to server
+    --   modifyIORef channels ( \ c -> c { inChan = w'
+    --                                   , serverPump = Just toServer, clientPump = Just toClient })
+
+    -- cleanup = do
+    --   ClientConnection _w _r cnx sp cp <- readIORef channels
+    --   sendClose cnx ("Bye" :: Text)
+    --   maybe (return ()) cancel sp
+    --   maybe (return ()) cancel cp
+    --   modifyIORef channels ( \ c -> c { serverPump = Nothing, clientPump = Nothing })
+
+    -- handleCommand List = do
+    --   r <- listGames "localhost" p
+    --   sendTextData connection (encode r)
+    -- handleCommand (CreateGame numHumans numRobots) = do
+    --   r <- runNewGame "localhost" p numHumans numRobots
+    --   sendTextData connection (encode r)
+    -- handleCommand (JoinGame playerName gameId) =
+    --   startGame p playerName gameId
+    -- handleCommand (Action n) = do
+    --   w <- inChan <$> readIORef channels
+    --   writeChan w (show n)
+    --   trace $ "action " ++ show n
+    -- handleCommand Bye = sendClose connection ("Bye" :: Text)
+
+startServer :: IO (Async (), Net.PortNumber)
+startServer = do
+  (s,t) <- Net.runServer 0
+  (t, ) <$> socketPort s
+
+stopServer :: (Async (), Net.PortNumber) -> IO ()
+stopServer (thread, _) = cancel thread
+
+instance Interpreter (ReaderT (String, Net.PortNumber) IO) GameState AcquireState Message Result where
+  interpret _currentState List = ask >>= \ (h,p) -> liftIO $ Just <$> Net.listGames h p
+  interpret _ _               = pure Nothing
+
+  before _ = pure ()
+  after _  = pure ()
+
+instance Inputs GameState Message where
+  inputs (GameState Init _)           = fmap ( \ n -> CreateGame n (6-n)) [1 .. 5]  ++ [ List ]
+  inputs (GameState GameCreated (Just GameDescription{gameDescId})) = [ JoinGame "player1" gameDescId, List ]
+  inputs (GameState GameStarted (Just GameDescription{descLive = True})) = [ Action 1, List ]
+  inputs _ = []
+
 acquire :: Message -> GameState -> (Maybe Result, GameState)
-acquire CreateGame{..} = newGame numHumans numRobots
+acquire CreateGame{..} = createGame numHumans numRobots
 acquire List           = list
 acquire JoinGame{..}   = joinGame playerName gameId
 acquire Action{..}     = playAction selectedPlay
 acquire Bye            = \ (GameState _state _) -> (Nothing, GameState GameEnded Nothing)
                                                    -- missing a result to indicate termination of game? -> we need a fully initiated game
 
-newGame :: Int -> Int ->  GameState -> (Maybe Result, GameState)
-newGame h r (GameState Init _) = (Just $ Net.NewGameCreated "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))
+createGame :: Int -> Int ->  GameState -> (Maybe Result, GameState)
+createGame h r (GameState Init _) = (Just $ Net.NewGameCreated "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))
   -- dummy GameId -> inject stdgen to generate a valid game id
-newGame _ _ g                  = (Nothing, g)
+createGame _ _ g                  = (Nothing, g)
 
 list :: GameState -> (Maybe Result, GameState)
 list curState@(GameState _state (Just gstate)) = (Just $ Net.GamesListed [ gstate ], curState)
