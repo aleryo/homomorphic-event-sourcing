@@ -8,8 +8,12 @@ library:
     - acquire-game
     - acquire-tcp
     - aeson
+    - async
     - base
     - ioautomata
+    - mtl
+    - network
+    - random
   exposed-modules:
     - Acquire.Model
     - Acquire.Messages
@@ -35,6 +39,7 @@ executables:
       - http-types
       - ioautomata
       - network
+      - random
       - stm
       - text
       - unagi-chan

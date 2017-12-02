@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
-import           Acquire.Messages
+import           Acquire.Messages               (Message (Action, Bye, CreateGame, JoinGame, List))
 import           Acquire.Net                    (InOut (..), listGames,
                                                  runNewGame, runPlayer,
                                                  runServer)
@@ -38,6 +38,7 @@ import           Network.WebSockets             (Connection,
                                                  receiveDataMessage, sendClose,
                                                  sendTextData)
 import           System.Environment
+import           System.Random                  (newStdGen)
 
 newtype CommandError = CommandError { reason :: String }
                      deriving (Generic)
@@ -100,11 +101,11 @@ handleClient channels p connection =
     -- I/O manager for WS connections
     -- We use a pair of `Chan` to read from and write to, encoding
     -- to JSON on the output
-    io (w,r) = InOut (input r) (output w) (outputResult w)
+    io (w,r) = InOut (inp r) (out w) (res w)
       where
-        input             = readChan  -- should probably use decode to be symetric, but we send raw strings...
-        output       chan = writeChan chan . encode
-        outputResult chan = writeChan chan . encode
+        inp      = readChan  -- should probably use decode to be symetric, but we send raw strings...
+        out chan = writeChan chan . encode
+        res chan = writeChan chan . encode
 
     startGame _p playerName gameId = do
       (w,r)   <- newChan
@@ -162,7 +163,8 @@ handleClient channels p connection =
 main :: IO ()
 main = do
   [port, ui] <- getArgs
-  (s,_) <- runServer 0
+  g <- newStdGen
+  (s,_) <- runServer 0 g
   socketPort s >>= trace . (\ p -> "started server on port " ++ show p)
   cnxs <- newTVarIO M.empty
   void $ run (read port) (WaiWS.websocketsOr defaultConnectionOptions (handleWS cnxs s) (serveUI ui))

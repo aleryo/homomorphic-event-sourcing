@@ -1,9 +1,10 @@
 {-# LANGUAGE FlexibleInstances   #-}
 {-# LANGUAGE GADTs               #-}
+{-# LANGUAGE NamedFieldPuns      #-}
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections       #-}
-module Acquire.Net.Server(runServer, PortNumber) where
+module Acquire.Net.Server(runServer, PortNumber, randomGameId) where
 
 import           Acquire.Game
 import           Acquire.Net.Types
@@ -23,7 +24,9 @@ import           System.IO
 import           System.IO.Error
 import           System.Random
 
-type Server = TVar (M.Map GameId ActiveGame)
+data Server = Server { randomSeed  :: StdGen
+                     , activeGames :: TVar (M.Map GameId ActiveGame)
+                     }
 
 closeConnection :: Connection -> IO ()
 closeConnection (Cnx hin hout) = hClose hin >> hClose hout
@@ -83,14 +86,15 @@ data GameThreads = GameThreads { activeGame  :: ActiveGame
 --  A single `Server` can handle any number of games.
 -- Returns the port number the server is actually listening on, which may be different if
 -- `port` is 0 and a free socket is assigned by the system.
-runServer :: PortNumber -> IO (Socket, Async ())
-runServer port = do
+runServer :: PortNumber -> StdGen -> IO (Socket, Async ())
+runServer port seed = do
   sock <- socket AF_INET Stream defaultProtocol
   setSocketOption sock ReuseAddr 1
   bind sock (SockAddrInet port iNADDR_ANY)
   listen sock 5
   existingGames <- readSavedGames
-  server <- newTVarIO existingGames
+  active <- newTVarIO existingGames
+  let server = Server seed active
   void $ async (garbageCollector server)
   srvThread <- async $ forever $ do
     (clientSock, _) <- accept sock
@@ -120,11 +124,11 @@ readSavedGames = do
 --  * all player's threads are sent a @ThreadKilled@ signal
 --  * game thread is set to nothing
 garbageCollector :: Server -> IO ()
-garbageCollector server = forever $ do
+garbageCollector Server{activeGames} = forever $ do
   tids <- liftIO $ atomically $ do
-    gamesMap <- readTVar server
+    gamesMap <- readTVar activeGames
     cleanedGames <- mapM cleanupStoppedGames (M.elems gamesMap)
-    writeTVar server (M.fromList $ map ((\ g -> (activeGameId g, g)) . activeGame) cleanedGames)
+    writeTVar activeGames (M.fromList $ map ((\ g -> (activeGameId g, g)) . activeGame) cleanedGames)
     return cleanedGames
   forM_ tids doCleanupGame
   threadDelay $ 10 * 1000 * 1000
@@ -174,20 +178,20 @@ handleCommand _ (CreateGame numHumans numRobots) = startNewGame numHumans numRob
 handleCommand h (JoinGame player game)        = joinGame h player game
 handleCommand _ (StartingGame _)              = return Nothing
 handleCommand _ ListGames                     = do
-  activeGames <- ask
+  Server{activeGames} <- ask
   games <- liftIO $ atomically $ readTVar activeGames
   return $ Just $ GamesListed $ map gamesList (M.elems games)
 
 startNewGame :: Int -> Int -> ReaderT Server IO (Maybe Result)
 startNewGame numh numr = do
-  activeGames <- ask
-  newId <- liftIO randomGameId
+  Server{activeGames,randomSeed} <- ask
+  let newId = randomGameId randomSeed
   let emptyGame = ActiveGame newId numh numr M.empty [] Nothing
   liftIO $ atomically $ modifyTVar' activeGames  (M.insert newId emptyGame)
   return $ Just $ NewGameCreated newId
 
-randomGameId :: IO GameId
-randomGameId = newStdGen >>= return . take 8 . randomRs ('A','Z')
+randomGameId :: StdGen -> GameId
+randomGameId = take 8 . randomRs ('A','Z')
 
 joinGame :: Handle -> PlayerName -> GameId -> ReaderT Server IO (Maybe Result)
 joinGame h player game = do
@@ -203,7 +207,7 @@ joinGame h player game = do
                                         else return $ Just $ PlayerRegistered player game
 
 addPlayerToActiveGame :: Handle -> ThreadId -> PlayerName -> GameId -> Server -> STM (Either String ActiveGame)
-addPlayerToActiveGame h tid player game activeGames = do
+addPlayerToActiveGame h tid player game Server{activeGames} = do
   games <- readTVar activeGames
   case M.lookup game games of
    Nothing               -> return $ Left $ "no active game "++ game
@@ -218,20 +222,19 @@ addPlayerToActiveGame h tid player game activeGames = do
 runFilledGame :: ActiveGame -> ReaderT Server IO (Maybe Result)
 runFilledGame ActiveGame{..} = do
   liftIO $ notifyStartup activeGameId registeredHumans connectionThreads
-  asyncGame <- liftIO $ async (runGameServer activeGameId numberOfRobots registeredHumans)
+  Server{activeGames,randomSeed} <- ask
+  asyncGame <- liftIO $ async (runGameServer activeGameId numberOfRobots registeredHumans randomSeed)
   trace ("started game " ++ activeGameId)
-  activeGames <- ask
   liftIO $ atomically $ modifyTVar' activeGames (M.adjust (\ g -> g { gameThread = Just asyncGame}) activeGameId)
   return Nothing
 
-runGameServer :: GameId -> Int -> Connections -> IO Game
-runGameServer gid numRobots clients  = do
-  g <- getStdGen
+runGameServer :: GameId -> Int -> Connections -> StdGen -> IO Game
+runGameServer gid numRobots clients seed = do
   let connections = M.insert "Console" (Cnx stdin stdout) clients
       robots      = map ((,Robot) . ("robot " ++) . show) [ 1 .. numRobots ]
   forM_ (M.elems connections) (\ (Cnx _ hout) -> hFlush hout)
   runReaderT (runPromptM playerInputHandler $
-              initialisedGame gid g (map (\ (p,_) -> (p,Human)) (M.toList clients) ++ robots) >>= interpretCommand) connections
+              initialisedGame gid seed (map (\ (p,_) -> (p,Human)) (M.toList clients) ++ robots) >>= interpretCommand) connections
 
 notifyStartup :: GameId -> Connections -> [ ThreadId ]  -> IO ()
 notifyStartup gid cnx threads = do

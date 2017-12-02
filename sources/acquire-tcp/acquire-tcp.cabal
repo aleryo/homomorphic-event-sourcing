@@ -51,9 +51,10 @@ executable acquire
               , async
               , base
               , bytestring
-              , optparse-applicative
               , mtl
               , network
+              , optparse-applicative
+              , random
               , text
   default-language: Haskell2010
 

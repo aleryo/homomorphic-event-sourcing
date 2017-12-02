@@ -12,6 +12,7 @@ import           Control.Concurrent.Async (wait)
 import           Data.Monoid
 import           Network.Socket           (socketPort)
 import           Options.Applicative
+import           System.Random            (getStdGen)
 
 data Configuration = Server { serverPort :: PortNumber }
                    | ClientPlayer { serverHost :: String
@@ -104,7 +105,8 @@ listGamesOptions = ClientListGames
 
 start :: Configuration -> IO ()
 start Server{..}          = do
-  (p, t) <- runServer serverPort
+  g <- getStdGen
+  (p, t) <- runServer serverPort g
   socketPort p >>= trace . ("Server started on port " ++) . show
   wait t
 start ClientPlayer{..}    = runPlayer  serverHost serverPort playerName playGameId consoleIO

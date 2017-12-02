@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns        #-}
+{-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TupleSections         #-}
 {- | A specificaction of `Acquire.Game` interactions in terms of `IOAutomaton`
 
@@ -23,11 +24,16 @@ import           Control.Concurrent.Async (Async, cancel)
 import           Control.Monad.Reader
 import           IOAutomaton
 import           Network.Socket           (socketPort)
+import           System.Random            (StdGen, mkStdGen)
 
 data GameState = GameState { acquireState :: AcquireState
                            , gameState    :: Maybe GameDescription
+                           , randomSeed   :: StdGen
                            }
   deriving (Eq, Show, Read)
+
+instance Eq StdGen where
+  s == s' = show s == show s'
 
 data AcquireState = Init
                   | GameCreated
@@ -37,7 +43,7 @@ data AcquireState = Init
                   deriving (Eq, Show, Read)
 
 instance IOAutomaton GameState AcquireState Message Result where
-  init       = GameState Init Nothing
+  init       = GameState Init Nothing seed
   sink       = const Sink
   state      = acquireState
   update a q = a { acquireState = q }
@@ -96,9 +102,12 @@ instance IOAutomaton GameState AcquireState Message Result where
     --   trace $ "action " ++ show n
     -- handleCommand Bye = sendClose connection ("Bye" :: Text)
 
+seed :: StdGen
+seed = mkStdGen 42
+
 startServer :: IO (Async (), Net.PortNumber)
 startServer = do
-  (s,t) <- Net.runServer 0
+  (s,t) <- Net.runServer 0 seed
   (t, ) <$> socketPort s
 
 stopServer :: (Async (), Net.PortNumber) -> IO ()
@@ -112,9 +121,9 @@ instance Interpreter (ReaderT (String, Net.PortNumber) IO) GameState AcquireStat
   after _  = pure ()
 
 instance Inputs GameState Message where
-  inputs (GameState Init _)           = fmap ( \ n -> CreateGame n (6-n)) [1 .. 5]  ++ [ List ]
-  inputs (GameState GameCreated (Just GameDescription{gameDescId})) = [ JoinGame "player1" gameDescId, List ]
-  inputs (GameState GameStarted (Just GameDescription{descLive = True})) = [ Action 1, List ]
+  inputs (GameState Init _ _)           = fmap ( \ n -> CreateGame n (6-n)) [1 .. 5]  ++ [ List ]
+  inputs (GameState GameCreated (Just GameDescription{gameDescId}) _) = [ JoinGame "player1" gameDescId, List ]
+  inputs (GameState GameStarted (Just GameDescription{descLive = True}) _) = [ Action 1, List ]
   inputs _ = []
 
 acquire :: Message -> GameState -> (Maybe Result, GameState)
@@ -122,24 +131,25 @@ acquire CreateGame{..} = createGame numHumans numRobots
 acquire List           = list
 acquire JoinGame{..}   = joinGame playerName gameId
 acquire Action{..}     = playAction selectedPlay
-acquire Bye            = \ (GameState _state _) -> (Nothing, GameState GameEnded Nothing)
-                                                   -- missing a result to indicate termination of game? -> we need a fully initiated game
+acquire Bye            = \ (GameState _state _ s) -> (Nothing, GameState GameEnded Nothing s)
+                                                     -- missing a result to indicate termination of game? -> we need a fully initiated game
 
-createGame :: Int -> Int ->  GameState -> (Maybe Result, GameState)
-createGame h r (GameState Init _) = (Just $ Net.NewGameCreated "12345678", GameState GameCreated (Just $ GameDescription "12345678" h r [] False))
+createGame :: Int -> Int -> GameState -> (Maybe Result, GameState)
+createGame h r (GameState Init _ s) = let nextId = Net.randomGameId s
+                                      in (Just $ Net.NewGameCreated nextId, GameState GameCreated (Just $ GameDescription nextId h r [] False) s)
   -- dummy GameId -> inject stdgen to generate a valid game id
 createGame _ _ g                  = (Nothing, g)
 
 list :: GameState -> (Maybe Result, GameState)
-list curState@(GameState _state (Just gstate)) = (Just $ Net.GamesListed [ gstate ], curState)
-list curState@(GameState _state Nothing)       = (Just $ Net.GamesListed [ ], curState)
+list curState@(GameState _state (Just gstate) _seed) = (Just $ Net.GamesListed [ gstate ], curState)
+list curState@(GameState _state Nothing _seed)       = (Just $ Net.GamesListed [ ], curState)
 
 joinGame :: PlayerName -> GameId -> GameState -> (Maybe Result, GameState)
-joinGame _pname _gid (GameState GameCreated (Just desc @ (GameDescription "12345678" 1 _robots [] False)))
-  = (Just $ Net.GameStarted "12345678", GameState GameStarted (Just $ desc { descLive = True } ))
+joinGame _pname _gid (GameState GameCreated (Just desc @ (GameDescription descId 1 _robots [] False)) _seed)
+  = (Just $ Net.GameStarted "12345678", GameState GameStarted (Just $ desc { descLive = True } ) _seed)
 joinGame _     _   g = (Nothing, g)
 
 playAction :: Int -> GameState -> (Maybe Result, GameState)
-playAction _actionNum (GameState GameStarted (Just desc @ (GameDescription "12345678" 1 _ [] False)))
-  = (Just $ Net.ErrorMessage "unsupported action pending model completion -- should be Played xxx", GameState GameStarted (Just $ desc { descLive = True } ))
+playAction _actionNum (GameState GameStarted (Just desc @ (GameDescription descId 1 _ [] False)) seed)
+  = (Just $ Net.ErrorMessage "unsupported action pending model completion -- should be Played xxx", GameState GameStarted (Just $ desc { descLive = True }) seed)
 playAction _         g = (Nothing, g)
