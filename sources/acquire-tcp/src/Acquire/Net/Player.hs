@@ -4,6 +4,7 @@
 module Acquire.Net.Player where
 
 import           Acquire.Game
+import           Acquire.Net.Game
 import           Acquire.Net.Types
 import           Acquire.Pretty
 import           Acquire.Trace
@@ -39,17 +40,13 @@ consoleIO = InOut getLine printMessage printResult
       putStrLn (render $ pretty game)
       putStrLn ""
 
-runPlayer :: String -> PortNumber -> PlayerName -> GameId
+runPlayer :: String -> PortNumber
+          -> PlayerName -> GameId
           -> InOut
           -> IO ()
 runPlayer host port player game io = do
-  sock <- socket AF_INET Stream defaultProtocol
-  let hints = defaultHints { addrFamily = AF_INET, addrSocketType = Stream }
-  server:_ <- getAddrInfo (Just hints) (Just host) (Just $ show port)
-  connect sock  (addrAddress server)
-  h <- socketToHandle sock ReadWriteMode
-  hSetBuffering h NoBuffering
-  hPutStrLn h (show $ JoinGame player game)
+  (server,h) <- connectTo host port
+  hPrint h (JoinGame player game)
   trace $ "registering " ++ player ++ " with server at address " ++ show (addrAddress server)
   readResult h player io
 
@@ -60,7 +57,7 @@ readResult h player io@InOut{..} = do
   outputResult res
   case res of
    GameStarted _ -> hFlush h >> askForPlay player h io
-   _            -> readResult h player io
+   _             -> readResult h player io
 
 askForPlay :: PlayerName -> Handle -> InOut -> IO ()
 askForPlay player handle io = do

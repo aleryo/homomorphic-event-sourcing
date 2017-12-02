@@ -6,7 +6,7 @@ import           Acquire.Net.Types
 import           Network.Socket
 import           System.IO
 
-connectTo :: String -> PortNumber -> IO Handle
+connectTo :: String -> PortNumber -> IO (AddrInfo, Handle)
 connectTo host port = do
   sock <- socket AF_INET Stream defaultProtocol
   let hints = defaultHints { addrFamily = AF_INET, addrSocketType = Stream }
@@ -14,11 +14,11 @@ connectTo host port = do
   connect sock  (addrAddress server)
   h <- socketToHandle sock ReadWriteMode
   hSetBuffering h NoBuffering
-  return h
+  return (server,h)
 
 runNewGame :: String -> PortNumber -> Int -> Int -> IO Result
 runNewGame host port numHumans numRobots = do
-  h <- connectTo host port
+  h <- snd <$> connectTo host port
   let command = CreateGame numHumans numRobots
   hPrint h command
   res :: Result <- read `fmap` hGetLine h
@@ -27,8 +27,17 @@ runNewGame host port numHumans numRobots = do
 
 listGames :: String -> PortNumber -> IO Result
 listGames host port = do
-  h <- connectTo host port
+  h <- snd <$> connectTo host port
   hPrint h ListGames
+  res :: Result <- read `fmap` hGetLine h
+  hClose h
+  return res
+
+
+joinGame :: String -> PortNumber -> String -> GameId -> IO Result
+joinGame host port player gameId = do
+  h <- snd <$> connectTo host port
+  hPrint h $ JoinGame player gameId
   res :: Result <- read `fmap` hGetLine h
   hClose h
   return res

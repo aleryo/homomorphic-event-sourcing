@@ -109,6 +109,7 @@ tests:
     dependencies:
       - acquire-game
       - acquire-server
+      - acquire-tcp
       - base
       - containers
       - data-reify

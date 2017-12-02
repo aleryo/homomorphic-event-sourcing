@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections       #-}
-module Acquire.Net (PortNumber, runServer, runPlayer, runNewGame, listGames,
+module Acquire.Net (PortNumber, runServer, runPlayer, runNewGame, listGames, joinGame, connectTo,
                     consoleIO, InOut(..), randomGameId,
                      module Acquire.Net.Types) where
 
