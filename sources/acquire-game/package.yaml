@@ -3,7 +3,7 @@ version: 0.1.0
 license-file:         LICENSE
 author: Arnaud Bailly <arnaud.oqube@gmail.com>
 synopsis:  Core rules and types for Acquire game
-ghc-options: -Wall -Werror -fno-warn-orphans
+ghc-options: -Wall -fno-warn-orphans
 
 library:
   source-dirs:

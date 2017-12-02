@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns        #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TupleSections         #-}
 {- | A specificaction of `Acquire.Game` interactions in terms of `IOAutomaton`
@@ -22,6 +23,7 @@ import           Acquire.Messages
 import           Acquire.Net              (GameDescription (..), Result)
 import qualified Acquire.Net              as Net
 import           Control.Concurrent.Async (Async, cancel)
+import           Control.Exception        (ErrorCall, catch, evaluate, throw)
 import           Control.Monad.State
 import           Data.Monoid              ((<>))
 import           IOAutomaton
@@ -125,10 +127,9 @@ instance Interpreter (StateT (String, Net.PortNumber, Maybe Handle) IO) GameStat
         (_, h) <- liftIO $ Net.connectTo host port
         liftIO $ hPrint h (Net.JoinGame playerName gameId)
         ln <- liftIO $ hGetLine h
-        liftIO $ print $ "server answers: " <> ln
-        let res = read ln
+        res :: Net.Result <- liftIO $ evaluate (read ln) `catch` \ (e :: ErrorCall) -> putStrLn ("fail to read Result from " <> show ln) >> throw e
         put (host,port,Just h)
-        return res
+        return $ Just res
 
   interpret _             _              = pure Nothing
 

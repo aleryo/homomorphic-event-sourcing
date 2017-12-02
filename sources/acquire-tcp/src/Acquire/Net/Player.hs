@@ -60,13 +60,12 @@ readResult h player io@InOut{..} = do
    _             -> readResult h player io
 
 askForPlay :: PlayerName -> Handle -> InOut -> IO ()
-askForPlay player handle io = do
+askForPlay _player handle io = forever $ do
   dat <- hGetLine handle
   m <- handleMessage (read dat) io
   case m of
    Just response -> void $ hPutStrLn handle response
    Nothing       -> return ()
-  askForPlay player handle io
 
 handleMessage :: Message -> InOut -> IO (Maybe String)
 handleMessage g@(GameState _ _ _) InOut{..} = do

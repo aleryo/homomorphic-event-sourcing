@@ -30,7 +30,7 @@ library
   default-extensions:  OverloadedStrings
                      , RecordWildCards
                      , ScopedTypeVariables
-  ghc-options:       -Wall -Werror -fno-warn-orphans -rtsopts
+  ghc-options:       -Wall -fno-warn-orphans -rtsopts
   exposed-modules: Acquire.Net
                  , Acquire.Robot
                  , Acquire.Net.Player, Acquire.Net.Server, Acquire.Net.Types, Acquire.Net.Game
@@ -44,7 +44,7 @@ executable acquire
   default-extensions: OverloadedStrings
                     , RecordWildCards
                     , ScopedTypeVariables
-  ghc-options: -Wall -Werror  -fno-warn-orphans -threaded -rtsopts
+  ghc-options: -Wall  -fno-warn-orphans -threaded -rtsopts
   build-depends:
                 acquire-tcp
               , acquire-game
@@ -63,7 +63,7 @@ Test-Suite tests
    hs-source-dirs:    test
    type:              exitcode-stdio-1.0
    main-is:           tests.hs
-   ghc-options:       -threaded -Wall -Werror -fno-warn-orphans -rtsopts
+   ghc-options:       -threaded -Wall -fno-warn-orphans -rtsopts
    other-modules: GameTest
    default-extensions:  OverloadedStrings
                       , RecordWildCards
