@@ -182,7 +182,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
 
         case 'PlayGame':
             switch (action.type) {
-                case 'Move':
+                case 'PlayMove':
                     // DONE send to backend: sendCommand model (Action { selectedPlay = n })
                     return {
                         type: game.type,

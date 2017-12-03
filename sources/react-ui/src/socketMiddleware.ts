@@ -146,7 +146,7 @@ const socketMiddleware = (function(){
                 break;
             }
 
-            case 'Move': {
+            case 'PlayMove': {
                 socket.send(JSON.stringify({tag: "Action", selectedPlay: action.move}));
                 break;
             }

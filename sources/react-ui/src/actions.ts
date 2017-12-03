@@ -12,7 +12,7 @@ export type Action
     | { type: 'CreateGame' }
 
     | { type: 'JoinGame', gameDescId: GameId }
-    | { type: 'Move', move: number }
+    | { type: 'PlayMove', move: number }
 
     | { type: 'ShowMessages' }
     | { type: 'HideMessages' }
@@ -74,7 +74,7 @@ export function joinGame(gameDescId: GameId): Action {
 }
 
 export function move(move: number): Action {
-    return {type: 'Move', move};
+    return {type: 'PlayMove', move};
 }
 
 export function showMessages(): Action {
