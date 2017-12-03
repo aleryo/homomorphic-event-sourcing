@@ -6,7 +6,7 @@ module Acquire.Messages where
 import           Data.Aeson
 import           GHC.Generics
 
-data Message = List
+data Message = ListGames
              | CreateGame { numHumans :: Int, numRobots :: Int }
              | JoinGame { playerName :: String, gameId :: String }
              | Action { selectedPlay :: Int }

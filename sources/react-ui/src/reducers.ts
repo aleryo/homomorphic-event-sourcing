@@ -119,7 +119,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
                     if (isEmpty(game.player.playerName)) {
                         return game;
                     }
-                    // DONE send to backend: sendCommand model List
+                    // DONE send to backend: sendCommand model ListGames
                     return {type: 'SelectGame', player: game.player, games: [], numPlayers: 1, numRobots: 5};
             }
             return game;
@@ -242,7 +242,7 @@ function game(game: GameState = INITIAL_STATE.game, action: Action = {type: 'Ini
         case 'EndOfGame':
             switch (action.type) {
                 case 'Reset':
-                    // DONE send to backend: sendCommand model List
+                    // DONE send to backend: sendCommand model ListGames
                     return {
                         type: 'SelectGame',
                         player: game.player,

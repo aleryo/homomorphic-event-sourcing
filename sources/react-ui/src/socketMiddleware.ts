@@ -129,7 +129,7 @@ const socketMiddleware = (function(){
             case 'PlayerRegistered':
             case 'NewGameCreated':
             case 'Reset':
-                socket.send(JSON.stringify({tag: "List", contents: []}));
+                socket.send(JSON.stringify({tag: "ListGames", contents: []}));
                 break;
 
             case 'CreateGame': {

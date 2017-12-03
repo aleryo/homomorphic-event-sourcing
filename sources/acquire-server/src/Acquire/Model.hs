@@ -79,7 +79,7 @@ stopServer :: (Async (), Net.PortNumber) -> IO ()
 stopServer (thread, _) = cancel thread
 
 instance Interpreter (StateT (String, Net.PortNumber, Maybe Handle) IO) GameState AcquireState Input Result where
-  interpret _currentState (Msg List)           = get >>= \ (h,p,_) -> liftIO $ Just <$> Net.listGames h p
+  interpret _currentState (Msg ListGames)      = get >>= \ (h,p,_) -> liftIO $ Just <$> Net.listGames h p
   interpret _             (Msg CreateGame{..}) = get >>= \ (h,p,_) -> liftIO $ Just <$> Net.runNewGame h p numHumans numRobots
   interpret _             (Msg JoinGame{..})   = get >>= runGame
     where
@@ -104,14 +104,14 @@ readOrThrow p hdl = liftIO $ do
     `catch` \ (e :: ErrorCall) -> putStrLn ("fail to read value " <> show (typeRep p) <> " from " <> show string) >> throw e
 
 instance Inputs GameState Input where
-  inputs (GameState Init _ _ _)                                              = Msg <$> [ CreateGame 1 5, List ]
-  inputs (GameState GameCreated (Just GameDescription{gameDescId}) _ _)      = Msg <$> [ JoinGame "player1" gameDescId, List ]
-  inputs (GameState GameStarted (Just GameDescription{descLive = True}) _ _) = Msg <$> [ Action 1, List ]
+  inputs (GameState Init _ _ _)                                              = Msg <$> [ CreateGame 1 5, ListGames ]
+  inputs (GameState GameCreated (Just GameDescription{gameDescId}) _ _)      = Msg <$> [ JoinGame "player1" gameDescId, ListGames ]
+  inputs (GameState GameStarted (Just GameDescription{descLive = True}) _ _) = Msg <$> [ Action 1, ListGames ]
   inputs _                                                                   = []
 
 acquire :: Input -> GameState -> (Maybe Result, GameState)
 acquire (Msg CreateGame{..} ) = createGame numHumans numRobots
-acquire (Msg List           ) = list
+acquire (Msg ListGames      ) = list
 acquire (Msg JoinGame{..}   ) = joinGame playerName gameId
 acquire (Msg Action{..}     ) = playAction selectedPlay
 acquire (Msg Bye            ) = \ (GameState _state _ _ s) -> (Nothing, GameState GameEnded Nothing Nothing s)

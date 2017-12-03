@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
-import           Acquire.Messages               (Message (Action, Bye, CreateGame, JoinGame, List))
+import           Acquire.Messages               (Message (Action, Bye, CreateGame, JoinGame, ListGames))
 import           Acquire.Net                    (InOut (..), listGames,
                                                  runNewGame, runPlayer,
                                                  runServer)
@@ -146,7 +146,7 @@ handleClient channels p connection =
       maybe (return ()) cancel cp
       modifyIORef channels ( \ c -> c { serverPump = Nothing, clientPump = Nothing })
 
-    handleCommand List = do
+    handleCommand ListGames = do
       r <- listGames "localhost" p
       sendTextData connection (encode r)
     handleCommand (CreateGame numHumans numRobots) = do

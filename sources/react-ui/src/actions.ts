@@ -21,7 +21,7 @@ export type Action
     | { type: 'Reset' }
 
     // frontend -> backend:
-    // List
+    // ListGames
     // CreateGame
     // JoinGame
     // Action
