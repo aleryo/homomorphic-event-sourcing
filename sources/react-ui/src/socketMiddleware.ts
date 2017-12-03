@@ -82,8 +82,8 @@ const socketMiddleware = (function(){
                 // FIXME decodeGame bails out here because players is not a list
                 store.dispatch({ type: 'GameEnds', endGame: decodeGame(msg.gsEndGame) });
                 break;
-            case "ErrorMessage":
-                store.dispatch({ type: 'ErrorMessage', message: msg.contents[0] });
+            case "ErrorMessageReceived":
+                store.dispatch({ type: 'ErrorMessageReceived', message: msg.contents[0] });
                 break;
             default:
                 console.log("Received unknown message type: '" + msg.tag + "'");

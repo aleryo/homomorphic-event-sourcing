@@ -25,7 +25,7 @@ data Result = PlayerRegistered PlayerName GameId
             | NewGameCreated GameId
             | GameStarted GameId
             | GamesListed [GameDescription]
-            | ErrorMessage String
+            | ErrorMessageReceived String
             deriving (Eq, Show, Read, Generic)
 
 instance ToJSON Result
@@ -67,4 +67,4 @@ instance Pretty Result where
   pretty (NewGameCreated gameId)              = text "created new game" <+> text gameId
   pretty (GameStarted gameId)                  = text "starting game" <+> text gameId
   pretty (GamesListed descs)                    = text "list of games:" <$$> vcat (map pretty descs)
-  pretty (ErrorMessage msg)                   = text msg
+  pretty (ErrorMessageReceived msg)                   = text msg

@@ -33,7 +33,7 @@ export type Action
     | { type: 'NewGameCreated', gameId: GameId } // not handled in reducers
     | { type: 'GameStarted', gameId: GameId }
     | { type: 'GameUpdated', board: GameBoard, possibleMoves: Order[], player: Player }
-    | { type: 'ErrorMessage', message: string }
+    | { type: 'ErrorMessageReceived', message: string }
     // TODO playerName is not used anywhere:
     | { type: 'Played', playerName: PlayerName, board: GameBoard, played: Order }
     | { type: 'GameEnds', endGame: Game }

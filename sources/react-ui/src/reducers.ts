@@ -53,7 +53,7 @@ const displayMessages = createReducer(INITIAL_STATE.displayMessages, {
 
 function errors(errors: Errors = INITIAL_STATE.errors, action: Action = {type: 'InitialAction'}) {
     switch(action.type){
-        case 'ErrorMessage':
+        case 'ErrorMessageReceived':
             return R.prepend(action.message, errors);
     }
     return errors;

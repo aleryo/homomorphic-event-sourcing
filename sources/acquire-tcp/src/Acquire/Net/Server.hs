@@ -198,7 +198,7 @@ joinGame h player game = do
   activeGames <- ask
   tid <- liftIO $ myThreadId
   res <- liftIO $ atomically $ addPlayerToActiveGame h tid player game activeGames
-  either (return . Just . ErrorMessage)
+  either (return . Just . ErrorMessageReceived)
     startGameIfAllHumansRegistered
     res
    where
