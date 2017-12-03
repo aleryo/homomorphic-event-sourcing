@@ -14,7 +14,7 @@ library
   hs-source-dirs:
       src
   default-extensions: OverloadedStrings RecordWildCards ScopedTypeVariables MultiParamTypeClasses
-  ghc-options: -Wall -Werror -fno-warn-orphans
+  ghc-options: -Wall -fno-warn-orphans
   build-depends:
       aeson
     , array

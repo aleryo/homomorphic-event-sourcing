@@ -5,7 +5,6 @@
 {-# LANGUAGE ScopedTypeVariables   #-}
 module Main where
 
-import           Acquire.Messages
 import           Acquire.Model
 import           Acquire.Net                    (Result)
 import           Acquire.Trace
@@ -82,13 +81,13 @@ handleWS cnxs pending = do
             trace $ "reusing old channels with key " ++ show key
             return r
 
-instance Interactive (ReaderT Connection IO) Message Result where
+instance Interactive (ReaderT Connection IO) Input Result where
   request = ask >>= \ connection -> liftIO $ do
     Text message _ <- receiveDataMessage connection
     trace $ "received message: " ++ show message
     case eitherDecode message of
       Left e  -> throwIO $ userError $ "cannot decode properly " <> show message <> ": " <> e
-      Right c -> pure c
+      Right c -> pure $ Just $ Msg c
 
   reply msg = ask >>= \ connection -> liftIO $ sendTextData connection (encode msg)
 
