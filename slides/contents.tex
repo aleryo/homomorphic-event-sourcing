@@ -54,7 +54,9 @@ Who we are?
 \begin{center}
 {
 \LARGE
-Experiment Ideas to Improve Code \& Design
+Trying to integrate formal methods
+\\[2em]
+Languages, Type Systems, \\Engineering Techniques
 }
 
 \vspace{2em}
@@ -66,18 +68,24 @@ Experiment Ideas to Improve Code \& Design
 
 \begin{frame}[fragile]{Ubiquitous Language}
 
-\begin{center}
-%\includegraphics[height=.4\textheight]{./pics/picture.png}
-\end{center}
+  \begin{itemize}[<+->]
+	\item Is $\ldots$ well $\ldots$ ubiquitous
+	\item Carries the business language into the code and beyond
+	\item Allows everybody to understand everybody else 
+	\item Understanding without (even unconscious) translation steps
+	\item Should be made explicit in a glossary
+  \end{itemize}
+
 \end{frame}
 
-\begin{frame}[fragile]{Command, Events, Errors}
+\begin{frame}[fragile]{Commands and Events}
 
-  \begin{itemize}
-  \item Commands are the queries to a component
-  \item Events \& Errors are the replies
-  \item Events are persistently stored and represent the state of the system
-  \item We can formalize these notions...
+  \begin{itemize}[<+->]
+  \item Commands represent interactions from the outside world
+  \item They are requests to the application
+  \item Events  are the system's replies
+  \item Events are persistently stored 
+  \item The current state of the system is the result of all events that happened so far
   \end{itemize}
 \end{frame}
 
@@ -87,53 +95,54 @@ Experiment Ideas to Improve Code \& Design
 \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Language}
-  \begin{itemize}
-  \item $C$ is the set of all Commands, $E$ the set of all Events, $S$ the set of states
-  \item $$\delta : S \times C \times E^* \rightarrow S$$ a transition function between states $S$
-  \item The language of a component $L \subseteq (C \times E^*)^*$ is a \textbf{transduction}
-  \item We can simplify to $L \subseteq ((C + \epsilon) \times E)^*$
-  \end{itemize}
-\end{frame}
+\begin{frame}[fragile]{Event Sourcing as a Formal Language}
 
-\begin{frame}[fragile]{Language}
-  An \emph{Event Sourced} language is such that
-  $$\forall s \in S, \exists t \in E^*, \exists c \in C^*, \delta(s_0,c \times t) = s $$
-  e.g. the possible states of the system are determined by possible traces of events:
-  $$S \subseteq E^*$$
+\begin{itemize}[<+->]
+\item Conceptually, the events comprise a so-called \textit{alphabet}.
+\item A \textit{word} is a sequence of elements of this alphabet (i.e.~events).
+\item The set of all possible words is a \textit{language}.
+\item This means each word of the language corresponds to a \textit{state} of the system.
+\item So all the possible states of the system form the language.
+\end{itemize}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Homomorphic Event Sourcing}
 
 \begin{frame}[fragile]{Interacting Components}
-  \begin{itemize}
-  \item What happens when 2 event-sourced components have to interact?
-  \item We want to map commands $C_1$ must be mapped to commands $C_2$, and events $E_2$ to events $E_1$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Base Event Loop}
 \begin{center}
 \includegraphics[height=.8\textheight]{./images/interaction-loop.pdf}
 \end{center}
 \end{frame}
 
+\begin{frame}[fragile]{Interacting Components}
+  \begin{itemize}
+  \item What happens when 2 event-sourced components have to interact?
+  \item We want to map commands to commands , and events to events
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}[fragile]{Homomorphism}
 
-  A \emph{homomorphism} is a structure-preserving map between two languages. This practically means it is enough to
-  define a \emph{map} from letters of one language to letters of the other
+  A \emph{homomorphism} is a structure-preserving map between two languages. 
+   \\[2em]
+  
+  \onslide<2->
+  This practically means it is enough to
+  define a \emph{map} from letters of one language to letters of the other.
 
 \end{frame}
 
 \begin{frame}[fragile]{Homomorphic Event Sourcing}
-  \begin{itemize}
-  \item Define mappings from UI commands to backend commands: An event
-    can map to nothing meaning there is not interaction with
+  \begin{itemize}[<+->]
+  \item Define mappings from UI commands to backend commands: A command
+    can map to nothing meaning there is no interaction with
     the backend
-  \item Define mappings from backend events to UI events: Defines how
+  \item Define mappings from backend events to UI events: Describes how
     backend's replies are interpreted in the UI
-  \item Strive to define \emph{identities}, e.g. use the same language of commands and events in the frontend and the backendx
+  \item Strive to define \emph{identities}, e.g.~use the same language of commands and events in the frontend and the backend
   \end{itemize}
 \end{frame}
 
@@ -253,31 +262,26 @@ Problems:
 
 \end{frame}
 
-\begin{frame}[fragile]{Beyond Homomorphism}
-  \begin{itemize}
-  \item Homomorphism do not account for \emph{current state}, e.g. what happened in the past
-  \item Some events might be meaningfully interpreted only after some other events happened
-  \item \emph{Homomorphism} $\longrightarrow$ \emph{Transduction}
+\begin{frame}[fragile]{Back to Formal Models}
+  \begin{itemize}[<+->]
+  \item Often contracts are fairly simple, just mapping requests to replies
+  \item What if some request only makes sense in a certain state?
+
+  \item We need more information! Let's use \emph{State Machines}.
   \end{itemize}
 \end{frame}
 
 
 \begin{frame}[fragile]{Our ``formal model'' approach}
 
-\begin{enumerate}
-\item Describe the Frontend-Backend integration in a formal model
-\item Generate mocks for the frontend from this model
-\item Generate tests for the backend from this model
-\item Guarantee: All aspects (that are in the model) are covered by the tests and mocks
-\end{enumerate}
+\begin{itemize}[<+->]
+\item Describe the core domain interactions as a formal model
+\item Generate mocks for the frontend: Use the State Machine as a \emph{Acceptor}
+\item Generate tests for the backend: Use the State Machine as a \emph{Generator}
 
-\end{frame}
-\begin{frame}[fragile]{Modelling with State Machines}
-  \begin{itemize}
-  \item Modelling the \emph{Code Domain}'s behaviour as a \emph{State Machine}
-  \item Use the State Machine as a \emph{Generator} to test \emph{Backend}
-  \item Use the State Machine as a \emph{Acceptor} to test \emph{Frontend}
-  \end{itemize}
+\item Guarantee: All aspects of  the model are covered by tests and mocks
+\end{itemize}
+
 \end{frame}
 
 
@@ -301,6 +305,7 @@ Problems:
     \includegraphics[height=.8\textheight]{./images/archi-front.pdf}
   \end{center}
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Conclusion}
