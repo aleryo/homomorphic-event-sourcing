@@ -122,25 +122,19 @@ Experiment Ideas to Improve Code \& Design
 
 \begin{frame}[fragile]{Homomorphism}
 
-Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\tau : L_1 \rightarrow L_2$ is a homomorphism iff
-
-  \[
-  \forall w_1, w_2 \in L_1, \tau (w_1 . w_2) = \tau (w_1) . \tau (w_2)
-  \]
-
-  In other words, a \emph{homomorphism} is a structure-preserving map between two languages. This practically means it is enough to
-  define $\tau$ on $\Sigma_1$
+  A \emph{homomorphism} is a structure-preserving map between two languages. This practically means it is enough to
+  define a \emph{map} from letters of one language to letters of the other
 
 \end{frame}
 
 \begin{frame}[fragile]{Homomorphic Event Sourcing}
   \begin{itemize}
-  \item Define mappings from UI events to backend commands: An event
+  \item Define mappings from UI commands to backend commands: An event
     can map to nothing meaning there is not interaction with
     the backend
-  \item Define mappings from backend commands to UI events: Defines how
-    backend's replies are interpreted in the UI, some events might not
-    be reflected in the UI (why?)
+  \item Define mappings from backend events to UI events: Defines how
+    backend's replies are interpreted in the UI
+  \item The goal is to define \emph{identities}, e.g. use the same language of commands and events in the frontend and the backendx
   \end{itemize}
 \end{frame}
 
@@ -169,9 +163,12 @@ Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\t
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Transductions}
-%  \begin{itemize}
-%  \end{itemize}
+\begin{frame}[fragile]{State Machines}
+  \begin{itemize}
+  \item Modelling the \emph{Code Domain}'s behaviour as a \emph{State Machine}
+  \item Use the State Machine as a \emph{Generator} to test \emph{Backend}
+  \item Use the State Machine as a \emph{Acceptor} to test \emph{Frontend}
+  \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,6 +176,50 @@ Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Examples \& Demo}
+
+\begin{frame}[fragile]{Acquire}
+  \begin{center}
+    \includegraphics[height=.8\textheight]{./images/acquire-boardgame.jpg}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Architecture - Backend}
+  \begin{center}
+    \includegraphics[height=.8\textheight]{./images/archi-back.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Architecture - Frontend}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Takeaways}
+  \only<1>{\Huge \begin{quote} Plans are worthless, but planning is everything \\ \textsc{\Large Dwight D. Eisenhower}\end{quote}}
+  \only<2>{\Huge \begin{quote} Models are worthless, but modelling is everything \\ \textsc{\Large Nicole \& Arnaud}\end{quote}}
+\end{frame}
+
+\begin{frame}[fragile]{Event Sourcing $\leftrightarrow$ State Machines}
+  \begin{itemize}[<+->]
+  \item \emph{Event Sourcing} turns a system into an \emph{interpreter} for a language
+  \item This makes it easy to model (part of) it as a \emph{State Machine}
+  \end{itemize}
+  \only<3>{\[
+      \begin{array}{c}
+        \text{Command} \times \text{State} \rightarrow \text{Event} \times \text{State} \\
+         \Updownarrow \\
+        \text{State} \xrightarrow{\text{Command} \times \text{Event}} \text{State} \\
+      \end{array}
+    \]}
+\end{frame}
+
+\begin{frame}[fragile]{Caveats}
+  \begin{itemize}
+  \item It takes time and energy to devise and refine a model
+  \item It's not a \emph{Silver Bullet}\textsuperscript{\tiny TM}
+  \end{itemize}
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Thank you very much!}
@@ -201,3 +242,5 @@ Let $L_1, L_2$ two languages over alphabets $\Sigma_1, \Sigma_2$, a function $\t
     \end{description}
   \end{block}
 \end{frame}
+
+%% https://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/02/Acquire-3M-Sid-Sackson-11.jpg
