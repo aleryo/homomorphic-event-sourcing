@@ -53,14 +53,21 @@ Problems:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Standard ``Industry-Strength'' Approach}
 
-
+\only<1>{
 \begin{itemize}
 \item Consumer-Driven Contract Testing
 \item Hand-written contracts
 \end{itemize}
+}
 
-<how CDCT works>
+\only<2>{
+\includegraphics[width=\textwidth]{images/CDCT1.pdf}
+}
+\only<3>{
+\includegraphics[width=\textwidth]{images/CDCT7.pdf}
+}
 
+\only<9>{
 Problems:
 
 \begin{itemize}
@@ -70,6 +77,7 @@ Problems:
 \item If contracts are too sparse, we miss out
 \item If contracts are too verbose (or too many), testing takes too long
 \end{itemize}
+}
 
 \end{frame}
 
