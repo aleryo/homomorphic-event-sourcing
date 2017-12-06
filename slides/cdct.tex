@@ -66,7 +66,7 @@ Problems:
 \begin{itemize}
 \item Contract testing is only as good as its contracts
 \item Manual contract-writing can be tedious and even error-prone
-\item (Errors may only be discovered late in the process, when the backend implements some functionality and discovers that it does not match the contract)
+\item Errors may only be discovered late in the process, when the backend implements some functionality and discovers that it does not match the contract
 \item If contracts are too sparse, we miss out
 \item If contracts are too verbose (or too many), testing takes too long
 \end{itemize}
@@ -77,7 +77,7 @@ Problems:
 \begin{frame}[fragile]{Our ``formal model'' approach}
 
 \begin{itemize}
-\item Describe the FE-BE integration in a formal model
+\item Describe the Frontend-Backend integration in a formal model
 \item Generate tests for the backend from this model
 \item Generate mocks for the frontend from this model
 \item Guarantee: All aspects (that are in the model) are covered by the tests and mocks
