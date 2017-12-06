@@ -11,8 +11,6 @@
 
 Model is currently incomplete:
 
- * does not handle proper `GameId` generation, requires setting `StdGen` at start and
-   passing it down to actual interpreter
  * does not handle game play
 
 -}
@@ -35,7 +33,7 @@ import           System.Random            (StdGen, mkStdGen)
 
 data GameState = GameState { acquireState :: AcquireState
                            , gameState    :: Maybe GameDescription
-                           , theGame      :: Maybe Game
+                           , theGame      :: Maybe Game.Game
                            , randomSeed   :: StdGen
                            }
   deriving (Eq, Show)
@@ -47,6 +45,11 @@ data Input = Msg Message
            | Eps
   deriving (Eq, Show)
 
+-- | Type of /output/ letters
+data Output = Res Result
+            | Out Game.Message
+  deriving (Eq, Show)
+
 data AcquireState = Init
                   | GameCreated
                   | GameStarted
@@ -55,7 +58,7 @@ data AcquireState = Init
                   | Sink
                   deriving (Eq, Show, Read)
 
-instance IOAutomaton GameState AcquireState Input Result where
+instance IOAutomaton GameState AcquireState Input Output where
   init       = GameState Init Nothing Nothing seed
   sink       = const Sink
   state      = acquireState
@@ -78,10 +81,15 @@ startServer = do
 stopServer :: (Async (), Net.PortNumber) -> IO ()
 stopServer (thread, _) = cancel thread
 
+playerMap numHumans numRobots =
+  let robots = map ((,Game.Robot) . ("robot " ++) . show) [ 1 .. numRobots ]
+      humans = map ((,Game.Human) . ("player " ++) . show) [ 1 .. numHumans ]
+  in humans ++ robots
+
 instance Interpreter (StateT (String, Net.PortNumber, Maybe Handle) IO) GameState AcquireState Input Result where
-  interpret _currentState (Msg ListGames)      = get >>= \ (h,p,_) -> liftIO $ Just <$> Net.listGames h p
-  interpret _             (Msg CreateGame{..}) = get >>= \ (h,p,_) -> liftIO $ Just <$> Net.runNewGame h p numHumans numRobots
-  interpret _             (Msg JoinGame{..})   = get >>= runGame
+  interpret curSt (Msg ListGames)      = get >>= \ (h,p,_) -> liftIO $ (,curSt) . Just <$> Net.listGames h p
+  interpret curSt (Msg CreateGame{..}) = get >>= \ (h,p,_) -> liftIO $ (,curSt) . Just <$> Net.runNewGame h p numHumans numRobots
+  interpret curSt (Msg JoinGame{..})   = get >>= runGame
     where
       runGame (host,port,_) = do
         (_, h) <- liftIO $ Net.connectTo host port
@@ -89,10 +97,18 @@ instance Interpreter (StateT (String, Net.PortNumber, Maybe Handle) IO) GameStat
         res <- readOrThrow (Proxy :: Proxy Net.Result) h
         put (host,port,Just h)
         msg :: Game.Message <- readOrThrow (Proxy :: Proxy Game.Message) h
-        liftIO $ putStrLn $ "received "  <> show msg
-        return $ Just res
+        case msg of
+          Game.GameState{} -> return $ (Just res, curSt { theGame = Just $ Game.newGame gameId (randomSeed curSt) (playerMap 1 5) })
+          _                -> return $ (Just res, curSt)
 
-  interpret _             _              = pure Nothing
+  interpret curSt (Msg Action{..})   = get  >>= playAction (theGame curSt)
+    where
+      playAction (Just game) (_,_, Just h) =
+        let plays = Game.possiblePlay game
+        in  hPrint h (plays !! 0)
+      playAction _ _   = pure (Nothing, curSt)
+
+  interpret curSt _                  = pure (Nothing, curSt)
 
   before _ = pure ()
   after _  = pure ()
@@ -109,7 +125,7 @@ instance Inputs GameState Input where
   inputs (GameState GameStarted (Just GameDescription{descLive = True}) _ _) = Msg <$> [ Action 1, ListGames ]
   inputs _                                                                   = []
 
-acquire :: Input -> GameState -> (Maybe Result, GameState)
+acquire :: Input -> GameState -> (Maybe Output, GameState)
 acquire (Msg CreateGame{..} ) = createGame numHumans numRobots
 acquire (Msg ListGames      ) = list
 acquire (Msg JoinGame{..}   ) = joinGame playerName gameId
@@ -121,19 +137,19 @@ acquire Eps                   = (Nothing,)
 createGame :: Int -> Int -> GameState -> (Maybe Result, GameState)
 createGame h r (GameState Init _ _ s) =
   let nextId = Net.randomGameId s
-  in (Just $ Net.NewGameCreated nextId, GameState GameCreated (Just $ GameDescription nextId h r [] False) Nothing s)
+  in (Just $ Res $ Net.NewGameCreated nextId, GameState GameCreated (Just $ GameDescription nextId h r [] False) Nothing s)
 createGame _ _ g                  = (Nothing, g)
 
 list :: GameState -> (Maybe Result, GameState)
-list curState@(GameState _state (Just gstate) _ _seed) = (Just $ Net.GamesListed [ gstate ], curState)
-list curState@(GameState _state Nothing _ _seed)       = (Just $ Net.GamesListed [ ], curState)
+list curState@(GameState _state (Just gstate) _ _seed) = (Just $ Res $ Net.GamesListed [ gstate ], curState)
+list curState@(GameState _state Nothing _ _seed)       = (Just $ Res $ Net.GamesListed [ ], curState)
 
 joinGame :: PlayerName -> GameId -> GameState -> (Maybe Result, GameState)
 joinGame _pname gid (GameState GameCreated (Just desc @ (GameDescription _descId 1 _robots [] False)) _game _seed)
-  = (Just $ Net.GameStarted gid, GameState GameStarted (Just $ desc { descLive = True } ) _game _seed)
+  = (Just $ Res $ Net.GameStarted gid, GameState GameStarted (Just $ desc { descLive = True } ) _game _seed)
 joinGame _     _   g = (Nothing, g)
 
 playAction :: Int -> GameState -> (Maybe Result, GameState)
-playAction _actionNum (GameState GameStarted (Just desc @ (GameDescription _descId 1 _ [] False)) _game ranSeed)
-  = (Just $ Net.ErrorMessage "unsupported action pending model completion -- should be Played xxx", GameState GameStarted (Just $ desc { descLive = True }) _game ranSeed)
+playAction actionNum (GameState GameStarted (Just desc @ (GameDescription _descId 1 _ [] False)) _game ranSeed)
+  = (Just $ Out $ , GameState GameStarted (Just $ desc { descLive = True }) _game ranSeed)
 playAction _         g = (Nothing, g)

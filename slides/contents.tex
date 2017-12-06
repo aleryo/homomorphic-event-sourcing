@@ -12,7 +12,7 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
+\part{Introduction}
 
 \begin{frame}[fragile]{Why?}
 
@@ -62,7 +62,7 @@ Experiment Ideas to Improve Code \& Design
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Event Sourcing 101}
+\part{Event Sourcing 101}
 
 \begin{frame}[fragile]{Ubiquitous Language}
 
@@ -109,8 +109,7 @@ Experiment Ideas to Improve Code \& Design
 \begin{frame}[fragile]{Interacting Components}
   \begin{itemize}
   \item What happens when 2 event-sourced components have to interact?
-  \item Events  $E_1$ from first component must be transduced into commands $C_2$, and some events $E_2$ into $C_1$
-  \item Modelling interaction as a \emph{transformation} of languages
+  \item We want to map commands $C_1$ must be mapped to commands $C_2$, and events $E_2$ to events $E_1$
   \end{itemize}
 \end{frame}
 
@@ -134,25 +133,104 @@ Experiment Ideas to Improve Code \& Design
     the backend
   \item Define mappings from backend events to UI events: Defines how
     backend's replies are interpreted in the UI
-  \item The goal is to define \emph{identities}, e.g. use the same language of commands and events in the frontend and the backendx
+  \item Strive to define \emph{identities}, e.g. use the same language of commands and events in the frontend and the backendx
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Benefits}
-  \begin{itemize}
-  \item Provides a high-level understanding of how of how 2 components
-    interact, e.g. a \emph{protocol}
-  \item Testing:
-    \begin{itemize}
-    \item Mock backend to test UI only
-    \item Test complete system with respect to overall model
-    \item Generate tests from model against UI or backend using the
-      defined language as an \emph{oracle} and \emph{generator}
-    \end{itemize}
-  \item Safer interactions: Define language and homomorphism in a
-    single place then generate the other side
-  \item Generalization to $n$ components, e.g. hexagonal architecture
-  \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Consumer-Driven Contract Testing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Standard Problem for Webapps?}
+
+\begin{itemize}
+\item Testing that frontend and backend play nicely together
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Standard Approach: ``Super-Na\"ive''}
+
+\only<1>{
+\begin{itemize}
+\item Backend designs API
+\item Backend is developed, tests are written
+\item Frontend waits until backend is implemented
+\item Frontend is developed
+\item Tests for frontend are written
+\item Interaction is tested via integration tests
+\end{itemize}
+}
+
+\only<2>{
+Problems:
+
+\begin{itemize}
+\item Frontend development is blocked
+\item Integration tests are slow
+\item Full integration testing does not scale
+\end{itemize}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Standard Approach: ``Still Quite Na\"ive''}
+
+\only<1>{
+\begin{itemize}
+\item Backend designs API
+\item Backend is developed, tests are written
+\item Frontend writes mocks for backend API
+\item Frontend can be developed immediately
+\item Interaction tests for frontend use these mocks
+\end{itemize}
+}
+
+\only<2>{
+Problems:
+
+\begin{itemize}
+\item Frontend relies on mocks for backend API
+\item Do the mocks reflect the backend's actual behaviour?
+\item Usually, backend behaviour changes
+\item Frontend does not notice because mocks still look good
+\end{itemize}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Standard ``Industry-Strength'' Approach}
+
+\only<1>{
+\begin{itemize}
+\item Consumer-Driven Contract Testing
+\item Hand-written contracts
+\end{itemize}
+}
+
+\only<2>{
+\includegraphics[width=\textwidth]{images/CDCT1.pdf}
+}
+
+\only<8>{
+\includegraphics[width=\textwidth]{images/CDCT7.pdf}
+}
+
+\only<9>{
+Problems:
+
+\begin{itemize}
+\item Contract testing is only as good as its contracts
+\item Manual contract-writing can be tedious and even error-prone
+\item Errors may only be discovered late in the process, when the backend implements some functionality and discovers that it does not match the contract
+\item If contracts are too sparse, we miss out
+\item If contracts are too verbose (or too many), testing takes too long
+\end{itemize}
+}
+
 \end{frame}
 
 \begin{frame}[fragile]{Beyond Homomorphism}
@@ -163,7 +241,18 @@ Experiment Ideas to Improve Code \& Design
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{State Machines}
+
+\begin{frame}[fragile]{Our ``formal model'' approach}
+
+\begin{enumerate}
+\item Describe the Frontend-Backend integration in a formal model
+\item Generate mocks for the frontend from this model
+\item Generate tests for the backend from this model
+\item Guarantee: All aspects (that are in the model) are covered by the tests and mocks
+\end{enumerate}
+
+\end{frame}
+\begin{frame}[fragile]{Modelling with State Machines}
   \begin{itemize}
   \item Modelling the \emph{Code Domain}'s behaviour as a \emph{State Machine}
   \item Use the State Machine as a \emph{Generator} to test \emph{Backend}
@@ -171,11 +260,9 @@ Experiment Ideas to Improve Code \& Design
   \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input cdct
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Examples \& Demo}
+\part{Examples \& Demo}
 
 \begin{frame}[fragile]{Acquire}
   \begin{center}
@@ -190,13 +277,17 @@ Experiment Ideas to Improve Code \& Design
 \end{frame}
 
 \begin{frame}[fragile]{Architecture - Frontend}
+  \begin{center}
+    \includegraphics[height=.8\textheight]{./images/archi-front.pdf}
+  \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Conclusion}
 
 \begin{frame}[fragile]{Takeaways}
-  \only<1>{\Huge \begin{quote} Plans are worthless, but planning is everything \\ \textsc{\Large Dwight D. Eisenhower}\end{quote}}
-  \only<2>{\Huge \begin{quote} Models are worthless, but modelling is everything \\ \textsc{\Large Nicole \& Arnaud}\end{quote}}
+  \only<1>{\Huge \begin{quote} Plans are worthless,\\ but planning is everything \\ \textsc{\Large Dwight D. Eisenhower}\end{quote}}
+  \only<2>{\Huge \begin{quote} Models are worthless,\\ but modelling is everything \\ \textsc{\Large Nicole \& Arnaud}\end{quote}}
 \end{frame}
 
 \begin{frame}[fragile]{Event Sourcing $\leftrightarrow$ State Machines}
