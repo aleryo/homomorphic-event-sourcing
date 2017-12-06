@@ -10,13 +10,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Standard Approach: ``Super-Na\"ive''}
 
+\only<1>{
 \begin{itemize}
-\item Backend develops API
-\item Backend tests itself
+\item Backend designs API
+\item Backend is developed, tests are written
 \item Frontend waits until backend is implemented
-\item Frontend tests itself and the interaction via integration tests
+\item Frontend is developed
+\item Tests for frontend are written 
+\item Interaction is tested via integration tests
 \end{itemize}
+}
 
+\only<2>{
 Problems:
 
 \begin{itemize}
@@ -24,29 +29,33 @@ Problems:
 \item Integration tests are slow
 \item Full integration testing does not scale
 \end{itemize}
-
+}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Standard Approach: ``Still Quite Na\"ive''}
 
+\only<1>{
 \begin{itemize}
-\item Backend develops API
-\item Backend tests itself
+\item Backend designs API
+\item Backend is developed, tests are written
 \item Frontend writes mocks for backend API
 \item Frontend can be developed immediately
-\item Frontend tests itself via mocks
+\item Interaction tests for frontend use these mocks
 \end{itemize}
+}
 
+\only<2>{
 Problems:
 
 \begin{itemize}
 \item Frontend relies on mocks for backend API
-\item How to ensure that the mocks reflect the backend's actual behaviour?
+\item Do the mocks reflect the backend's actual behaviour?
 \item Usually, backend behaviour changes
 \item Frontend does not notice because mocks still look good
 \end{itemize}
+}
 
 \end{frame}
 
@@ -63,7 +72,8 @@ Problems:
 \only<2>{
 \includegraphics[width=\textwidth]{images/CDCT1.pdf}
 }
-\only<3>{
+
+\only<8>{
 \includegraphics[width=\textwidth]{images/CDCT7.pdf}
 }
 
@@ -84,12 +94,12 @@ Problems:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Our ``formal model'' approach}
 
-\begin{itemize}
+\begin{enumerate}
 \item Describe the Frontend-Backend integration in a formal model
-\item Generate tests for the backend from this model
 \item Generate mocks for the frontend from this model
+\item Generate tests for the backend from this model
 \item Guarantee: All aspects (that are in the model) are covered by the tests and mocks
-\end{itemize}
+\end{enumerate}
 
 \end{frame}
 
