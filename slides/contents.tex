@@ -276,7 +276,7 @@ Problems:
 
   \begin{itemize}[<+->]
   \item Describe the core domain interactions as a formal model
-  \item Generate mocks for the frontend: Use the State Machine as a \emph{Acceptor}
+  \item Generate mocks for the frontend: Use the State Machine as an \emph{Acceptor}
   \item Generate tests for the backend: Use the State Machine as a \emph{Generator}
   \item Guarantee: All aspects of  the model are covered by tests and mocks
   \end{itemize}
@@ -285,7 +285,7 @@ Problems:
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\part{Examples \& Demo}
+\part{Examples}
 
 \begin{frame}[fragile]{Acquire}
   \begin{center}
@@ -315,32 +315,30 @@ Problems:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Conclusion}
 
+\begin{frame}[fragile]{Event Sourcing \& Formal Methods}
+  \begin{itemize}[<+->]
+  \item Building an\emph{Event Sourced} system yields opportunities to leverage more formal approaches to V\&V
+  \item Modelling as a \emph{State Machine} over a \emph{Formal Language} is one possible approach
+  \item Provides foundations to develop independent parts of the system and \emph{validate} their interaction
+  \item It takes time and energy to devise and refine a model
+  \end{itemize}
+  \only<4>{
+    \begin{block}{Event Sourcing as a Transduction}
+      \[
+        \begin{array}{c}
+          \text{Command} \times \text{State} \rightarrow \text{Event} \times \text{State} \\
+          \Updownarrow \\
+          \text{State} \xrightarrow{\text{Command} \times \text{Event}} \text{State} \\
+        \end{array}
+      \]
+    \end{block}
+  }
+\end{frame}
+
 \begin{frame}[fragile]{Takeaways}
   \only<1>{\Huge \begin{quote} Plans are worthless,\\ but planning is everything \\ \textsc{\Large Dwight D. Eisenhower}\end{quote}}
   \only<2>{\Huge \begin{quote} Models are worthless,\\ but modelling is everything \\ \textsc{\Large Nicole \& Arnaud}\end{quote}}
 \end{frame}
-
-\begin{frame}[fragile]{Event Sourcing $\leftrightarrow$ State Machines}
-  \begin{itemize}[<+->]
-  \item \emph{Event Sourcing} turns a system into an \emph{interpreter} for a language
-  \item This makes it easy to model (part of) it as a \emph{State Machine}
-  \end{itemize}
-  \only<3>{\[
-      \begin{array}{c}
-        \text{Command} \times \text{State} \rightarrow \text{Event} \times \text{State} \\
-         \Updownarrow \\
-        \text{State} \xrightarrow{\text{Command} \times \text{Event}} \text{State} \\
-      \end{array}
-    \]}
-\end{frame}
-
-\begin{frame}[fragile]{Caveats}
-  \begin{itemize}
-  \item It takes time and energy to devise and refine a model
-  \item It's not a \emph{Silver Bullet}\textsuperscript{\tiny TM}
-  \end{itemize}
-\end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Thank you very much!}
@@ -351,6 +349,7 @@ Problems:
         \item[E-Mail]  \href{mailto:arnaud@aleryo.com}{\texttt{arnaud@aleryo.com}}
         \item[Twitter] \href{http://twitter.com/NicoleRauch}{\texttt{@dr\_c0d3}}
         \item[Web] \href{http://aleryo.com}{\texttt{http://aleryo.com}}
+        \item[Web] \href{http://symbiont.io}{\texttt{http://symbiont.io}}
         \end{description}
   \end{block}
   \begin{block}{Nicole Rauch}
