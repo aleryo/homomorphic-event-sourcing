@@ -4,7 +4,7 @@
 {-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
 
->-- |
+-- |
 -- = How to Play Acquire
 --
 -- These game rules are stolen from <http://www.cs.cmu.edu/~lanthony/classes/SEng/Design/acquire.html this page> which
