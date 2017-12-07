@@ -56,7 +56,7 @@ Who we are?
 \LARGE
 Trying to integrate formal methods
 \\[2em]
-Languages, Type Systems, \\Engineering Techniques
+Languages, Type Systems, \\[.2em] Engineering Techniques
 }
 
 \vspace{2em}
@@ -99,7 +99,7 @@ Languages, Type Systems, \\Engineering Techniques
 
 \begin{itemize}[<+->]
 \item Conceptually, the events comprise a so-called \textit{alphabet}.
-\item A \textit{word} is a sequence of elements of this alphabet (i.e.~events).
+\item A \textit{word} is a sequence of letters of this alphabet (i.e.~events).
 \item The set of all possible words is a \textit{language}.
 \item This means each word of the language corresponds to a \textit{state} of the system.
 \item So all the possible states of the system form the language.
@@ -119,7 +119,7 @@ Languages, Type Systems, \\Engineering Techniques
 \begin{frame}[fragile]{Interacting Components}
   \begin{itemize}
   \item What happens when 2 event-sourced components have to interact?
-  \item We want to map commands to commands , and events to events
+  \item We want to map commands to commands and events to events
   \end{itemize}
 \end{frame}
 
@@ -190,9 +190,9 @@ Problems:
 \only<1>{
 \begin{itemize}
 \item Backend designs API
-\item Backend is developed, tests are written
 \item Frontend writes mocks for backend API
-\item Frontend can be developed immediately
+\item Backend is developed, tests are written
+\item Frontend can also be developed immediately
 \item Interaction tests for frontend use these mocks
 \end{itemize}
 }
@@ -276,7 +276,7 @@ Problems:
 
 \begin{itemize}[<+->]
 \item Describe the core domain interactions as a formal model
-\item Generate mocks for the frontend: Use the State Machine as a \emph{Acceptor}
+\item Generate mocks for the frontend: Use the State Machine as an \emph{Acceptor}
 \item Generate tests for the backend: Use the State Machine as a \emph{Generator}
 
 \item Guarantee: All aspects of  the model are covered by tests and mocks
@@ -339,8 +339,6 @@ Problems:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Thank you very much!}
-
-  \url{https://github.com/}
 
   ~\\[1em]
   \begin{block}{Arnaud Bailly}
