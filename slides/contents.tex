@@ -71,7 +71,7 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
   \begin{itemize}[<+->]
 	\item Is $\ldots$ well $\ldots$ ubiquitous
 	\item Carries the business language into the code and beyond
-	\item Allows everybody to understand everybody else 
+	\item Allows everybody to understand everybody else
 	\item Understanding without (even unconscious) translation steps
 	\item Should be made explicit in a glossary
   \end{itemize}
@@ -84,7 +84,7 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
   \item Commands represent interactions from the outside world
   \item They are requests to the application
   \item Events  are the system's replies
-  \item Events are persistently stored 
+  \item Events are persistently stored
   \item The current state of the system is the result of all events that happened so far
   \end{itemize}
 \end{frame}
@@ -126,9 +126,9 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
 
 \begin{frame}[fragile]{Homomorphism}
 
-  A \emph{homomorphism} is a structure-preserving map between two languages. 
+  A \emph{homomorphism} is a structure-preserving map between two languages.
    \\[2em]
-  
+
   \onslide<2->
   This practically means it is enough to
   define a \emph{map} from letters of one language to letters of the other.
@@ -274,13 +274,12 @@ Problems:
 
 \begin{frame}[fragile]{Our ``formal model'' approach}
 
-\begin{itemize}[<+->]
-\item Describe the core domain interactions as a formal model
-\item Generate mocks for the frontend: Use the State Machine as an \emph{Acceptor}
-\item Generate tests for the backend: Use the State Machine as a \emph{Generator}
-
-\item Guarantee: All aspects of  the model are covered by tests and mocks
-\end{itemize}
+  \begin{itemize}[<+->]
+  \item Describe the core domain interactions as a formal model
+  \item Generate mocks for the frontend: Use the State Machine as a \emph{Acceptor}
+  \item Generate tests for the backend: Use the State Machine as a \emph{Generator}
+  \item Guarantee: All aspects of  the model are covered by tests and mocks
+  \end{itemize}
 
 \end{frame}
 
@@ -303,6 +302,12 @@ Problems:
 \begin{frame}[fragile]{Architecture - Frontend}
   \begin{center}
     \includegraphics[height=.8\textheight]{./images/archi-front.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{The Code}
+  \begin{center}
+  \url{https://github.com/aleryo/homomorphic-event-sourcing}
   \end{center}
 \end{frame}
 
