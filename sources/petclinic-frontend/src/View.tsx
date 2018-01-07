@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 
-import {Model, Props} from './types';
+import {Model, Props, Pet} from './types';
 
 import {connect} from 'react-redux';
 import PetAdmission from './PetAdmission';
+import {admitPet} from './reducers';
 
 export class ViewComponent extends Component<Props> {
 
@@ -15,7 +16,7 @@ export class ViewComponent extends Component<Props> {
         const {model, dispatch} = this.props;
         return <div>
             Hallo Hallo
-            <PetAdmission admitPet={()=>{}} />
+            <PetAdmission admitPet={(pet:Pet)=> this.props.dispatch(admitPet(pet))} />
 
         </div>;
     }

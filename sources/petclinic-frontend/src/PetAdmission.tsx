@@ -19,7 +19,7 @@ export default class extends Component<Props, Pet> {
 
     constructor(props: Props) {
         super(props);
-        this.state = { name: "Pet" };
+        this.state = { name: "Pet", species: "" };
     }
 
     render() {

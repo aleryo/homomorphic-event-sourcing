@@ -1,10 +1,11 @@
 
 export interface Pet {
     name: string,
-    species?: string
+    species: string
 }
 
 export interface Model {
+    admittedPets: Pet[]
 }
 
 
