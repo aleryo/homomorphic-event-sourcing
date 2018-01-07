@@ -46,9 +46,13 @@ petStore CheckOut{petName}  store@PetStore{hostedPets}
 
 petStore ListPets          s@PetStore{hostedPets} = (Just $ Pets hostedPets, s)
 
+
 instance IOAutomaton PetStore PetStoreState Input Output where
   init       = PetStore []
   sink       = const Sink
   state      = const PetStoreOpen
   update a _ = a
   action     = petStore
+
+instance Inputs PetStore Input where
+  inputs PetStore{} = []
