@@ -4,8 +4,9 @@ packages:
   - 'acquire-tcp'
   - 'acquire-server'
   - 'ioautomata'
+  - 'pet-store'
 
 extra-deps:
   - unagi-chan-0.4.0.0
   - MonadPrompt-1.0.0.5
-resolver: nightly-2017-10-13
+resolver: lts-10.0
