@@ -29,8 +29,10 @@ newtype ValidPetStore = ValidPetStore (Valid PetStore PetStoreState Input Output
 instance Arbitrary ValidPetStore where
   arbitrary = ValidPetStore <$> arbitrary
 
-prop_mockPetStoreClientRunsAgainstMockRunner :: ValidPetStore -> Property
-prop_mockPetStoreClientRunsAgainstMockRunner (ValidPetStore (validTransitions -> trs)) =
+prop_mockPetStoreClientRunsAgainstMockRunner :: Property
+prop_mockPetStoreClientRunsAgainstMockRunner =
+  verbose $
+  forAll (arbitrary :: Gen ValidPetStore) $ \ (ValidPetStore (validTransitions -> trs)) ->
     let res = (runIdentity . flip evalStateT (fmap input trs) . runMock) $ mockModel (init :: PetStore) (T [])
         msg = "result :" <> show res
     in  counterexample msg $ isSuccessful res

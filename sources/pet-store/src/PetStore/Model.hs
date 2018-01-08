@@ -44,7 +44,8 @@ petStore CheckOut{petName}  store@PetStore{hostedPets}
   | petName `notElem` hostedPets = (Just $ Error PetAlreadyCheckedOut, store)
   | otherwise                    = (Just $ PetCheckedOut petName, PetStore $ delete petName hostedPets)
 
-petStore ListPets          s@PetStore{hostedPets} = (Just $ Pets hostedPets, s)
+petStore ListPets          s@PetStore{hostedPets}
+  = (Just $ Pets hostedPets, s)
 
 
 instance IOAutomaton PetStore PetStoreState Input Output where
@@ -54,5 +55,9 @@ instance IOAutomaton PetStore PetStoreState Input Output where
   update a _ = a
   action     = petStore
 
+petsNames :: [ String ]
+petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
+
 instance Inputs PetStore Input where
-  inputs PetStore{} = []
+  inputs (PetStore [])         = fmap CheckIn petsNames
+  inputs (PetStore hostedPets) = fmap CheckOut hostedPets
