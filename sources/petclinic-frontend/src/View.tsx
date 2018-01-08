@@ -15,7 +15,7 @@ export class ViewComponent extends Component<Props> {
 
     render() {
         return <div>
-            Hallo Hallo
+            <h2>Welcome to our Pet Clinic</h2>
             <PetAdmission admitPet={(pet:Pet)=> this.props.dispatch(admitPet(pet))} />
             <PetList pets={this.props.admittedPets} />
         </div>;

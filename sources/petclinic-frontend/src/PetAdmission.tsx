@@ -25,6 +25,7 @@ export default class extends Component<Props, Pet> {
     render() {
         return (
             <div>
+                <h3>Admit a New Pet</h3>
                 <div>
                     <label>Pet name: </label>
                     <input type="text"
