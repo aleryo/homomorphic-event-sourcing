@@ -13,6 +13,6 @@ const pictures : { [index:string] : string } = {
 
 export default ({name, species}: Pet) => (
     <div>
-        <img height="50" src={pictures[species]}/><span>{name}</span><br/>
+        <img height="20" src={pictures[species]}/><span>{name}</span><br/>
     </div>
 );
