@@ -9,7 +9,6 @@ export interface Model {
 }
 
 
-export interface Props {
-    model: Model,
+export interface Props extends Model {
     dispatch?: any
 }
