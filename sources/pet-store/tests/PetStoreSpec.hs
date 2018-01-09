@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE ViewPatterns               #-}
 module PetStoreSpec where
 
@@ -33,7 +34,7 @@ prop_mockPetStoreClientRunsAgainstMockRunner :: Property
 prop_mockPetStoreClientRunsAgainstMockRunner =
   verbose $
   forAll (arbitrary :: Gen ValidPetStore) $ \ (ValidPetStore (validTransitions -> trs)) ->
-    let res = (runIdentity . flip evalStateT (fmap input trs) . runMock) $ mockModel (init :: PetStore) (T [])
+    let res = runIdentity . flip evalStateT (fmap input trs) . runMock $ mockModel (init :: PetStore)
         msg = "result :" <> show res
     in  counterexample msg $ isSuccessful res
 

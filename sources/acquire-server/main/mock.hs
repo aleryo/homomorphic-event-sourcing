@@ -81,7 +81,7 @@ handleWS cnxs pending = do
             trace $ "reusing old channels with key " ++ show key
             return r
 
-instance Interactive (ReaderT Connection IO) Input Result where
+instance Interactive (ReaderT Connection IO) Input Output where
   request = ask >>= \ connection -> liftIO $ do
     Text message _ <- receiveDataMessage connection
     trace $ "received message: " ++ show message
@@ -93,7 +93,7 @@ instance Interactive (ReaderT Connection IO) Input Result where
 
 handleClient :: IORef ClientConnection -> Connection ->  IO ()
 handleClient channels connection =
-  let clientLoop = runReaderT (mockModel (init :: GameState) (T [])) connection
+  let clientLoop = runReaderT (mockModel (init :: GameState)) connection
 
   in (clientLoop >>= dumpResult) `catch` (\ (e :: ConnectionException) -> do
                                              trace $ "client error: " <> show e <>", closing everything"

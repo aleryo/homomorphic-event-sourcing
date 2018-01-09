@@ -1,6 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.17.1.
+-- This file has been generated from package.yaml by hpack version 0.20.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 393f5789c9aee9a0449c3802bea4f4c461ab34df970f0f002aa5c0f310949f22
 
 name:           acquire-game
 version:        0.1.0
@@ -16,14 +18,14 @@ library
   default-extensions: OverloadedStrings RecordWildCards ScopedTypeVariables MultiParamTypeClasses
   ghc-options: -Wall -fno-warn-orphans
   build-depends:
-      aeson
+      MonadPrompt
+    , aeson
     , array
     , base
     , bytestring
     , containers
     , data-default
     , directory
-    , MonadPrompt
     , mtl
     , random
     , random-shuffle

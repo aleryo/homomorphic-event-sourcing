@@ -2,7 +2,7 @@
 module Acquire.ModelSpec where
 
 import           Acquire.Model
-import           Acquire.Net             (Result, randomGameId)
+import           Acquire.Net             (randomGameId)
 import           Control.Monad.State
 import           Data.Monoid             ((<>))
 import           IOAutomaton             as A
@@ -19,7 +19,7 @@ spec = describe "Acquire Model" $
 
 prop_gameEngineRespectsItsModel :: PropertyM IO ()
 prop_gameEngineRespectsItsModel =
-  forAllM (arbitrary :: Gen (Valid GameState AcquireState Input Result))  $ \ (validTransitions -> trace) -> do
+  forAllM (arbitrary :: Gen (Valid GameState AcquireState Input Output))  $ \ (validTransitions -> trace) -> do
   b' <- run $ do
     removeStateFile
     putStrLn $ "checking trace " <> show trace
