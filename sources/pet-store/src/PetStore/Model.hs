@@ -4,25 +4,39 @@
 module PetStore.Model where
 
 import           Data.List   (delete)
+import           Data.Monoid ((<>))
 import           IOAutomaton
 
-data Input = CheckIn { petName :: String }
-           | CheckOut { petName :: String }
+data PetType = Cat | Dog | Canary | Fish | Rabbit
+  deriving (Eq, Show, Enum)
+
+data Pet = Pet { petName :: String
+               , petType :: PetType
+               }
+           deriving (Eq,Show)
+
+-- should be Command
+data Input = Add { pet :: Pet }
+           | Remove { pet :: Pet }
+           -- level2 : Checkout
+           -- level3: AddAccessory/RemoveAccessory w/ constraints depending on type of pet
            | ListPets
            deriving (Eq, Show)
 
-data Output = PetCheckedIn { petName :: String }
-            | PetCheckedOut { petName :: String }
-            | Pets { pets :: [ String ] }
+-- should be Event
+data Output = PetAdded { pet :: Pet }
+            | PetRemoved { pet :: Pet }
+            | Pets { pets :: [ Pet ] }
             | Error { reason :: PetStoreError }
            deriving (Eq, Show)
 
-data PetStoreError = PetAlreadyCheckedIn
-                   | PetAlreadyCheckedOut
+-- some errors
+data PetStoreError = PetAlreadyAdded
+                   | PetDoesNotExist
            deriving (Eq, Show)
 
 -- | Concrete state of a `PetStore`
-newtype PetStore = PetStore { hostedPets :: [ String ] }
+newtype PetStore = PetStore { storedPets :: [ Pet ] }
                  deriving (Eq, Show)
 
 -- | Abstract state of a `PetStore`
@@ -36,16 +50,16 @@ petStore :: Input
          -> PetStore
          -> (Maybe Output, PetStore)
 
-petStore CheckIn{petName}  store@PetStore{hostedPets}
-  | petName `notElem` hostedPets = (Just $ PetCheckedIn petName, PetStore $ petName:hostedPets)
-  | otherwise                    = (Just $ Error PetAlreadyCheckedIn, store)
+petStore Add{pet}  store@PetStore{storedPets}
+  | pet `notElem` storedPets = (Just $ PetAdded pet, PetStore $ pet:storedPets)
+  | otherwise                = (Just $ Error PetAlreadyAdded, store)
 
-petStore CheckOut{petName}  store@PetStore{hostedPets}
-  | petName `notElem` hostedPets = (Just $ Error PetAlreadyCheckedOut, store)
-  | otherwise                    = (Just $ PetCheckedOut petName, PetStore $ delete petName hostedPets)
+petStore Remove{pet}  store@PetStore{storedPets}
+  | pet `notElem` storedPets = (Just $ Error PetDoesNotExist, store)
+  | otherwise                = (Just $ PetRemoved pet, PetStore $ delete pet storedPets)
 
-petStore ListPets          s@PetStore{hostedPets}
-  = (Just $ Pets hostedPets, s)
+petStore ListPets          s@PetStore{storedPets}
+  = (Just $ Pets storedPets, s)
 
 
 instance IOAutomaton PetStore PetStoreState Input Output where
@@ -59,5 +73,6 @@ petsNames :: [ String ]
 petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
 
 instance Inputs PetStore Input where
-  inputs (PetStore [])         = fmap CheckIn petsNames
-  inputs (PetStore hostedPets) = fmap CheckOut hostedPets
+  inputs (PetStore _)         = fmap Add listOfPets <> fmap Remove listOfPets
+    where
+      listOfPets = [ Pet name species | name <- petsNames, species <- enumFrom Cat ]
