@@ -5,7 +5,7 @@ export interface Pet {
 }
 
 export interface Model {
-    admittedPets: Pet[]
+    pets: Pet[]
 }
 
 

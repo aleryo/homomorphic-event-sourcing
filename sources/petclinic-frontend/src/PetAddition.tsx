@@ -3,7 +3,7 @@ import {Pet} from './types';
 
 const cat = require('../img/cat.jpg');
 const dog = require('../img/dog.jpg');
-const bird = require('../img/bird.jpg');
+const canary = require('../img/canary.jpg');
 const rabbit = require('../img/rabbit.jpg');
 const fish = require('../img/fish.jpg');
 
@@ -25,7 +25,7 @@ export default class extends Component<Props, Pet> {
     render() {
         return (
             <div>
-                <h3>Admit a New Pet</h3>
+                <h3>Add a New Pet</h3>
                 <div>
                     <label>Pet name: </label>
                     <input type="text"
@@ -35,7 +35,7 @@ export default class extends Component<Props, Pet> {
                     <label>Species: </label>
                     <button onClick={() => this.setState({species: "cat"})} style={buttonStyle}><img height="50" src={cat}/></button>
                     <button onClick={() => this.setState({species: "dog"})} style={buttonStyle}><img height="50" src={dog}/></button>
-                    <button onClick={() => this.setState({species: "bird"})} style={buttonStyle}><img height="50" src={bird}/></button>
+                    <button onClick={() => this.setState({species: "canary"})} style={buttonStyle}><img height="50" src={canary}/></button>
                     <button onClick={() => this.setState({species: "rabbit"})} style={buttonStyle}><img height="50" src={rabbit}/></button>
                     <button onClick={() => this.setState({species: "fish"})} style={buttonStyle}><img height="50" src={fish}/></button>
                 </div>
@@ -44,7 +44,7 @@ export default class extends Component<Props, Pet> {
                         onClick={() => {
                             this.props.admitPet(this.state);
                         }}
-                    >Admit {this.state.name}{this.state.species ? ", a" : ""} {this.state.species}
+                    >Add {this.state.name}{this.state.species ? ", a" : ""} {this.state.species}
                     </button>
                 </div>
             </div>
