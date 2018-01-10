@@ -3,37 +3,10 @@
 {-# LANGUAGE NamedFieldPuns        #-}
 module PetStore.Model where
 
-import           Data.List   (delete)
-import           Data.Monoid ((<>))
+import           Data.List         (delete)
+import           Data.Monoid       ((<>))
 import           IOAutomaton
-
-data PetType = Cat | Dog | Canary | Fish | Rabbit
-  deriving (Eq, Show, Enum)
-
-data Pet = Pet { petName :: String
-               , petType :: PetType
-               }
-           deriving (Eq,Show)
-
--- should be Command
-data Input = Add { pet :: Pet }
-           | Remove { pet :: Pet }
-           -- level2 : Checkout
-           -- level3: AddAccessory/RemoveAccessory w/ constraints depending on type of pet
-           | ListPets
-           deriving (Eq, Show)
-
--- should be Event
-data Output = PetAdded { pet :: Pet }
-            | PetRemoved { pet :: Pet }
-            | Pets { pets :: [ Pet ] }
-            | Error { reason :: PetStoreError }
-           deriving (Eq, Show)
-
--- some errors
-data PetStoreError = PetAlreadyAdded
-                   | PetDoesNotExist
-           deriving (Eq, Show)
+import           PetStore.Messages
 
 -- | Concrete state of a `PetStore`
 newtype PetStore = PetStore { storedPets :: [ Pet ] }

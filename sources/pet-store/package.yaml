@@ -14,6 +14,7 @@ library:
     - random
   exposed-modules:
     - PetStore.Model
+    - PetStore.Messages
   default-extensions:
     - OverloadedStrings
     - RecordWildCards
@@ -59,6 +60,8 @@ executables:
       - ioautomata
       - mtl
       - network
+      - servant
+      - servant-server
       - stm
       - text
       - unagi-chan
