@@ -33,11 +33,11 @@ export default class extends Component<Props, Pet> {
                 </div>
                 <div>
                     <label>Species: </label>
-                    <button onClick={() => this.setState({species: "cat"})} style={buttonStyle}><img height="50" src={cat}/></button>
-                    <button onClick={() => this.setState({species: "dog"})} style={buttonStyle}><img height="50" src={dog}/></button>
-                    <button onClick={() => this.setState({species: "canary"})} style={buttonStyle}><img height="50" src={canary}/></button>
-                    <button onClick={() => this.setState({species: "rabbit"})} style={buttonStyle}><img height="50" src={rabbit}/></button>
-                    <button onClick={() => this.setState({species: "fish"})} style={buttonStyle}><img height="50" src={fish}/></button>
+                    <button onClick={() => this.setState({species: "Cat"})} style={buttonStyle}><img height="50" src={cat}/></button>
+                    <button onClick={() => this.setState({species: "Dog"})} style={buttonStyle}><img height="50" src={dog}/></button>
+                    <button onClick={() => this.setState({species: "Canary"})} style={buttonStyle}><img height="50" src={canary}/></button>
+                    <button onClick={() => this.setState({species: "Rabbit"})} style={buttonStyle}><img height="50" src={rabbit}/></button>
+                    <button onClick={() => this.setState({species: "Fish"})} style={buttonStyle}><img height="50" src={fish}/></button>
                 </div>
                 <div>
                     <button

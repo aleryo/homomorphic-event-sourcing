@@ -3,11 +3,11 @@ import {Pet} from './types';
 
 
 const pictures : { [index:string] : string } = {
-    cat: require('../img/cat.jpg'),
-    dog: require('../img/dog.jpg'),
-    bird: require('../img/canary.jpg'),
-    rabbit: require('../img/rabbit.jpg'),
-    fish: require('../img/fish.jpg')
+    "Cat": require('../img/cat.jpg'),
+    "Dog": require('../img/dog.jpg'),
+    "Bird": require('../img/canary.jpg'),
+    "Rabbit": require('../img/rabbit.jpg'),
+    "Fish": require('../img/fish.jpg')
 };
 
 
