@@ -5,7 +5,7 @@ import {Pet} from './types';
 const pictures : { [index:string] : string } = {
     "Cat": require('../img/cat.jpg'),
     "Dog": require('../img/dog.jpg'),
-    "Bird": require('../img/canary.jpg'),
+    "Canary": require('../img/canary.jpg'),
     "Rabbit": require('../img/rabbit.jpg'),
     "Fish": require('../img/fish.jpg')
 };
