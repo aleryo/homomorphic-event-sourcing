@@ -12,9 +12,12 @@ library:
     - mtl
     - network
     - random
+    - servant
+    - servant-server
   exposed-modules:
     - PetStore.Model
     - PetStore.Messages
+    - PetStore.Api
   default-extensions:
     - OverloadedStrings
     - RecordWildCards
@@ -32,11 +35,16 @@ executables:
       - base
       - bytestring
       - containers
+      - http-client
       - http-types
       - ioautomata
+      - mtl
       - network
+      - QuickCheck
       - random
       - servant
+      - servant-client
+      - servant-server
       - stm
       - text
       - unagi-chan
@@ -56,10 +64,12 @@ executables:
       - base
       - bytestring
       - containers
+      - http-client
       - http-types
       - ioautomata
       - mtl
       - network
+      - QuickCheck
       - servant
       - servant-server
       - stm
