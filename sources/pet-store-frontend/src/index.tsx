@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {createStore, compose, applyMiddleware} from "redux";
 import logger from "redux-logger";
-import thunkMiddleware, {default as thunk} from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
 
 import reducers from "./reducers";
 
