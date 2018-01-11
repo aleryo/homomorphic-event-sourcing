@@ -74,6 +74,7 @@ export const INITIAL_STATE: Model = {
 
 
 const pets = createReducer(INITIAL_STATE.pets, {
+    ["PETS_LOADED"]: (currentPets:Pet[], action:{ type: "PETS_LOADED", pets: Pet[] }) => action.pets,
     ["PET_ADDED"]: (currentPets:Pet[], action:{ type: "PET_ADDED", addedPet: Pet }) => currentPets.concat(action.addedPet),
     ["PET_SOLD"]:  (currentPets:Pet[], action:{ type: "PET_SOLD", soldPet: Pet }) =>
         currentPets.filter((pet:Pet) => pet.name !== action.soldPet.name && pet.species !== action.soldPet.species)

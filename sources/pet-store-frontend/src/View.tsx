@@ -4,13 +4,13 @@ import {Model, Props, Pet} from './types';
 
 import {connect} from 'react-redux';
 import PetAdmission from './PetAddition';
-import {addAndSubmitPet, sellPet} from './reducers';
+import {addAndSubmitPet, loadPets, sellPet} from './reducers';
 import PetList from './PetList';
 
 export class ViewComponent extends Component<Props> {
 
     componentWillMount() {
-        // TODO load data from backend
+        this.props.dispatch(loadPets());
     }
 
     render() {
