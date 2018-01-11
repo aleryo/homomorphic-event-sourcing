@@ -1,21 +1,22 @@
 import ajax from "nanoajax";
 import {Pet} from './types';
 
-export function addPet(pet:Pet, callback:any) {
+export function submitPet(pet:Pet, callback:any) {
     ajax.ajax({
-            url: "/api/addPet",
+            url: "/pets",
             method: "POST",
-            body: "name=" + pet.name + "&species=" + pet.species
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({petName: pet.name, petType: pet.species})
         },
         (code:number, response:string) => {
-            callback(JSON.parse(response));
+            // callback(JSON.parse(response));
         }
     );
 }
 
 export function fetchPets(callback:any) {
     ajax.ajax({
-            url: "/api/pets",
+            url: "/pets",
             method: "GET"
         },
         (code:number, response:string) => {

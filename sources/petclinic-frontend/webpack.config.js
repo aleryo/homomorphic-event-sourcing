@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const localPort = "3000";
-const proxiedServer = "http://localhost:5555";
+const proxiedServer = "http://localhost:9090";
 
 module.exports = {
     entry: [
@@ -24,7 +24,7 @@ module.exports = {
         port: localPort,
         hot: true,       // hot module replacement
         historyApiFallback: true,
-        //proxy: { "/": proxiedServer }
+        proxy: { "/": proxiedServer }
     },
     devtool: "inline-source-map",
     output: {

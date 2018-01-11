@@ -44,6 +44,19 @@ export function addPet(pet:Pet) : Action {
     }
 }
 
+
+export function addAndSubmitPet(pet:Pet) {
+    return (dispatch:any) => {
+
+        dispatch(addPet(pet));
+
+        ajax.submitPet(pet,(pets:Pet[]) => {
+            // dispatch(updatePets(pets));
+        });
+    };
+}
+
+
 export function sellPet(pet:Pet) : Action {
     return {
         type: "PET_SOLD",
