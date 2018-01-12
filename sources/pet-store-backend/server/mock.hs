@@ -23,11 +23,11 @@ main = do
   [port] <- getArgs
   store <- newMVar (PetStore [])
   putStrLn $ "starting mock HTTP PetStore on port " <> port
-  void $ run (read port) (serve devPetStoreApi $ enter (runServer store) handler)
+  void $ run (read port) (serve petStoreApi $ enter (runServer store) handler)
     where
       runServer store = NT $ Handler . flip runReaderT store
 
-      handler = (listPets :<|> addPet :<|> removePet) :<|> reset
+      handler = listPets :<|> addPet :<|> removePet :<|> reset
 
       addPet    pet = action (Add pet)
       removePet pet = action (Remove pet)

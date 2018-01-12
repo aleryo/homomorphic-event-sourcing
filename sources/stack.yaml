@@ -5,6 +5,7 @@ packages:
   - 'acquire-server'
   - 'ioautomata'
   - 'pet-store'
+  - 'pet-store-backend'
 
 extra-deps:
   - unagi-chan-0.4.0.0

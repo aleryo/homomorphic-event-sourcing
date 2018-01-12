@@ -24,7 +24,7 @@ addPet    :: Pet -> ClientM Event
 removePet :: Pet -> ClientM Event
 reset     :: ClientM NoContent
 
-listPets :<|> addPet :<|> removePet :<|> reset = client petStoreApi
+(listPets :<|> addPet :<|> removePet) :<|> reset = client devPetStoreApi
 
 handleCommand :: MonadIO f
             => t -> ClientM a -> ClientEnv -> f (Maybe a, t)

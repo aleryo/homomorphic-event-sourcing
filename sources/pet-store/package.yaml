@@ -11,13 +11,12 @@ library:
     - ioautomata
     - mtl
     - network
+    - pet-store-backend
     - random
     - servant
     - servant-server
   exposed-modules:
     - PetStore.Model
-    - PetStore.Messages
-    - PetStore.Api
   default-extensions:
     - OverloadedStrings
     - RecordWildCards
@@ -30,6 +29,7 @@ executables:
     main: driver.hs
     dependencies:
       - pet-store
+      - pet-store-backend
       - aeson
       - async
       - base
@@ -60,6 +60,7 @@ executables:
     dependencies:
       - aeson
       - pet-store
+      - pet-store-backend
       - async
       - base
       - bytestring
@@ -92,6 +93,7 @@ tests:
     main: Tests.hs
     dependencies:
       - pet-store
+      - pet-store-backend
       - base
       - containers
       - data-reify
