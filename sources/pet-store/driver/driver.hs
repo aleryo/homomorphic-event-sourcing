@@ -35,7 +35,8 @@ instance Interpreter (ReaderT ClientEnv IO) PetStore PetStoreState Command Event
   interpret curSt (Remove p) = ask >>= handleCommand curSt (removePet p)
   interpret curSt  ListPets  = ask >>= handleCommand curSt listPets
 
-  before _ = pure ()
+  before _ = ask >>= void . liftIO . runClientM reset
+
   after _  = pure ()
 
 eitherToMaybe :: Either e a -> Maybe a
@@ -52,8 +53,9 @@ main = do
       mgr <- newManager defaultManagerSettings
       let url = BaseUrl Http serverHost (read serverPort) ""
           env = ClientEnv mgr url
-      void $ runClientM reset env
+
       res <- flip runReaderT env $ testSUT (init :: PetStore) (T trace)
+
       putStrLn $ "final result " <> show res
       pure res
     assert (isSuccessful b')
