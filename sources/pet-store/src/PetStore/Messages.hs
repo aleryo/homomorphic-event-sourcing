@@ -14,8 +14,7 @@ data Pet = Pet { petName :: String
                }
            deriving (Eq,Show,Generic,ToJSON,FromJSON)
 
--- should be Command
-data Input = Add { pet :: Pet }
+data Command = Add { pet :: Pet }
            | Remove { pet :: Pet }
            -- level2: Checkout
            -- level3: AddAccessory/RemoveAccessory w/ constraints depending on type of pet
@@ -23,7 +22,7 @@ data Input = Add { pet :: Pet }
            deriving (Eq, Show,Generic,ToJSON,FromJSON)
 
 -- should be Event
-data Output = PetAdded { pet :: Pet }
+data Event = PetAdded { pet :: Pet }
             | PetRemoved { pet :: Pet }
             | Pets { pets :: [ Pet ] }
             | Error { reason :: PetStoreError }

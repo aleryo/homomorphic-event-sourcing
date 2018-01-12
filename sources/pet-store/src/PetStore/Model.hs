@@ -19,9 +19,9 @@ data PetStoreState = PetStoreOpen
                      -- ^Special /sink/ state where all unhandled transitions endup
                    deriving (Eq, Show)
 
-petStore :: Input
+petStore :: Command
          -> PetStore
-         -> (Maybe Output, PetStore)
+         -> (Maybe Event, PetStore)
 
 petStore Add{pet}  store@PetStore{storedPets}
   | pet `notElem` storedPets = (Just $ PetAdded pet, PetStore $ pet:storedPets)
@@ -35,7 +35,7 @@ petStore ListPets          s@PetStore{storedPets}
   = (Just $ Pets storedPets, s)
 
 
-instance IOAutomaton PetStore PetStoreState Input Output where
+instance IOAutomaton PetStore PetStoreState Command Event where
   init       = PetStore []
   sink       = const Sink
   state      = const PetStoreOpen
@@ -45,7 +45,7 @@ instance IOAutomaton PetStore PetStoreState Input Output where
 petsNames :: [ String ]
 petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
 
-instance Inputs PetStore Input where
+instance Inputs PetStore Command where
   inputs (PetStore _)         = fmap Add listOfPets <> fmap Remove listOfPets
     where
       listOfPets = [ Pet name species | name <- petsNames, species <- enumFrom Cat ]
