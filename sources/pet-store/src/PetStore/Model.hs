@@ -9,8 +9,10 @@ import           IOAutomaton
 import           PetStore.Messages
 
 -- | Concrete state of a `PetStore`
-newtype PetStore = PetStore { storedPets :: [ Pet ] }
-                 deriving (Eq, Show)
+data PetStore = PetStore { storedPets :: [ Pet ]
+                         , baskets    :: [ (User, [ Pet ]) ]
+                         }
+              deriving (Eq, Show)
 
 -- | Abstract state of a `PetStore`
 -- It is either @Open@ or invalid @Sink@
@@ -19,24 +21,25 @@ data PetStoreState = PetStoreOpen
                      -- ^Special /sink/ state where all unhandled transitions endup
                    deriving (Eq, Show)
 
-petStore :: Command
+petStore :: Input
          -> PetStore
-         -> (Maybe Event, PetStore)
+         -> (Maybe Output, PetStore)
 
 petStore Add{pet}  store@PetStore{storedPets}
-  | pet `notElem` storedPets = (Just $ PetAdded pet, PetStore $ pet:storedPets)
+  | pet `notElem` storedPets = (Just $ PetAdded pet, store { storedPets = pet:storedPets} )
   | otherwise                = (Just $ Error PetAlreadyAdded, store)
 
 petStore Remove{pet}  store@PetStore{storedPets}
   | pet `notElem` storedPets = (Just $ Error PetDoesNotExist, store)
-  | otherwise                = (Just $ PetRemoved pet, PetStore $ delete pet storedPets)
+  | otherwise                = (Just $ PetRemoved pet, store { storedPets = delete pet storedPets } )
 
+-- Actually a Query not a Command
 petStore ListPets          s@PetStore{storedPets}
   = (Just $ Pets storedPets, s)
 
 
-instance IOAutomaton PetStore PetStoreState Command Event where
-  init       = PetStore []
+instance IOAutomaton PetStore PetStoreState Input Output where
+  init       = PetStore [] []
   sink       = const Sink
   state      = const PetStoreOpen
   update a _ = a
@@ -45,7 +48,7 @@ instance IOAutomaton PetStore PetStoreState Command Event where
 petsNames :: [ String ]
 petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
 
-instance Inputs PetStore Command where
-  inputs (PetStore _)         = fmap Add listOfPets <> fmap Remove listOfPets
+instance Inputs PetStore Input where
+  inputs (PetStore _ _) = fmap Add listOfPets <> fmap Remove listOfPets
     where
       listOfPets = [ Pet name species | name <- petsNames, species <- enumFrom Cat ]

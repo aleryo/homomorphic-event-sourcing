@@ -7,9 +7,9 @@ module PetStore.Api where
 import           PetStore.Messages
 import           Servant
 
-type PetStoreApi = "pets"   :> Get '[JSON] Event
-                   :<|> "pets"   :> ReqBody '[JSON] Pet :> Post '[JSON] Event
-                   :<|> "pets"   :> ReqBody '[JSON] Pet :> Delete '[JSON] Event
+type PetStoreApi = "pets"   :> Get '[JSON] [ Pet ]
+                   :<|> "pets"   :> ReqBody '[JSON] Pet :> Post '[JSON] Output
+                   :<|> "pets"   :> ReqBody '[JSON] Pet :> Delete '[JSON] Output
 
 type DevPetStoreApi = PetStoreApi
                       :<|> "_reset" :> Delete '[JSON] NoContent

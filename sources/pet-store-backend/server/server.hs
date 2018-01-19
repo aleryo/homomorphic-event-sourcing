@@ -12,6 +12,7 @@ import           Data.Monoid              ((<>))
 --import           Data.Text.Encoding       (encodeUtf8)
 import           Network.Wai.Handler.Warp (run)
 import           PetStore.Api
+import           PetStore.Handler
 --import           PetStore.Messages
 import           Servant
 import           System.Environment
@@ -27,9 +28,4 @@ main = do
       server other  = error $ "don't know how to handle environment '" <> other <>  "'"
 
       prodHandler = listPets :<|> addPet :<|> removePet
-      devHandler = (listPets :<|> addPet :<|> removePet) :<|> reset
-
-      listPets = undefined
-      addPet = undefined
-      removePet = undefined
-      reset = undefined
+      devHandler  = (listPets :<|> addPet :<|> removePet) :<|> reset

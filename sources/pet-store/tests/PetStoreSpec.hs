@@ -7,6 +7,7 @@ import           Control.Monad.Identity
 import           Control.Monad.State
 import           Data.Monoid            ((<>))
 import           IOAutomaton
+import           PetStore.Messages
 import           PetStore.Model
 import           Prelude                hiding (init)
 import           Test.Hspec

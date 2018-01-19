@@ -19,21 +19,21 @@ import           System.Environment
 import           Test.QuickCheck
 import           Test.QuickCheck.Monadic
 
-listPets  :: ClientM Event
-addPet    :: Pet -> ClientM Event
-removePet :: Pet -> ClientM Event
+listPets  :: ClientM Output
+addPet    :: Pet -> ClientM Output
+removePet :: Pet -> ClientM Output
 reset     :: ClientM NoContent
 
 (listPets :<|> addPet :<|> removePet) :<|> reset = client devPetStoreApi
 
-handleCommand :: MonadIO f
+handleInput :: MonadIO f
             => t -> ClientM a -> ClientEnv -> f (Maybe a, t)
-handleCommand curSt act = (first eitherToMaybe . (, curSt) <$>) . liftIO . runClientM act
+handleInput curSt act = (first eitherToMaybe . (, curSt) <$>) . liftIO . runClientM act
 
-instance Interpreter (ReaderT ClientEnv IO) PetStore PetStoreState Command Event where
-  interpret curSt (Add p)    = ask >>= handleCommand curSt (addPet p)
-  interpret curSt (Remove p) = ask >>= handleCommand curSt (removePet p)
-  interpret curSt  ListPets  = ask >>= handleCommand curSt listPets
+instance Interpreter (ReaderT ClientEnv IO) PetStore PetStoreState Input Output where
+  interpret curSt (Add p)    = ask >>= handleInput curSt (addPet p)
+  interpret curSt (Remove p) = ask >>= handleInput curSt (removePet p)
+  interpret curSt  ListPets  = ask >>= handleInput curSt listPets
 
   before _ = ask >>= void . liftIO . runClientM reset
 
@@ -47,7 +47,7 @@ main :: IO ()
 main = do
   [serverHost, serverPort] <- getArgs -- to connect to server
   quickCheck $ monadicIO $
-    forAllM (arbitrary :: Gen (Valid PetStore PetStoreState Command Event))  $ \ (validTransitions -> trace) -> do
+    forAllM (arbitrary :: Gen (Valid PetStore PetStoreState Input Output))  $ \ (validTransitions -> trace) -> do
     b' <- run $ do
       putStrLn $ "checking trace " <> show trace <> " against " <> show (serverHost, serverPort)
       mgr <- newManager defaultManagerSettings
