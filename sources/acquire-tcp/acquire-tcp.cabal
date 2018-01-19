@@ -71,4 +71,4 @@ Test-Suite tests
    build-depends: base
                 , acquire-tcp
                 , QuickCheck
-                , HTF
+                , test-framework
