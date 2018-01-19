@@ -1,9 +1,9 @@
 name: pet-store
 synopsis:  A Simple model for a Pet Store app
-ghc-options: -Wall -fno-warn-orphans
 
 library:
   source-dirs: src
+  ghc-options: -Wall -fno-warn-orphans
   dependencies:
     - aeson
     - async
