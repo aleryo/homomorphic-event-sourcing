@@ -1,4 +1,7 @@
-import ajax from 'nanoajax';
+// import ajax from 'nanoajax';
+// const ajax = require('nanoajax');
+const axios = require('axios');
+
 import {Pet} from './types';
 
 interface PetFromBackend {
@@ -6,11 +9,12 @@ interface PetFromBackend {
     petType: string
 }
 
-export function submitPet(pet: Pet, callback: any) {
-    ajax.ajax({
-            url: '/pets',
+export function submitPet(pet: Pet, callback: any, url: string = "") {
+    axios.request({
+            // baseURL: url,
+            url: url + '/pets',
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json;charset=utf-8'},
             body: JSON.stringify({petName: pet.name, petType: pet.species})
         },
         (code: number, response: string) => {
@@ -23,17 +27,18 @@ function transformPets(petsFromBackend: PetFromBackend[]) : Pet[] {
     return petsFromBackend.map((petFromBackend:PetFromBackend) => ({name: petFromBackend.petName, species: petFromBackend.petType}) );
 }
 
-export function fetchPets(successCB: any) {
-    ajax.ajax({
-            url: '/pets',
-            method: 'GET'
+export function fetchPets(successCB: any, url: string = "") {
+    axios.request({
+        method: 'GET',
+        // baseURL: url,
+        url: url + '/pets',
+        headers: {'Accept': 'application/json;charset=utf-8'},
+    }).then(
+        (response: any) => {
+            console.log("success", response.data)
+            successCB(transformPets(response.data));
         },
-        (code: number, response: string) => {
-        if(code === 200){
-            successCB(transformPets(JSON.parse(response)));
-        } else {
-            // TODO error handling
-        }
-        }
-    );
+        (error: string) => {
+            console.log('houston...', error);
+        });
 }
