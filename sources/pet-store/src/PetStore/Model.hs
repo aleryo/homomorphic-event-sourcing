@@ -38,15 +38,20 @@ petStore Remove{pet}  store@PetStore{storedPets}
 petStore ListPets          s@PetStore{storedPets}
   = (Just $ Pets storedPets, s)
 
-petStore UserLogin { user }               store@PetStore{storedPets, baskets}
+petStore UserLogin { user }               store@PetStore{ baskets}
   | user `elem` fmap fst baskets = (Just $ UserLoggedIn user, store)
-  | otherwise                    = (Just $ UserLoggedIn user, store { baskets = (user, []):baskets } )
+  | otherwise                    = (Just $ UserLoggedIn user
+                                   , store { baskets = (user, []):baskets }
+                                   )
 
 petStore AddToBasket { user, pet }        store@PetStore{storedPets, baskets}
   | user `notElem` fmap fst baskets = (Just $ Error UserNotLoggedIn, store)
   | pet `notElem` storedPets        = (Just $ Error PetDoesNotExist, store)
-  | otherwise                       = (Just $ AddedToBasket user pet, store { storedPets = delete pet storedPets
-                                                                            , baskets = basketWithAddedPet })
+  | otherwise                       = (Just $ AddedToBasket user pet
+                                      , store { storedPets = delete pet storedPets
+                                              , baskets = basketWithAddedPet
+                                              }
+                                      )
   where
     addPet (u,ps) | u == user    = (u,pet:ps)
                   | otherwise    = (u,ps)
@@ -55,9 +60,12 @@ petStore AddToBasket { user, pet }        store@PetStore{storedPets, baskets}
 petStore RemoveFromBasket { user, pet}    store@PetStore{storedPets, baskets}
   | user `notElem` fmap fst baskets  = (Just $ Error UserNotLoggedIn, store)
   | fmap (pet `notElem`) userBasket
-    == Just True                     = (Just $ Error UserNotLoggedIn, store)
-  | otherwise                        = (Just $ AddedToBasket user pet, store { storedPets = delete pet storedPets
-                                                                            , baskets = basketWithRemovedPet })
+    == Just True                     = (Just $ Error PetNotInBasket, store)
+  | otherwise                        = (Just $ AddedToBasket user pet
+                                       , store { storedPets = pet : storedPets
+                                               , baskets = basketWithRemovedPet
+                                               }
+                                       )
   where
     userBasket = lookup user baskets
 
@@ -65,15 +73,29 @@ petStore RemoveFromBasket { user, pet}    store@PetStore{storedPets, baskets}
                      | otherwise    = (u,ps)
     basketWithRemovedPet = fmap removePet baskets
 
-petStore CheckoutBasket { user, payment } store@PetStore{storedPets, baskets}
+petStore GetUserBasket { user } store@PetStore{baskets}
   | user `notElem` fmap fst baskets  = (Just $ Error UserNotLoggedIn, store)
-  | otherwise                        = undefined
+  | otherwise = (Just $ UserBasket user userBasket, store)
+  where
+    userBasket     = fromJust $ lookup user baskets
+
+petStore CheckoutBasket { user, payment } store@PetStore{baskets}
+  | user `notElem` fmap fst baskets  = (Just $ Error UserNotLoggedIn, store)
+  | checkCardNumber payment          = (Just $ CheckedOutBasket user payment basketAmount, checkoutBasket)
+  | otherwise                        = (Just $ Error InvalidPayment, store)
+  where
+    userBasket     = fromJust $ lookup user baskets
+    basketAmount   = foldr (+) 0 $ fmap petPrice userBasket
+    checkoutBasket = store { baskets = fmap resetBasket baskets }
+    resetBasket (u,b) | u == user = (user,[])
+                      | otherwise = (u,b)
 
 petStore UserLogout { user }              store@PetStore{storedPets, baskets}
   | user `notElem` fmap fst baskets  = (Just $ Error UserNotLoggedIn, store)
-  | otherwise                        = (Just $ UserLoggedOut user, putBackBasketInStore )
+  | otherwise                        = (Just $ UserLoggedOut user, store { storedPets = storedPets <> userBasket
+                                                                         , baskets = delete (user,userBasket) baskets})
   where
-    putBackBasketInStore = undefined
+    userBasket  = fromJust $ lookup user baskets
 
 
 

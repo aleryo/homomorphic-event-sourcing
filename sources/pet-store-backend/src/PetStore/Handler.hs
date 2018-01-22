@@ -4,7 +4,7 @@ import           PetStore.Messages
 import           Servant
 
 
-listPets :: Handler [ Pet ]
+listPets :: Handler Output
 listPets = undefined
 
 addPet :: Pet -> Handler Output

@@ -21,7 +21,7 @@ import           System.Environment
 main :: IO ()
 main = do
   [port] <- getArgs
-  store <- newMVar (PetStore [])
+  store <- newMVar (PetStore [] [])
   putStrLn $ "starting mock HTTP PetStore on port " <> port
   void $ run (read port) (serve devPetStoreApi $ enter (runServer store) handler)
     where
@@ -35,7 +35,6 @@ main = do
       reset         = do
         st <- ask
         liftIO $ modifyMVar st (const $ pure (A.init, NoContent))
-
 
       action act =  ask >>= \ st -> do
         pets <- liftIO $ takeMVar st

@@ -17,6 +17,7 @@ library:
   exposed-modules:
     - PetStore.Api
     - PetStore.Messages
+    - PetStore.Handler
   default-extensions:
     - OverloadedStrings
     - RecordWildCards

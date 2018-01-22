@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 363c91dd211815ef5c417cd8158752d82afb01feace456cbb256e6f70258ec2f
+-- hash: a2c676a03f0622bf107af00b075aaf19d9e6bef1711aac52b54e472c968ae537
 
 name:           pet-store-backend
 version:        0.0.0
@@ -27,6 +27,7 @@ library
   exposed-modules:
       PetStore.Api
       PetStore.Messages
+      PetStore.Handler
   other-modules:
       Paths_pet_store_backend
   default-language: Haskell2010
