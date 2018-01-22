@@ -41,7 +41,7 @@ describe('ajaxcalls Pact Contract', function() {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: [
+                        body: { pets: [
                             {
                                 petName: 'Fifi',
                                 petType: 'Dog'
@@ -50,7 +50,7 @@ describe('ajaxcalls Pact Contract', function() {
                                 petName: 'Minki',
                                 petType: 'Cat'
                             }
-                        ]
+                        ] }
                     }
                 });
             })
