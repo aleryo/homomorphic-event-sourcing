@@ -22,8 +22,12 @@ export function submitPet(pet: Pet, callback: any, url: string = '') {
     );
 }
 
-function transformPets(petsFromBackend: PetFromBackend[]) : Pet[] {
-    return petsFromBackend.map((petFromBackend:PetFromBackend) => ({name: petFromBackend.petName, species: petFromBackend.petType}) );
+function transformPets(dataFromBackend: any): Pet[] {
+    console.log(dataFromBackend);
+    return dataFromBackend.pets.map((petFromBackend: PetFromBackend) => ({
+        name: petFromBackend.petName,
+        species: petFromBackend.petType
+    }));
 }
 
 export function fetchPets(successCB: any, url: string = '') {
