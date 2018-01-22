@@ -26,12 +26,9 @@ function transformPets(petsFromBackend: PetFromBackend[]) : Pet[] {
     return petsFromBackend.map((petFromBackend:PetFromBackend) => ({name: petFromBackend.petName, species: petFromBackend.petType}) );
 }
 
-export function fetchPets(successCB: any, url: string = "") {
-    axios.request({
-        method: 'GET',
-        // baseURL: url,
-        url: url + '/pets',
-        headers: {'Accept': 'application/json;charset=utf-8'},
+export function fetchPets(successCB: any, url: string = '') {
+    axios.get(url + '/pets', {
+        headers: {'Accept': 'application/json'},
     }).then(
         (response: any) => {
             console.log("success", response.data)
