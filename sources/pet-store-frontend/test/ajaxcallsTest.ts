@@ -41,7 +41,9 @@ describe('ajaxcalls Pact Contract', function() {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: { pets: [
+                        body: {
+                            tag: "Pets",
+                            pets: [
                             {
                                 petName: 'Fifi',
                                 petType: 'Dog'
