@@ -95,6 +95,14 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
 \end{center}
 \end{frame}
 
+\begin{frame}[fragile]{}
+\begin{center}
+\Huge
+Demo
+\end{center}
+\end{frame}
+
+
 \begin{frame}[fragile]{Event Sourcing as a Formal Language}
 
 \begin{itemize}[<+->]
@@ -249,11 +257,20 @@ Problems:
 }
 
 \only<9>{
+\lstinputlisting{contracts/nopets}
+}
+
+\only<10>{
+\lstinputlisting{contracts/somepets}
+}
+
+\only<11>{
 Problems:
 
 \begin{itemize}
 \item Contract testing is only as good as its contracts
 \item Manual contract-writing can be tedious and even error-prone
+\item Provider testing must manually establish the desired state
 \item Errors may only be discovered late in the process, when the backend implements some functionality and discovers that it does not match the contract
 \item If contracts are too sparse, we miss out
 \item If contracts are too verbose (or too many), testing takes too long
