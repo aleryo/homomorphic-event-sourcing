@@ -14,10 +14,12 @@ library:
     - random
     - servant
     - servant-server
+    - text
+    - warp
   exposed-modules:
     - PetStore.Api
     - PetStore.Messages
-    - PetStore.Handler
+    - PetStore.Server
   default-extensions:
     - OverloadedStrings
     - RecordWildCards

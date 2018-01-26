@@ -8,15 +8,23 @@ library:
     - aeson
     - async
     - base
+    - bytestring
+    - http-client
     - ioautomata
     - mtl
     - network
     - pet-store-backend
+    - QuickCheck
     - random
     - servant
+    - servant-client
     - servant-server
+    - text
+    - warp
   exposed-modules:
     - PetStore.Model
+    - PetStore.Mock
+    - PetStore.Driver
   default-extensions:
     - OverloadedStrings
     - RecordWildCards

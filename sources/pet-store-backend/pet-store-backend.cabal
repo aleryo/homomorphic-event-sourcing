@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a2c676a03f0622bf107af00b075aaf19d9e6bef1711aac52b54e472c968ae537
+-- hash: f756ba6b28682c8fd1822b76eb896235451e424f153a4b928f46192b517574d6
 
 name:           pet-store-backend
 version:        0.0.0
@@ -24,11 +24,14 @@ library
     , random
     , servant
     , servant-server
+    , text
+    , warp
   exposed-modules:
       PetStore.Api
       PetStore.Messages
-      PetStore.Handler
+      PetStore.Server
   other-modules:
+      PetStore.Handler
       Paths_pet_store_backend
   default-language: Haskell2010
 
