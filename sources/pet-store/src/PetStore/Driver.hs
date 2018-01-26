@@ -64,13 +64,11 @@ runTestDriver serverHost serverPort = do
   quickCheck $ monadicIO $
     forAllM (arbitrary :: Gen (Valid PetStore PetStoreState Input Output))  $ \ (validTransitions -> trace) -> do
     b' <- run $ do
-      putStrLn $ "checking trace " <> show trace <> " against " <> show (serverHost, serverPort)
       mgr <- newManager defaultManagerSettings
       let url = BaseUrl Http serverHost serverPort ""
           env = ClientEnv mgr url
 
-      res <- flip runReaderT env $ testSUT (init :: PetStore) (T trace)
+      flip runReaderT env $ testSUT (init :: PetStore) (T trace)
 
-      putStrLn $ "final result " <> show res
-      pure res
+    monitor (counterexample $ "run not successful " <> show b')
     assert (isSuccessful b')

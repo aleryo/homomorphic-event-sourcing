@@ -107,11 +107,21 @@ instance IOAutomaton PetStore PetStoreState Input Output where
   action     = petStore
 
 petsNames :: [ String ]
-petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
+petsNames = [ "Bailey", "Bella", "Max", "Lucy" ]
+
+users :: [ User ]
+users = [ User "alice", User "bob", User "charlie", User "damian", User "elisa" ]
 
 instance Inputs PetStore Input where
-  inputs (PetStore pets _) = fmap Add listOfPets
-                             <> fmap Remove pets
-                             <> fmap Remove [head listOfPets ] -- might not exist
+  inputs (PetStore pets baskets) = fmap Add listOfPets
+                                   <> fmap Remove pets
+                                   <> fmap Remove [head listOfPets ] -- might not exist
+                                   <> [ ListPets ]
+                                   <> fmap UserLogin (concat $ replicate 3 users)
+                                   <> fmap (UserLogout . fst) baskets
+                                   <> fmap (uncurry AddToBasket) possibleAdds
+                                   <> fmap (uncurry RemoveFromBasket) possibleRemoves
     where
-      listOfPets = [ Pet name species price | name <- petsNames, species <- enumFrom Cat, price <- [ 10, 20 .. 100 ] ]
+      possibleAdds    = [ (u, p) | u <- fmap fst baskets, p <- pets ]
+      possibleRemoves = [ (u, p) | (u,ps) <- baskets, p <- ps ]
+      listOfPets = [ Pet name species price | name <- petsNames, species <- enumFrom Cat, price <- [ 10, 20, 30 ] ]

@@ -20,6 +20,7 @@ library:
     - servant-client
     - servant-server
     - text
+    - wai-extra
     - warp
   exposed-modules:
     - PetStore.Model
@@ -31,7 +32,7 @@ library:
     - ScopedTypeVariables
 
 executables:
-  driver:
+  driver-petstore:
     source-dirs:
       - driver
     main: driver.hs
@@ -61,7 +62,7 @@ executables:
       - wai-websockets
       - websockets
       - warp
-  mock:
+  mock-petstore:
     source-dirs:
       - mock
     main: mock.hs

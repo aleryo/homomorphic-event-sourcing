@@ -13,10 +13,10 @@ type PetStoreApi = "pets"  :> Get '[JSON] Output
               :<|> "pets"  :> ReqBody '[JSON] Pet :> Delete '[JSON] Output
               :<|> "users" :> Capture "user" User :> Put '[JSON] Output
               :<|> "users" :> Capture "user" User :> Delete '[JSON] Output
-              :<|> "users" :> Capture "user" User :> ReqBody '[JSON] Pet :> Put '[JSON] Output
-              :<|> "users" :> Capture "user" User :> ReqBody '[JSON] Pet :> Delete '[JSON] Output
-              :<|> "users" :> Capture "user" User :> ReqBody '[JSON] Payment :> Post '[JSON] Output
-              :<|> "users" :> Capture "user" User :> Get '[JSON] Output
+              :<|> "users" :> Capture "user" User :> "basket" :> ReqBody '[JSON] Pet :> Put '[JSON] Output
+              :<|> "users" :> Capture "user" User :> "basket" :> ReqBody '[JSON] Pet :> Delete '[JSON] Output
+              :<|> "users" :> Capture "user" User :> "basket" :> ReqBody '[JSON] Payment :> Post '[JSON] Output
+              :<|> "users" :> Capture "user" User :> "basket" :> Get '[JSON] Output
 
 type DevPetStoreApi = PetStoreApi
                       :<|> "_reset" :> Delete '[JSON] NoContent

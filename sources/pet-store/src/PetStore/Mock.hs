@@ -9,12 +9,13 @@ module PetStore.Mock where
 import           Control.Concurrent.MVar
 import           Control.Monad.Except
 import           Control.Monad.Reader
-import qualified Data.ByteString.Lazy     as LBS
-import           Data.Monoid              ((<>))
+import qualified Data.ByteString.Lazy                 as LBS
+import           Data.Monoid                          ((<>))
 import           Data.Text
-import           Data.Text.Encoding       (encodeUtf8)
-import qualified IOAutomaton              as A
-import           Network.Wai.Handler.Warp (run)
+import           Data.Text.Encoding                   (encodeUtf8)
+import qualified IOAutomaton                          as A
+import           Network.Wai.Handler.Warp             (run)
+import           Network.Wai.Middleware.RequestLogger
 import           PetStore.Api
 import           PetStore.Messages
 import           PetStore.Model
@@ -24,7 +25,7 @@ startMockServer :: Int -> IO ()
 startMockServer port = do
   store <- newMVar (PetStore [] [])
   putStrLn $ "starting mock HTTP PetStore on port " <> show port
-  void $ run port (serve devPetStoreApi $ enter (runServer store)  handler)
+  void $ run port $ logStdoutDev $ (serve devPetStoreApi $ enter (runServer store)  handler)
     where
       runServer store = NT $ Handler . flip runReaderT store
 
