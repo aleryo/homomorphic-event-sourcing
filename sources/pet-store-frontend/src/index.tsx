@@ -1,5 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
+const ReactDOM = require("react-dom");
 import {Provider} from "react-redux";
 import {createStore, compose, applyMiddleware} from "redux";
 import logger from "redux-logger";

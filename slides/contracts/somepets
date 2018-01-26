@@ -1,0 +1,20 @@
+{
+  "description": "a request for all pets",
+  "providerState": "i have a list of pets",
+  "request": {
+    "method": "GET",
+    "path": "/pets",
+    "headers": { "Accept": "application/json" }
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "body": {
+      "tag": "Pets",
+      "pets": [
+        { "petName": "Fifi", "petType": "Dog" },
+        { "petName": "Minki", "petType": "Cat" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "description": "a request for all pets",
+  "providerState": "i have no pets",
+  "request": {
+    "method": "GET",
+    "path": "/pets",
+    "headers": { "Accept": "application/json" }
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "body": {
+      "tag": "Pets",
+      "pets": []
+    }
+  }
+}

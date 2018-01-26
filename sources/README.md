@@ -27,6 +27,13 @@ $ stack setup
 $ stack test
 ```
 
+### Running the Pet Store mock server
+```
+cd sources/pet-store
+stack build
+stack exec mock -- 9090
+```
+
 ### Running the server
 
 To start an acquire HTTP server on port 9000:

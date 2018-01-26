@@ -1,4 +1,5 @@
-import ajax from 'nanoajax';
+const axios = require('axios');
+
 import {Pet} from './types';
 
 interface PetFromBackend {
@@ -6,34 +7,34 @@ interface PetFromBackend {
     petType: string
 }
 
-export function submitPet(pet: Pet, callback: any) {
-    ajax.ajax({
-            url: '/pets',
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({petName: pet.name, petType: pet.species})
-        },
-        (code: number, response: string) => {
-            // callback(JSON.parse(response));
+export function submitPet(pet: Pet, callback: any, url: string = '') {
+    axios.post(url + '/pets',
+        {
+            petName: pet.name,
+            petType: pet.species,
+            petPrice: 1
+        }).then(
+        (response: any) => {
+            // callback(response.data);
         }
     );
 }
 
-function transformPets(petsFromBackend: PetFromBackend[]) : Pet[] {
-    return petsFromBackend.map((petFromBackend:PetFromBackend) => ({name: petFromBackend.petName, species: petFromBackend.petType}) );
+function transformPets(dataFromBackend: any): Pet[] {
+    return dataFromBackend.pets.map((petFromBackend: PetFromBackend) => ({
+        name: petFromBackend.petName,
+        species: petFromBackend.petType
+    }));
 }
 
-export function fetchPets(successCB: any) {
-    ajax.ajax({
-            url: '/pets',
-            method: 'GET'
+export function fetchPets(successCB: any, url: string = '') {
+    axios.get(url + '/pets', {
+        headers: {'Accept': 'application/json'},
+    }).then(
+        (response: any) => {
+            successCB(transformPets(response.data));
         },
-        (code: number, response: string) => {
-        if(code === 200){
-            successCB(transformPets(JSON.parse(response)));
-        } else {
-            // TODO error handling
-        }
-        }
-    );
+        (error: string) => {
+            console.log('houston...', error);
+        });
 }

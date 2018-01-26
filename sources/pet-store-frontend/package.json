@@ -10,11 +10,12 @@
     "webpack": "NODE_ENV=production webpack -p --config webpack.prod.config.js",
     "build-watch": "webpack --watch --config webpack.config.js",
     "check-updates": "node_modules/.bin/ncu",
-    "test": "node_modules/.bin/mocha --compilers js:babel-core/register --recursive test",
+    "test": "node_modules/.bin/mocha -r ts-node/register test/*.ts",
     "test-watch": "node_modules/.bin/mocha --watch --compilers js:babel-core/register --recursive test"
   },
   "devDependencies": {
     "@types/core-js": "0.9.43",
+    "@types/mocha": "2.2.46",
     "@types/ramda": "0.25.0",
     "@types/react": "16.0.19",
     "@types/react-dom": "16.0.2",
@@ -36,12 +37,14 @@
     "mocha": "3.4.2",
     "must": "0.13.4",
     "npm-check-updates": "2.12.1",
+    "pact": "4.3.2",
     "react-addons-test-utils": "15.6.0",
     "react-hot-loader": "3.0.0-beta.6",
     "react-test-renderer": "15.6.1",
     "sinon": "2.3.8",
     "style-loader": "0.19.0",
     "ts-loader": "3.1.1",
+    "ts-node": "4.1.0",
     "tslint": "5.8.0",
     "typescript": "2.5.3",
     "url-loader": "0.6.2",
@@ -50,6 +53,7 @@
     "ws": "3.3.2"
   },
   "dependencies": {
+    "axios": "0.17.1",
     "nanoajax": "0.4.3",
     "ramda": "0.25.0",
     "react": "15.6.1",

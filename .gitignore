@@ -13,3 +13,4 @@ sources/react-ui/node_modules
 sources/react-ui/build
 sources/pet-store-frontend/node_modules
 package-lock.json
+sources/pet-store-frontend/pacts
