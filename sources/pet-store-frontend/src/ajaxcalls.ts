@@ -1,5 +1,3 @@
-// import ajax from 'nanoajax';
-// const ajax = require('nanoajax');
 const axios = require('axios');
 
 import {Pet} from './types';
@@ -23,7 +21,6 @@ export function submitPet(pet: Pet, callback: any, url: string = '') {
 }
 
 function transformPets(dataFromBackend: any): Pet[] {
-    console.log(dataFromBackend);
     return dataFromBackend.pets.map((petFromBackend: PetFromBackend) => ({
         name: petFromBackend.petName,
         species: petFromBackend.petType
@@ -35,7 +32,6 @@ export function fetchPets(successCB: any, url: string = '') {
         headers: {'Accept': 'application/json'},
     }).then(
         (response: any) => {
-            console.log("success", response.data)
             successCB(transformPets(response.data));
         },
         (error: string) => {
