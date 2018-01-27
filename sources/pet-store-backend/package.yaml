@@ -9,12 +9,16 @@ library:
     - aeson
     - async
     - base
+    - bytestring
+    - containers
     - mtl
     - network
     - random
     - servant
     - servant-server
     - text
+    - time
+    - wai-extra
     - warp
   exposed-modules:
     - PetStore.Api

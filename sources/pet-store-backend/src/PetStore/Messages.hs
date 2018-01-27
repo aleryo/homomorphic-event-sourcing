@@ -18,7 +18,7 @@ data Pet = Pet { petName  :: String
            deriving (Eq,Show,Generic,ToJSON,FromJSON)
 
 data User = User { userName :: String }
-          deriving (Eq,Show,Generic,ToJSON,FromJSON)
+          deriving (Eq,Ord,Show,Generic,ToJSON,FromJSON)
 
 data Payment = Payment { cardNumber :: String }
              deriving (Eq,Show,Generic,ToJSON,FromJSON)
