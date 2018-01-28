@@ -61,7 +61,7 @@ petStore RemoveFromBasket { user, pet}    store@PetStore{storedPets, baskets}
   | user `notElem` fmap fst baskets  = (Just $ Error UserNotLoggedIn, store)
   | fmap (pet `notElem`) userBasket
     == Just True                     = (Just $ Error PetNotInBasket, store)
-  | otherwise                        = (Just $ AddedToBasket user pet
+  | otherwise                        = (Just $ RemovedFromBasket user pet
                                        , store { storedPets = pet : storedPets
                                                , baskets = basketWithRemovedPet
                                                }
@@ -69,8 +69,9 @@ petStore RemoveFromBasket { user, pet}    store@PetStore{storedPets, baskets}
   where
     userBasket = lookup user baskets
 
-    removePet (u,ps) | u == user    = (u,pet:ps)
+    removePet (u,ps) | u == user    = (u,delete pet ps)
                      | otherwise    = (u,ps)
+
     basketWithRemovedPet = fmap removePet baskets
 
 petStore GetUserBasket { user } store@PetStore{baskets}
