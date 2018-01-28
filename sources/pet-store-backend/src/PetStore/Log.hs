@@ -5,7 +5,9 @@ module PetStore.Log where
 import           Control.Monad.Trans
 import           Data.Aeson
 import           Data.ByteString.Lazy.Char8 as IO
+import           Data.Time.Clock
 import           Data.Time.Clock.System
+import           Data.Time.Format
 import           Servant                    (NoContent)
 
 class MonadLog m where
@@ -24,7 +26,7 @@ instance ToJSON NoContent where
 
 instance (MonadIO m) => MonadLog m where
   mlog a = liftIO $ do
-    ts <- getSystemTime
-    IO.putStrLn $ encode $ object [ "timestamp" .= show ts
+    ts <- systemToUTCTime <$> getSystemTime
+    IO.putStrLn $ encode $ object [ "timestamp" .= formatTime defaultTimeLocale (iso8601DateFormat (Just "%H:%M:%S%Q")) ts
                                   , "message" .= a
                                   ]

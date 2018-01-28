@@ -10,4 +10,4 @@ packages:
 extra-deps:
   - unagi-chan-0.4.0.0
   - MonadPrompt-1.0.0.5
-resolver: lts-10.0
+resolver: lts-10.3

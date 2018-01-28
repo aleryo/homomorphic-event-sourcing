@@ -18,31 +18,29 @@ type PetServer m a =
 listPets :: PetServer m Output
 listPets = withinLog ListPets $ ask >>= liftIO . readMVar >>= pure . Pets . storedPets
 
-
 addPet :: Pet -> PetServer m Output
 addPet pet = withinLog (Add pet) $ ask >>= send (PetAdded pet)
 
-
 removePet :: Pet -> PetServer m Output
-removePet = undefined
+removePet pet = withinLog (Remove pet) $ ask >>= send (PetRemoved pet)
 
 reset :: PetServer m NoContent
 reset = withinLog ("reset" :: String) $ ask >>= resetStore >> pure NoContent
 
 login            :: User -> PetServer m Output
-login = undefined
+login user = withinLog (UserLogin user) $ ask >>= send (UserLoggedIn user)
 
 logout           :: User -> PetServer m Output
-logout = undefined
+logout user = withinLog (UserLogout user) $ ask >>= send (UserLoggedOut user)
 
 addToBasket      :: User -> Pet -> PetServer m Output
-addToBasket = undefined
+addToBasket user pet = withinLog (AddToBasket user pet) $ ask >>= send (AddedToBasket user pet)
 
 removeFromBasket :: User -> Pet -> PetServer m Output
-removeFromBasket = undefined
+removeFromBasket user pet = withinLog (RemoveFromBasket user pet) $ ask >>= send (RemovedFromBasket user pet)
 
 checkout         :: User -> Payment -> PetServer m Output
-checkout = undefined
+checkout user payment = withinLog (CheckoutBasket user payment) $ ask >>= send (CheckedOutBasket user payment 0)
 
 listBasket       :: User -> PetServer m Output
-listBasket = undefined
+listBasket user = withinLog (GetUserBasket user) $ ask >>= const (pure $ UserBasket user [])
