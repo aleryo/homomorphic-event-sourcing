@@ -27,8 +27,9 @@ data Store = Store { storedPets :: [ Pet ]
                    , eventSink  :: IO.Handle
                    }
 
-send :: (MonadIO m) => Output -> StoreDB -> m Output
-send event storedb = liftIO $ modifyMVar storedb $ \ store@Store{..} -> do
+send :: (MonadIO m) => Input -> StoreDB -> m Output
+send input storedb = liftIO $ modifyMVar storedb $ \ store@Store{..} -> do
+  let event = act input store
   hPutStrLn eventSink (decodeUtf8 $ encode event)
   IO.hFlush eventSink
   pure (apply event store, event)
@@ -38,6 +39,18 @@ resetStore db = liftIO $ modifyMVar_  db $ \ Store{..} -> do
   IO.hSeek eventSink IO.AbsoluteSeek 0
   IO.hSetFileSize eventSink 0
   pure $ Store [] Map.empty eventSink
+
+act :: Input -> Store -> Output
+act Add { pet } store                      = undefined
+act Remove { pet } store                   = undefined
+act UserLogin { user } store               = undefined
+act AddToBasket { user, pet } store        = undefined
+act RemoveFromBasket { user, pet } store   = undefined
+act CheckoutBasket { user, payment } store = undefined
+act UserLogout { user } store              = undefined
+act ListPets store                         = undefined
+act GetUserBasket { user } store           = undefined
+
 
 apply :: Output -> Store -> Store
 apply PetAdded { pet } store                = store { storedPets = pet : storedPets store }
