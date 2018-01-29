@@ -6,7 +6,8 @@ export interface Pet {
 }
 
 export interface Model {
-    pets: Pet[]
+    pets: Pet[],
+    user: string | null
 }
 
 
