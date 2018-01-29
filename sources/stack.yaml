@@ -11,3 +11,26 @@ extra-deps:
   - unagi-chan-0.4.0.0
   - MonadPrompt-1.0.0.5
 resolver: lts-10.3
+image:
+
+  # You need a `containers` yaml section for `stack image container`.
+  # A `container` section that does not contain a list is also valid.
+  containers:
+
+    # This example just has one container.
+    -
+      # You need a base image name. Stack layers exes on top of
+      # the base image. Prepare your project image in advance by
+      # putting all your runtime dependencies in the image.
+      base: "fpco/stack-run"
+
+      # You can optionally name the image. Stack will use the project
+      # directory name if you leave out this option.
+      name: "hes/pet-store"
+
+      # Optionally specify a list of executables. Stack will create
+      # a tagged image for each in the list. these images will have
+      # their respective "ENTRYPOINT" set.
+      entrypoints:
+        - driver-petstore
+        - mock-petstore
