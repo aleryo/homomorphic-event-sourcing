@@ -1,16 +1,8 @@
-# ...
+# Pet Store Demo
 
 ## React.js Frontend
 
-### Installation Instructions
-
-1. `cd react-ui`
-1. `npm install` -- to download all required 3rd party modules
-
-#### Running the Frontend from Webpack's Dev Server
-
-1. `npm start` (on Windows: `npm start-win`) -- launches the webpack-dev-server
-1. Go to [localhost:3000](http://localhost:3000) to access the frontend
+**TBD**
 
 ## Haskell Backend
 
@@ -27,44 +19,56 @@ $ stack setup
 $ stack test
 ```
 
+### Running the server
+
+To start a PetStore HTTP server on port 9000:
+
+```
+$ stack exec pet-store-server -- 9000
+```
+
+## Model-Based Testing
+
+We provide a complete model for a REST-based PetStore service along with 2 executables for:
+
+1. Test-drive a client by providing a *mock* server
+2. Test-drive a server by providing a *driver* generating tests
+
 ### Running the Pet Store mock server
 ```
 cd sources/pet-store
 stack build
-stack exec mock -- 9090
+stack exec mock-petstore -- 9090
 ```
 
-### Running the server
+### Running the Pet Store test Driver
 
-To start an acquire HTTP server on port 9000:
-
-```
-$ stack exec server -- 9000 react-ui
-```
-
-**TBD**: Then point browser at `http://localhost:9000/index.html` to load the UI
-
-### Running mock server
-
-To run a mock websocket server on port 9000 against which to test a client:
+To run a test driver that will generate traces and test a server at `localhost:9090`
 
 ```
-$ stack exec wsmock -- 9000
+$ stack exec driver-petstore -- localhost 9090
 ```
 
-**WORK IN PROGRESS**: This server implements an `IOAutomaton` based protocol.
+### Docker
 
-### Testing mock WS server
+Both *mock* and *driver* can be run as docker containers:
 
-There is a very simple client program that can be used to test the mock WS server:
+To run mock server within a container, exposing port 9090:
 
 ```
-$ stack exec wsclient -- 127.0.0.1 9000 foo
-Connected!
-{"tag": "List"}
-{"reason":"command List not handled"}
-{"tag":"Bye"}
-wsclient: CloseRequest 1000 "Bye"
-^C
-$
+docker run --name mock-petstore -p 9090 aleryo/pet-store-mock-petstore:v2 9090
+```
+
+To run the driver against the mock server or another server within a container:
+
+```
+docker run --link mock-petstore:mock-petstore aleryo/pet-store-driver-petstore:v2 mock-petstore 9090
+```
+
+To run the driver against a *local* server, assuming server listens on all local IPs:
+
+```
+# check IP for interfaces on the machine, using ifconfig/ipconfig/ip addr
+# let's assume this gives 192.168.0.2
+docker run aleryo/pet-store-driver-petstore:v2 192.168.0.2 9090
 ```
