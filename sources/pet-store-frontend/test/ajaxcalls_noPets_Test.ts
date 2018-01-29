@@ -1,7 +1,7 @@
 const expect = require('must');
 
-import {fetchPets} from '../src/ajaxcalls';
-import {Pet} from '../src/types';
+import {fetchPets} from '../src-v1/ajaxcalls';
+import {Pet} from '../src-v1/types';
 
 const pact = require('pact');
 
