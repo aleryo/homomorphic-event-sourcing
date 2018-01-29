@@ -12,7 +12,7 @@
     "body": {
       "tag": "Pets",
       "pets": [
-        { "petName": "Fifi", "petType": "Dog" },
+        { "petName": "Fifi",  "petType": "Dog" },
         { "petName": "Minki", "petType": "Cat" }
       ]
     }
