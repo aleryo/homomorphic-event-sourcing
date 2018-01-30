@@ -56,8 +56,7 @@ Both *mock* and *driver* can be run as docker containers:
 To run mock server within a container, exposing port 9090:
 
 ```
-docker run --name mock-petstore -p 9090 aleryo/pet-store-mock-petstore:v2 9090
-```
+docker run -rm -p 9090:9090 --name mock-petstore aleryo/pet-store-mock-petstore:v1 9090```
 
 To run the driver against the mock server or another server within a container:
 
@@ -72,3 +71,8 @@ To run the driver against a *local* server, assuming server listens on all local
 # let's assume this gives 192.168.0.2
 docker run aleryo/pet-store-driver-petstore:v2 192.168.0.2 9090
 ```
+
+### Switching the Frontend between Versions 1 and 2 of the model
+
+In the file `webpack.config.js` around line 10, you will find `"./src-v1/index.tsx",`. Here you can either choose v1 or v2.
+Make sure to restart webpack for the change to become active!
