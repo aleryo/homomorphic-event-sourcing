@@ -7,7 +7,7 @@ const proxiedServer = "http://localhost:9090";
 
 module.exports = {
     entry: [
-        "./src-v2/index.tsx",
+        "./src-v1/index.tsx",
         //"./img/"
         //"./css/acquire.css",
         //"./css/font-awesome.css"

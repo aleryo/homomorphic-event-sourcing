@@ -1,40 +1,32 @@
-const axios = require('axios');
-
+import {DataFromBackend} from './actions';
 import {Pet} from './types';
 
-interface PetFromBackend {
-    petName: string,
-    petType: string
-}
+const axios = require('axios');
 
-export function submitPet(pet: Pet, callback: any, url: string = '') {
+
+export function submitPet(pet: Pet, successCB: ((d: DataFromBackend) => void), url: string = '') {
     axios.post(url + '/pets',
         {
             petName: pet.name,
-            petType: pet.species,
-            petPrice: 1
-        }).then(
-        (response: any) => {
-            // callback(response.data);
-        }
-    );
+            petType: pet.species
+        }, {headers: {'Accept': 'application/json'}})
+        .then((response: { data: DataFromBackend }) => successCB(response.data))
+        .catch((error: string) => console.log('ERROR!', error));
 }
 
-function transformPets(dataFromBackend: any): Pet[] {
-    return dataFromBackend.pets.map((petFromBackend: PetFromBackend) => ({
-        name: petFromBackend.petName,
-        species: petFromBackend.petType
-    }));
+export function sellPet(pet: Pet, successCB: ((d: DataFromBackend) => void), url: string = '') {
+    axios.delete(url + '/pets',
+        {data: {
+            petName: pet.name,
+            petType: pet.species
+        }}, {headers: {'Accept': 'application/json'}})
+        .then((response: { data: DataFromBackend }) => successCB(response.data))
+        .catch((error: string) => console.log('ERROR!', error));
 }
+
 
 export function fetchPets(successCB: any, url: string = '') {
-    axios.get(url + '/pets', {
-        headers: {'Accept': 'application/json'},
-    }).then(
-        (response: any) => {
-            successCB(transformPets(response.data));
-        },
-        (error: string) => {
-            console.log('houston...', error);
-        });
+    axios.get(url + '/pets', {headers: {'Accept': 'application/json'}})
+        .then((response: { data: DataFromBackend }) => successCB(response.data))
+        .catch((error: string) => console.log('ERROR!', error));
 }

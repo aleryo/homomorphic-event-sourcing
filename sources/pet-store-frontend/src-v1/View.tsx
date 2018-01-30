@@ -4,7 +4,7 @@ import {Model, Props, Pet} from './types';
 
 import {connect} from 'react-redux';
 import PetAdmission from './PetAddition';
-import {addAndSubmitPet, loadPets, sellPet} from './reducers';
+import {addAndSubmitPet, loadPets, sellAndSubmitPet} from './actions';
 import PetList from './PetList';
 
 export class ViewComponent extends Component<Props> {
@@ -17,7 +17,7 @@ export class ViewComponent extends Component<Props> {
         return <div>
             <h2>Welcome to our Pet Store</h2>
             <PetAdmission admitPet={(pet:Pet) => this.props.dispatch(addAndSubmitPet(pet))} />
-            <PetList pets={this.props.pets} sellPet={(pet:Pet) => this.props.dispatch(sellPet(pet))} />
+            <PetList pets={this.props.pets} sellPet={(pet:Pet) => this.props.dispatch(sellAndSubmitPet(pet))} />
         </div>;
     }
 }
