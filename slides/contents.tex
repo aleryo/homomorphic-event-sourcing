@@ -315,7 +315,7 @@ Problems:
 \begin{frame}[fragile]{Messages (Input)}
 \begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
 data Input = -- Commands
-             Add { pet :: Pet }
+             Add    { pet :: Pet }
            | Remove { pet :: Pet }
              -- Queries
            | ListPets
@@ -325,10 +325,10 @@ data Input = -- Commands
 \begin{frame}[fragile]{Messages (Output)}
 \begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
 data Output = -- Events
-              PetAdded { pet :: Pet }
+              PetAdded   { pet :: Pet }
             | PetRemoved { pet :: Pet }
             -- Answers
-            | Pets { pets :: [ Pet ] }
+            | Pets  { pets :: [ Pet ] }
             | Error { reason :: PetStoreError }
 
 -- some errors
@@ -346,7 +346,9 @@ petStore :: Input
 
 petStore Add{pet}  store@PetStore{storedPets}
   | pet `notElem` storedPets =
-      (Just $ PetAdded pet, store { storedPets = pet:storedPets} )
+      (Just $ PetAdded pet, 
+       store { storedPets = pet:storedPets } )
+       
   | otherwise                =
       (Just $ Error PetAlreadyAdded, store)
 \end{lstlisting}
