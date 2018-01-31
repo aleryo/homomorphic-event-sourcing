@@ -302,24 +302,66 @@ Problems:
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\part{Examples}
+\part{Pet Store: A Sample Model}
 
-\begin{frame}[fragile]{Acquire}
-  \begin{center}
-    \includegraphics[height=.8\textheight]{./images/acquire-boardgame.jpg}
-  \end{center}
+\begin{frame}[fragile]{PetStore}
+  \begin{itemize}[<+->]
+  \item Model (part of a) \emph{Pets} online shop
+  \item Owner can \emph{Add} some pet or \emph{Remove} it from the store
+  \item ``Obvious'' business rules: One cannot add twice the same pet or remove a non existing pet
+  \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Architecture - Backend}
-  \begin{center}
-    \includegraphics[height=.8\textheight]{./images/archi-back.pdf}
-  \end{center}
+\begin{frame}[fragile]{Messages (Input)}
+\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+data Input = -- Commands
+             Add { pet :: Pet }
+           | Remove { pet :: Pet }
+             -- Queries
+           | ListPets
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Architecture - Frontend}
-  \begin{center}
-    \includegraphics[height=.8\textheight]{./images/archi-front.pdf}
-  \end{center}
+\begin{frame}[fragile]{Messages (Output)}
+\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+data Output = -- Events
+              PetAdded { pet :: Pet }
+            | PetRemoved { pet :: Pet }
+            -- Answers
+            | Pets { pets :: [ Pet ] }
+            | Error { reason :: PetStoreError }
+
+-- some errors
+data PetStoreError = PetAlreadyAdded
+                   | PetDoesNotExist
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Model (fragment)}
+\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+petStore :: Input
+         -> PetStore
+         -> (Maybe Output, PetStore)
+
+petStore Add{pet}  store@PetStore{storedPets}
+  | pet `notElem` storedPets =
+      (Just $ PetAdded pet, store { storedPets = pet:storedPets} )
+  | otherwise                =
+      (Just $ Error PetAlreadyAdded, store)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Testing}
+  \begin{itemize}[<+->]
+  \item Using a Model-based \emph{mock server} to test frontend
+  \item Generate \emph{action traces} from Model-based \emph{driver} to test backend
+  \end{itemize}
+  \only<3>{
+    \begin{block}{Demo}
+      \Large{Let's check our mock is consistent with our driver}
+    \end{block}
+  }
 \end{frame}
 
 \begin{frame}[fragile]{The Code}
