@@ -15,6 +15,7 @@ export class ViewComponent extends Component<Props> {
 
     render() {
         return <div>
+            {this.props.error ? <h1 style={{backgroundColor: "red"}}>{this.props.error.message}</h1> : null}
             <h2>Welcome to our Pet Store</h2>
             <PetAdmission admitPet={(pet:Pet) => this.props.dispatch(addAndSubmitPet(pet))} />
             <PetList pets={this.props.pets} sellPet={(pet:Pet) => this.props.dispatch(sellAndSubmitPet(pet))} />

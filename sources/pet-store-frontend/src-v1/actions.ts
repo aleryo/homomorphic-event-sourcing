@@ -1,10 +1,10 @@
 import * as ajax from './ajaxcalls';
 
-import {Pet} from './types';
+import {Pet, Error} from './types';
 
 
 export type PetFromBackend = { petName: string, petType: string }
-export type PetStoreErrorFromBackend = {}
+export type PetStoreErrorFromBackend = string
 
 export type DataFromBackend
 // events:
@@ -20,6 +20,9 @@ const transformPet = (petFromBackend: PetFromBackend) => ({
     species: petFromBackend.petType
 });
 
+const transformError = (errorFromBackend: PetStoreErrorFromBackend) => ( { message: errorFromBackend } );
+
+
 const transformPets = (petsFromBackend: PetFromBackend[]) => petsFromBackend.map(transformPet);
 
 export function transformBackendDataToAction(dataFromBackend: DataFromBackend): Action {
@@ -31,9 +34,10 @@ export function transformBackendDataToAction(dataFromBackend: DataFromBackend): 
         case 'Pets':
             return updatePets(transformPets(dataFromBackend.pets));
         case 'Error':
-            return {type: 'InitialAction'};
+            return catchError(transformError(dataFromBackend.reason));
     }
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +51,7 @@ export type Action
     // frontend actions (events) that correspond to frontend-backend commands:
     | { type: 'PET_ADDED', addedPet: Pet }
     | { type: 'PET_SOLD', soldPet: Pet }
+    | { type: 'ERROR', message: Error }
 
 // backend events:
 
@@ -95,5 +100,12 @@ export function sellAndSubmitPet(pet: Pet) {
         // dispatch(sell(pet));
 
         ajax.sellPet(pet, (d: DataFromBackend) => dispatch(transformBackendDataToAction(d)));
+    };
+}
+
+export function catchError(error: Error): Action {
+    return {
+        type: 'ERROR',
+        message: error
     };
 }

@@ -4,8 +4,13 @@ export interface Pet {
     species: string
 }
 
+export interface Error {
+    message: string
+}
+
 export interface Model {
-    pets: Pet[]
+    pets: Pet[],
+    error: Error | null
 }
 
 
