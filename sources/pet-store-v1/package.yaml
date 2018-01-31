@@ -1,0 +1,104 @@
+name: pet-store-v1
+synopsis:  A Simple model for a Pet Store app
+ghc-options: -Wall -fno-warn-orphans
+
+library:
+  source-dirs: src
+  dependencies:
+    - aeson
+    - async
+    - base
+    - ioautomata
+    - mtl
+    - network
+    - random
+    - servant
+    - servant-server
+  exposed-modules:
+    - PetStore.Model
+    - PetStore.Messages
+    - PetStore.Api
+  default-extensions:
+    - OverloadedStrings
+    - RecordWildCards
+    - ScopedTypeVariables
+
+executables:
+  driver-petstore-v1:
+    source-dirs:
+      - driver
+    main: driver.hs
+    dependencies:
+      - pet-store-v1
+      - aeson
+      - async
+      - base
+      - bytestring
+      - containers
+      - http-client
+      - http-types
+      - ioautomata
+      - mtl
+      - network
+      - QuickCheck
+      - random
+      - servant
+      - servant-client
+      - servant-server
+      - stm
+      - text
+      - unagi-chan
+      - wai
+      - wai-middleware-static
+      - wai-websockets
+      - websockets
+      - warp
+  mock-petstore-v1:
+    source-dirs:
+      - mock
+    main: mock.hs
+    dependencies:
+      - aeson
+      - pet-store-v1
+      - async
+      - base
+      - bytestring
+      - containers
+      - http-client
+      - http-types
+      - ioautomata
+      - mtl
+      - network
+      - QuickCheck
+      - servant
+      - servant-server
+      - stm
+      - text
+      - unagi-chan
+      - wai
+      - wai-middleware-static
+      - wai-websockets
+      - websockets
+      - warp
+    default-extensions:
+      - OverloadedStrings
+      - RecordWildCards
+      - ScopedTypeVariables
+
+tests:
+  tests:
+    source-dirs:
+      - tests
+    main: Tests.hs
+    dependencies:
+      - pet-store-v1
+      - base
+      - containers
+      - data-reify
+      - directory
+      - hspec
+      - hspec-discover
+      - ioautomata
+      - mtl
+      - QuickCheck
+      - random

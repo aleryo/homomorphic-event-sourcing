@@ -95,13 +95,41 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
 \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{}
-\begin{center}
-\Huge
-Demo
-\end{center}
+\begin{frame}[fragile]{Example: An Event-Sourced Pet Store}
+  \begin{itemize}[<+->]
+  \item Model (part of a) \emph{Pets} online shop
+  \item Owner can \emph{Add} some pet or \emph{Remove} it from the store
+  \item ``Obvious'' business rules: One cannot add twice the same pet or remove a non existing pet
+  \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Inputs: Commands \& Queries}
+\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+data Input = -- Commands
+             Add { pet :: Pet }
+           | Remove { pet :: Pet }
+             -- Queries
+           | ListPets
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Outputs: Events \& Answers}
+\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+data Output = -- Events
+              PetAdded { pet :: Pet }
+            | PetRemoved { pet :: Pet }
+            -- Answers
+            | Pets { pets :: [ Pet ] }
+            | Error { reason :: PetStoreError }
+
+-- some errors
+data PetStoreError = PetAlreadyAdded
+                   | PetDoesNotExist
+\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{A Formal Model for Event Sourcing}
 
 \begin{frame}[fragile]{Event Sourcing as a Formal Language}
 
@@ -115,49 +143,19 @@ Demo
 
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\part{Homomorphic Event Sourcing}
-
-\begin{frame}[fragile]{Interacting Components}
+\begin{frame}[fragile]{Example: Pet Store States}
 \begin{center}
-\includegraphics[height=.8\textheight]{./images/interaction-loop.pdf}
+\includegraphics[height=.8\textheight]{./images/pet-store-iosm.pdf}
 \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Interacting Components}
-  \begin{itemize}
-  \item What happens when 2 event-sourced components have to interact?
-  \item We want to map commands to commands and events to events
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Homomorphism}
-
-  A \emph{homomorphism} is a structure-preserving map between two languages.
-   \\[2em]
-
-  \onslide<2->
-  This practically means it is enough to
-  define a \emph{map} from letters of one language to letters of the other.
-
-\end{frame}
-
-\begin{frame}[fragile]{Homomorphic Event Sourcing}
-  \begin{itemize}[<+->]
-  \item Define mappings from UI commands to backend commands: A command
-    can map to nothing meaning there is no interaction with
-    the backend
-  \item Define mappings from backend events to UI events: Describes how
-    backend's replies are interpreted in the UI
-  \item Strive to define \emph{identities}, e.g.~use the same language of commands and events in the frontend and the backend
-  \end{itemize}
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Consumer-Driven Contract Testing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \begin{frame}[fragile]{Standard Problem for Webapps?}
 
 \begin{itemize}
@@ -165,6 +163,14 @@ Demo
 \end{itemize}
 
 \end{frame}
+
+
+\begin{frame}[fragile]{The Interaction Problem}
+  \begin{center}
+    \includegraphics[height=.8\textheight]{./images/interaction-loop.pdf}
+  \end{center}
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Standard Approach: ``Super-Na\"ive''}
@@ -256,18 +262,23 @@ Problems:
 \includegraphics[width=\textwidth]{images/CDCT7.pdf}
 }
 
-\only<9>{
-\lstinputlisting{contracts/nopets}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Pet Store Contracts}
+
+\only<1>{
+  \lstinputlisting{contracts/nopets}
 }
 
-\only<10>{
-\lstinputlisting{contracts/somepets}
+\only<2>{
+  \lstinputlisting{contracts/somepets}
 }
 
-\only<11>{
-Problems:
+\end{frame}
 
-\begin{itemize}
+\begin{frame}[fragile]{The Problem with CDCT}
+
+\begin{itemize}[<+->]
 \item Contract testing is only as good as its contracts
 \item Manual contract-writing can be tedious and even error-prone
 \item Provider testing must manually establish the desired state
@@ -275,16 +286,14 @@ Problems:
 \item If contracts are too sparse, we miss out
 \item If contracts are too verbose (or too many), testing takes too long
 \end{itemize}
-}
 
 \end{frame}
 
-\begin{frame}[fragile]{Back to Formal Models}
+\begin{frame}[fragile]{Back to Formal Language}
   \begin{itemize}[<+->]
   \item Often contracts are fairly simple, just mapping requests to replies
   \item What if some request only makes sense in a certain state?
-
-  \item We need more information! Let's use \emph{State Machines}.
+  \item We need more information: Let's use \emph{State Machines}!
   \end{itemize}
 \end{frame}
 
@@ -292,7 +301,7 @@ Problems:
 \begin{frame}[fragile]{Our ``formal model'' approach}
 
   \begin{itemize}[<+->]
-  \item Describe the core domain interactions as a formal model
+  \item Describe the core domain interactions as a formally verifiable model
   \item Generate mocks for the frontend: Use the State Machine as an \emph{Acceptor}
   \item Generate tests for the backend: Use the State Machine as a \emph{Generator}
   \item Guarantee: All aspects of  the model are covered by tests and mocks
@@ -300,45 +309,37 @@ Problems:
 
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\part{Pet Store: A Sample Model}
-
-\begin{frame}[fragile]{PetStore}
-  \begin{itemize}[<+->]
-  \item Model (part of a) \emph{Pets} online shop
-  \item Owner can \emph{Add} some pet or \emph{Remove} it from the store
-  \item ``Obvious'' business rules: One cannot add twice the same pet or remove a non existing pet
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Messages (Input)}
-\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
-data Input = -- Commands
-             Add    { pet :: Pet }
-           | Remove { pet :: Pet }
-             -- Queries
-           | ListPets
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Messages (Output)}
-\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
-data Output = -- Events
-              PetAdded   { pet :: Pet }
-            | PetRemoved { pet :: Pet }
-            -- Answers
-            | Pets  { pets :: [ Pet ] }
-            | Error { reason :: PetStoreError }
-
--- some errors
-data PetStoreError = PetAlreadyAdded
-                   | PetDoesNotExist
-\end{lstlisting}
+\begin{frame}[fragile]{Model-Based Interaction Testing}
+  \only<1>{
+    \begin{center}
+      \includegraphics[height=.8\textheight]{./images/modelling-interaction-1.pdf}
+    \end{center}
+  }
+  \only<2>{
+    \begin{center}
+      \includegraphics[height=.8\textheight]{./images/modelling-interaction-2.pdf}
+    \end{center}
+  }
+  \only<3>{
+    \begin{center}
+      \includegraphics[height=.8\textheight]{./images/modelling-interaction-3.pdf}
+    \end{center}
+  }
+  \only<4>{
+    \begin{center}
+      \includegraphics[height=.8\textheight]{./images/modelling-interaction-4.pdf}
+    \end{center}
+  }
+  \only<5>{
+    \begin{center}
+      \includegraphics[height=.8\textheight]{./images/modelling-interaction-5.pdf}
+    \end{center}
+  }
 \end{frame}
 
 
-\begin{frame}[fragile]{Model (fragment)}
+
+\begin{frame}[fragile]{Example: PetStore Model}
 \begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
 petStore :: Input
          -> PetStore
@@ -346,30 +347,48 @@ petStore :: Input
 
 petStore Add{pet}  store@PetStore{storedPets}
   | pet `notElem` storedPets =
-      (Just $ PetAdded pet, 
+      (Just $ PetAdded pet,
        store { storedPets = pet:storedPets } )
-       
+
   | otherwise                =
       (Just $ Error PetAlreadyAdded, store)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Testing}
-  \begin{itemize}[<+->]
-  \item Using a Model-based \emph{mock server} to test frontend
-  \item Generate \emph{action traces} from Model-based \emph{driver} to test backend
-  \end{itemize}
-  \only<3>{
-    \begin{block}{Demo}
-      \Large{Let's check our mock is consistent with our driver}
-    \end{block}
-  }
+\begin{frame}[fragile]{Demo}
+  \begin{center}
+    \Huge{Testing internal consistency of the model}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Demo}
+  \begin{center}
+    \Huge{Updating the model and testing front-end}
+  \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{The Code}
   \begin{center}
   \url{https://github.com/aleryo/homomorphic-event-sourcing}
   \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Bug Trophy}
+  \begin{itemize}[<+->]
+  \item Incorrect routes definitions in the API leading to invalid queries
+  \item (\emph{v2}) Forgetting to move basket's content back to store when user logs out
+  \item (\emph{v2}) Bad copy/pasting leading to \texttt{RemovePet} actually adding it
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Real World Application}
+  \begin{itemize}[<+->]
+  \item Testing Implementation of a Smart Contracts transaction scheduling platform
+  \item Define a Model of the system in terms of \emph{Actions}, observable \emph{State} and potential \emph{Failures} from components
+  \item Generate sequence of \emph{Action}
+  \item Run \emph{Actions} in parallel against the Model and the Implementation
+  \item Check reached states in Implementation is identical to the Model's
+  \end{itemize}
 \end{frame}
 
 
@@ -379,9 +398,9 @@ petStore Add{pet}  store@PetStore{storedPets}
 \begin{frame}[fragile]{Event Sourcing \& Formal Methods}
   \begin{itemize}[<+->]
   \item Building an\emph{Event Sourced} system yields opportunities to leverage more formal approaches to V\&V
-  \item Modelling as a \emph{State Machine} over a \emph{Formal Language} is one possible approach
+  \item Modelling as a \emph{State Machine} over a \emph{Formal Language} seems a promising approach
   \item Provides foundations to develop independent parts of the system and \emph{validate} their interaction
-  \item It takes time and energy to devise and refine a model
+  \item It takes time and energy to devise and refine a model!
   \end{itemize}
   \only<4>{
     \begin{block}{Event Sourcing as a Transduction}

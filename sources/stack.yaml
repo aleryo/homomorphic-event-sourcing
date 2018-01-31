@@ -4,6 +4,7 @@ packages:
   - 'acquire-tcp'
   - 'acquire-server'
   - 'ioautomata'
+  - 'pet-store-v1'
   - 'pet-store'
   - 'pet-store-backend'
 
@@ -32,5 +33,7 @@ image:
       # a tagged image for each in the list. these images will have
       # their respective "ENTRYPOINT" set.
       entrypoints:
+        - driver-petstore-v1
+        - mock-petstore-v1
         - driver-petstore
         - mock-petstore
