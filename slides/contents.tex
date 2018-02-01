@@ -137,11 +137,11 @@ data PetStoreError = PetAlreadyAdded
 \begin{frame}[fragile]{Event Sourcing as a Formal Language}
 
 \begin{itemize}[<+->]
-\item Conceptually, the events comprise a so-called \textit{alphabet}.
-\item A \textit{word} is a sequence of letters of this alphabet (i.e.~events).
-\item The set of all possible words is a \textit{language}.
-\item This means each word of the language corresponds to a \textit{state} of the system.
-\item So all the possible states of the system form the language.
+\item Conceptually, the commands and events comprise a so-called \textit{alphabet}
+\item A \textit{word} is a valid sequence of letters from this alphabet
+\item The set of all possible words is a \textit{language}
+\item This means each word of the language corresponds to a \textit{state} of the system
+\item So the language enumerates all the reachable states of the system
 \end{itemize}
 
 \end{frame}
@@ -407,6 +407,7 @@ petStore Add{pet}  store@PetStore{storedPets}
   \item Modelling as a \emph{State Machine} over a \emph{Formal Language} seems a promising approach
   \item Provides foundations to develop independent parts of the system and \emph{validate} their interaction
   \item It takes time and energy to devise and refine a model!
+  \item
   \end{itemize}
 \end{frame}
 
