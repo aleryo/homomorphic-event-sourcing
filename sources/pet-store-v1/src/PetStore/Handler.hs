@@ -1,17 +1,28 @@
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE MonoLocalBinds        #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RankNTypes            #-}
+{-# LANGUAGE TupleSections         #-}
 module PetStore.Handler where
 
+import           Control.Monad.Except
+import           Control.Monad.Reader
+import           PetStore.Log
 import           PetStore.Messages
+import           PetStore.Store
 import           Servant
 
+type PetServer m a =
+  (MonadLog m, MonadReader StoreDB m, MonadError ServantErr m, MonadIO m) => m a
 
-listPets :: Handler Output
-listPets = undefined
+listPets :: PetServer m Output
+listPets =  ask >>= send ListPets
 
-addPet :: Pet -> Handler Output
-addPet = undefined
+addPet :: Pet -> PetServer m Output
+addPet pet =  ask >>= send (Add pet)
 
-removePet :: Pet -> Handler Output
-removePet = undefined
+removePet :: Pet -> PetServer m Output
+removePet pet =  ask >>= send (Remove pet)
 
-reset :: Handler NoContent
-reset = undefined
+reset :: PetServer m NoContent
+reset =  ask >>= resetStore >> pure NoContent

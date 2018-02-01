@@ -7,6 +7,10 @@ module PetStore.Api where
 import           PetStore.Messages
 import           Servant
 
+
+data ServerMode = Prod | Dev
+  deriving (Eq, Show, Read)
+
 type PetStoreApi = "pets"   :> Get '[JSON] Output
                    :<|> "pets"   :> ReqBody '[JSON] Pet :> Post '[JSON] Output
                    :<|> "pets"   :> ReqBody '[JSON] Pet :> Delete '[JSON] Output

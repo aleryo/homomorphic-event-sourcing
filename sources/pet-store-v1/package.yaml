@@ -8,16 +8,25 @@ library:
     - aeson
     - async
     - base
+    - bytestring
+    - containers
+    - data-default
     - ioautomata
     - mtl
     - network
     - random
     - servant
     - servant-server
+    - text
+    - time
+    - wai-extra
+    - wai-middleware-static
+    - warp
   exposed-modules:
     - PetStore.Model
     - PetStore.Messages
     - PetStore.Api
+    - PetStore.Server
   default-extensions:
     - OverloadedStrings
     - RecordWildCards
@@ -79,6 +88,34 @@ executables:
       - wai-middleware-static
       - wai-websockets
       - websockets
+      - warp
+    default-extensions:
+      - OverloadedStrings
+      - RecordWildCards
+      - ScopedTypeVariables
+
+  server-v1:
+    source-dirs:
+      - server
+    main: server.hs
+    dependencies:
+      - aeson
+      - pet-store-v1
+      - async
+      - base
+      - bytestring
+      - containers
+      - http-client
+      - http-types
+      - mtl
+      - network
+      - servant
+      - servant-server
+      - stm
+      - unagi-chan
+      - wai
+      - wai-extra
+      - wai-middleware-static
       - warp
     default-extensions:
       - OverloadedStrings
