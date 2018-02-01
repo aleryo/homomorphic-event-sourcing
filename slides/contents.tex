@@ -100,7 +100,7 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
   \begin{itemize}[<+->]
   \item Model (part of a) \emph{Pets} online shop
   \item Owner can \emph{Add} some pet or \emph{Remove} it from the store
-  \item ``Obvious'' business rules: One cannot add twice the same pet or remove a non existing pet
+  \item ``Obvious'' business rules: One cannot add the same pet twice or remove a non-existing pet
   \end{itemize}
 \end{frame}
 
@@ -110,7 +110,7 @@ data Input =
   -- Commands
     Add    { pet :: Pet }
   | Remove { pet :: Pet }
-    -- Queries
+  -- Queries
   | ListPets
 \end{lstlisting}
 \end{frame}
@@ -282,9 +282,9 @@ Problems:
 \begin{frame}[fragile]{The Problem with CDCT}
 
 \begin{itemize}[<+->]
+\item Provider testing must manually establish the desired state
 \item Contract testing is only as good as its contracts
 \item Manual contract-writing can be tedious and even error-prone
-\item Provider testing must manually establish the desired state
 \item Errors may only be discovered late in the process, when the backend implements some functionality and discovers that it does not match the contract
 \item If contracts are too sparse, we miss out
 \item If contracts are too verbose (or too many), testing takes too long
@@ -293,7 +293,7 @@ Problems:
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\part{Beyond CDCT With Model}
+\part{Beyond CDCT}
 
 \begin{frame}[fragile]{Back to Formal Language}
   \begin{itemize}[<+->]
@@ -403,7 +403,7 @@ petStore Add{pet}  store@PetStore{storedPets}
 
 \begin{frame}[fragile]{Event Sourcing \& Formal Methods}
   \begin{itemize}[<+->]
-  \item Building an\emph{Event Sourced} system yields opportunities to leverage more formal approaches to V\&V
+  \item Building an\emph{Event Sourced} system yields opportunities to leverage more formal approaches to Verification \& Validation
   \item Modelling as a \emph{State Machine} over a \emph{Formal Language} seems a promising approach
   \item Provides foundations to develop independent parts of the system and \emph{validate} their interaction
   \item It takes time and energy to devise and refine a model!
