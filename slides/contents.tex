@@ -105,23 +105,25 @@ Languages, Type Systems, \\[.2em] Engineering Techniques
 \end{frame}
 
 \begin{frame}[fragile]{Inputs: Commands \& Queries}
-\begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
-data Input = -- Commands
-             Add { pet :: Pet }
-           | Remove { pet :: Pet }
-             -- Queries
-           | ListPets
+  \begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
+data Input =
+  -- Commands
+    Add    { pet :: Pet }
+  | Remove { pet :: Pet }
+    -- Queries
+  | ListPets
 \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Outputs: Events \& Answers}
 \begin{lstlisting}[language=Haskell,basicstyle=\ttfamily,keywordstyle=\color{red}]
-data Output = -- Events
-              PetAdded { pet :: Pet }
-            | PetRemoved { pet :: Pet }
-            -- Answers
-            | Pets { pets :: [ Pet ] }
-            | Error { reason :: PetStoreError }
+data Output =
+  -- Events
+    PetAdded   { pet :: Pet }
+  | PetRemoved { pet :: Pet }
+  -- Answers
+  | Pets       { pets :: [ Pet ] }
+  | Error      { reason :: PetStoreError }
 
 -- some errors
 data PetStoreError = PetAlreadyAdded
@@ -406,17 +408,6 @@ petStore Add{pet}  store@PetStore{storedPets}
   \item Provides foundations to develop independent parts of the system and \emph{validate} their interaction
   \item It takes time and energy to devise and refine a model!
   \end{itemize}
-  \only<4>{
-    \begin{block}{Event Sourcing as a Transduction}
-      \[
-        \begin{array}{c}
-          \text{Command} \times \text{State} \rightarrow \text{Event} \times \text{State} \\
-          \Updownarrow \\
-          \text{State} \xrightarrow{\text{Command} \times \text{Event}} \text{State} \\
-        \end{array}
-      \]
-    \end{block}
-  }
 \end{frame}
 
 \begin{frame}[fragile]{Takeaways}
