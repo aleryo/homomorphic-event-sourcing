@@ -49,7 +49,7 @@ main = do
   quickCheck $ monadicIO $
     forAllM (arbitrary :: Gen (Valid PetStore PetStoreState Input Output))  $ \ (validTransitions -> trace) -> do
     b' <- run $ do
-      putStrLn $ "checking trace " <> show trace <> " against " <> show (serverHost, serverPort)
+      putStrLn $ "\nchecking trace " <> show trace <> " against " <> show (serverHost, serverPort)
       mgr <- newManager defaultManagerSettings
       let url = BaseUrl Http serverHost (read serverPort) ""
           env = ClientEnv mgr url
