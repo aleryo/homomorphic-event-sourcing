@@ -35,6 +35,7 @@ We provide a complete model for a REST-based PetStore service along with 2 execu
 2. Test-drive a server by providing a *driver* generating tests
 
 ### Running the Pet Store mock server
+
 ```
 cd sources/pet-store
 stack build
@@ -51,12 +52,16 @@ $ stack exec driver-petstore -- localhost 9090
 
 ### Docker
 
-Both *mock* and *driver* can be run as docker containers:
+Both *mock* and *driver* can be run as docker containers, in 2 different versions:
+
+* v1 contains basic store management for adding and removing pets
+* v2 adds user basket interaction: User can login, logout, add/remove pets from basket and checkout providing credit card number
 
 To run mock server within a container, exposing port 9090:
 
 ```
 docker run -rm -p 9090:9090 --name mock-petstore aleryo/pet-store-mock-petstore:v1 9090```
+```
 
 To run the driver against the mock server or another server within a container:
 
