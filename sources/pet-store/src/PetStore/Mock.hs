@@ -31,7 +31,7 @@ startMockServer port = do
 
       handler = (listPets :<|> addPet :<|> removePet
                 :<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket)
-        :<|> reset
+        :<|> reset :<|> undefined
 
       addPet    pet = action (Add pet)
       removePet pet = action (Remove pet)

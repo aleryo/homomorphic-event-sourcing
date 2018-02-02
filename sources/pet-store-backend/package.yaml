@@ -12,11 +12,14 @@ library:
     - bytestring
     - containers
     - data-default
+    - lens
     - mtl
     - network
     - random
     - servant
     - servant-server
+    - servant-swagger
+    - swagger2
     - text
     - time
     - wai-extra

@@ -33,7 +33,7 @@ removeFromBasket :: User -> Pet -> ClientM Output
 checkout         :: User -> Payment -> ClientM Output
 listBasket       :: User -> ClientM Output
 
-(listPets :<|> addPet :<|> removePet:<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket) :<|> reset = client devPetStoreApi
+(listPets :<|> addPet :<|> removePet:<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket) :<|> reset :<|> _ = client devPetStoreApi
 
 handleInput :: MonadIO f
             => t -> ClientM a -> ClientEnv -> f (Maybe a, t)

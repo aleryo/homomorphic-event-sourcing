@@ -19,6 +19,7 @@ import           Network.Wai.Middleware.RequestLogger.JSON
 import           PetStore.Api
 import           PetStore.Handler
 import           PetStore.Store
+import           PetStore.Swagger
 import           Servant
 
 startServer :: ServerMode -> Int -> IO ()
@@ -36,4 +37,4 @@ startServer devMode port = do
       server store Dev  = serve devPetStoreApi $ enter (runServer store) devHandler
 
       prodHandler = listPets :<|> addPet :<|> removePet :<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket
-      devHandler  = prodHandler :<|> reset
+      devHandler  = prodHandler :<|> reset :<|> pure petStoreSwagger

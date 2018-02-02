@@ -4,6 +4,7 @@
 
 module PetStore.Api where
 
+import           Data.Swagger
 import           Data.Text         (pack, unpack)
 import           PetStore.Messages
 import           Servant
@@ -19,7 +20,9 @@ type PetStoreApi = "pets"  :> Get '[JSON] Output
               :<|> "users" :> Capture "user" User :> "basket" :> Get '[JSON] Output
 
 type DevPetStoreApi = PetStoreApi
-                      :<|> "_reset" :> Delete '[JSON] NoContent
+                      :<|> "_reset"       :> Delete '[JSON] NoContent
+                      :<|> "swagger.json" :> Get '[JSON] Swagger
+
 
 data ServerMode = Prod | Dev
   deriving (Eq, Show, Read)
