@@ -44,7 +44,7 @@ instance IOAutomaton PetStore PetStoreState Input Output where
   action     = petStore
 
 petsNames :: [ String ]
-petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy" ]
+petsNames = [ "Bailey", "Bella", "Max", "Lucy", "Charlie", "Molly", "Buddy", "Daisy", "" ]
 
 instance Inputs PetStore Input where
   inputs (PetStore _) = fmap Add listOfPets <> fmap Remove listOfPets

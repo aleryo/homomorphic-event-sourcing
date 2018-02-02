@@ -12,11 +12,14 @@ library:
     - containers
     - data-default
     - ioautomata
+    - lens
     - mtl
     - network
     - random
     - servant
     - servant-server
+    - servant-swagger
+    - swagger2
     - text
     - time
     - wai-extra

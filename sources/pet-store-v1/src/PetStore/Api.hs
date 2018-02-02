@@ -4,9 +4,9 @@
 
 module PetStore.Api where
 
+import           Data.Swagger
 import           PetStore.Messages
 import           Servant
-
 
 data ServerMode = Prod | Dev
   deriving (Eq, Show, Read)
@@ -17,6 +17,7 @@ type PetStoreApi = "pets"   :> Get '[JSON] Output
 
 type DevPetStoreApi = PetStoreApi
                       :<|> "_reset" :> Delete '[JSON] NoContent
+                      :<|> "swagger.json" :> Get '[JSON] Swagger
 
 petStoreApi :: Proxy PetStoreApi
 petStoreApi = Proxy

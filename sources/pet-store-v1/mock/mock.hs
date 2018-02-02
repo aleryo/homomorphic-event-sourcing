@@ -27,7 +27,7 @@ main = do
     where
       runServer store = NT $ Handler . flip runReaderT store
 
-      handler = (listPets :<|> addPet :<|> removePet) :<|> reset
+      handler = (listPets :<|> addPet :<|> removePet) :<|> reset :<|> undefined
 
       addPet    pet = action (Add pet)
       removePet pet = action (Remove pet)
