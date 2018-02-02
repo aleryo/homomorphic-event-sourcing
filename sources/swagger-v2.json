@@ -1,0 +1,488 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Pet Store API",
+    "license": {
+      "name": "All Rights Reserved"
+    },
+    "description": "An API for managing a Pet Store"
+  },
+  "paths": {
+    "/pets": {
+      "get": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid `body`"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid `body`"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/users/{user}": {
+      "put": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/users/{user}/basket": {
+      "get": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          },
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "400": {
+            "description": "Invalid `body`"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          },
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "400": {
+            "description": "Invalid `body`"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "name": "user",
+            "type": "string"
+          },
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "`user` not found"
+          },
+          "400": {
+            "description": "Invalid `body`"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Output"
+            },
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Output": {
+      "properties": {
+        "PetAdded": {
+          "required": [
+            "pet"
+          ],
+          "type": "object",
+          "properties": {
+            "pet": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        },
+        "PetRemoved": {
+          "required": [
+            "pet"
+          ],
+          "type": "object",
+          "properties": {
+            "pet": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        },
+        "UserLoggedIn": {
+          "required": [
+            "user"
+          ],
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        },
+        "AddedToBasket": {
+          "required": [
+            "user",
+            "pet"
+          ],
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            },
+            "pet": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        },
+        "RemovedFromBasket": {
+          "required": [
+            "user",
+            "pet"
+          ],
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            },
+            "pet": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        },
+        "CheckedOutBasket": {
+          "required": [
+            "user",
+            "payment",
+            "amount"
+          ],
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "integer"
+            },
+            "payment": {
+              "$ref": "#/definitions/Payment"
+            },
+            "user": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        },
+        "UserLoggedOut": {
+          "required": [
+            "user"
+          ],
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        },
+        "UserBasket": {
+          "required": [
+            "user",
+            "pets"
+          ],
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#/definitions/User"
+            },
+            "pets": {
+              "items": {
+                "$ref": "#/definitions/Pet"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "Pets": {
+          "required": [
+            "pets"
+          ],
+          "type": "object",
+          "properties": {
+            "pets": {
+              "items": {
+                "$ref": "#/definitions/Pet"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "Error": {
+          "required": [
+            "reason"
+          ],
+          "type": "object",
+          "properties": {
+            "reason": {
+              "$ref": "#/definitions/PetStoreError"
+            }
+          }
+        }
+      },
+      "maxProperties": 1,
+      "minProperties": 1,
+      "type": "object"
+    },
+    "Pet": {
+      "description": "A Pet for sale in the Store",
+      "required": [
+        "petName",
+        "petType",
+        "petPrice"
+      ],
+      "properties": {
+        "petName": {
+          "type": "string"
+        },
+        "petType": {
+          "$ref": "#/definitions/PetType"
+        },
+        "petPrice": {
+          "type": "integer"
+        }
+      },
+      "example": {
+        "petType": "Dog",
+        "petPrice": 100,
+        "petName": "Fifi"
+      },
+      "type": "object"
+    },
+    "PetType": {
+      "type": "string",
+      "enum": [
+        "Cat",
+        "Dog",
+        "Canary",
+        "Fish",
+        "Rabbit"
+      ]
+    },
+    "User": {
+      "required": [
+        "userName"
+      ],
+      "properties": {
+        "userName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Payment": {
+      "required": [
+        "cardNumber"
+      ],
+      "properties": {
+        "cardNumber": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PetStoreError": {
+      "type": "string",
+      "enum": [
+        "PetAlreadyAdded",
+        "PetDoesNotExist",
+        "UserNotLoggedIn",
+        "PetNotInBasket",
+        "InvalidPayment"
+      ]
+    }
+  }
+}
