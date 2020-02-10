@@ -31,10 +31,10 @@ startServer devMode port = do
     where
       doLog _ = mkRequestLogger $ def { outputFormat = CustomOutputFormatWithDetails formatAsJSON }
 
-      runServer store = NT $ Handler . flip runReaderT store
+      runServer store = Handler . flip runReaderT store
 
-      server store Prod = serve petStoreApi $ enter (runServer store) prodHandler
-      server store Dev  = serve devPetStoreApi $ enter (runServer store) devHandler
+      server store Prod = serve petStoreApi $ hoistServer petStoreApi (runServer store) prodHandler
+      server store Dev  = serve devPetStoreApi $ hoistServer devPetStoreApi (runServer store) devHandler
 
       prodHandler = listPets :<|> addPet :<|> removePet :<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket
       devHandler  = prodHandler :<|> reset :<|> pure petStoreSwagger

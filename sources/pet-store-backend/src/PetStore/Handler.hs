@@ -13,7 +13,7 @@ import           PetStore.Store
 import           Servant
 
 type PetServer m a =
-  (MonadLog m, MonadReader StoreDB m, MonadError ServantErr m, MonadIO m) => m a
+  (MonadLog m, MonadReader StoreDB m, MonadError ServerError m, MonadIO m) => m a
 
 listPets :: PetServer m Output
 listPets =  ask >>= send ListPets

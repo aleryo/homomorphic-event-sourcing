@@ -1,42 +1,41 @@
 flags: {}
 packages:
-  - 'acquire-game'
-  - 'acquire-tcp'
-  - 'acquire-server'
-  - location:
-      git: 'https://github.com/abailly/ioautomata.git'
-      commit: 'c68ccf4'
-    extra-dep: true
-  - 'pet-store-v1'
+  # - 'acquire-game'
+  # - 'acquire-tcp'
+  # - 'acquire-server'
+#  - 'pet-store-v1'
   - 'pet-store'
   - 'pet-store-backend'
 
 extra-deps:
-  - unagi-chan-0.4.0.0
-  - MonadPrompt-1.0.0.5
-resolver: lts-10.3
-image:
+- git: '/Users/arnaud/projects/ioautomata'
+  commit: e2e5816611d7166f58ecdd299f7f6d2776983f70
 
-  # You need a `containers` yaml section for `stack image container`.
-  # A `container` section that does not contain a list is also valid.
-  containers:
+#   - unagi-chan-0.4.0.0
+#   - MonadPrompt-1.0.0.5
+resolver: lts-14.22
+# image:
 
-    # This example just has one container.
-    -
-      # You need a base image name. Stack layers exes on top of
-      # the base image. Prepare your project image in advance by
-      # putting all your runtime dependencies in the image.
-      base: "fpco/stack-run"
+#   # You need a `containers` yaml section for `stack image container`.
+#   # A `container` section that does not contain a list is also valid.
+#   containers:
 
-      # You can optionally name the image. Stack will use the project
-      # directory name if you leave out this option.
-      name: "aleryo/pet-store"
+#     # This example just has one container.
+#     -
+#       # You need a base image name. Stack layers exes on top of
+#       # the base image. Prepare your project image in advance by
+#       # putting all your runtime dependencies in the image.
+#       base: "fpco/stack-run"
 
-      # Optionally specify a list of executables. Stack will create
-      # a tagged image for each in the list. these images will have
-      # their respective "ENTRYPOINT" set.
-      entrypoints:
-        - driver-petstore-v1
-        - mock-petstore-v1
-        - driver-petstore
-        - mock-petstore
+#       # You can optionally name the image. Stack will use the project
+#       # directory name if you leave out this option.
+#       name: "aleryo/pet-store"
+
+#       # Optionally specify a list of executables. Stack will create
+#       # a tagged image for each in the list. these images will have
+#       # their respective "ENTRYPOINT" set.
+#       entrypoints:
+#         - driver-petstore-v1
+#         - mock-petstore-v1
+#         - driver-petstore
+#         - mock-petstore

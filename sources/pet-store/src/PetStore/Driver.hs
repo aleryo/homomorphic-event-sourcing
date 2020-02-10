@@ -66,7 +66,7 @@ runTestDriver serverHost serverPort = do
     b' <- run $ do
       mgr <- newManager defaultManagerSettings
       let url = BaseUrl Http serverHost serverPort ""
-          env = ClientEnv mgr url
+          env = ClientEnv mgr url Nothing
 
       flip runReaderT env $ testSUT (init :: PetStore) (T trace)
 

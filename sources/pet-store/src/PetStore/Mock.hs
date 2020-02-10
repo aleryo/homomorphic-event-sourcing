@@ -25,9 +25,9 @@ startMockServer :: Int -> IO ()
 startMockServer port = do
   store <- newMVar (PetStore [] [])
   putStrLn $ "starting mock HTTP PetStore on port " <> show port
-  void $ run port $ logStdoutDev $ (serve devPetStoreApi $ enter (runServer store)  handler)
+  void $ run port $ logStdoutDev $ (serve devPetStoreApi $ hoistServer devPetStoreApi (runServer store)  handler)
     where
-      runServer store = NT $ Handler . flip runReaderT store
+      runServer store = Handler . flip runReaderT store
 
       handler = (listPets :<|> addPet :<|> removePet
                 :<|> login :<|> logout :<|> addToBasket :<|> removeFromBasket :<|> checkout :<|> listBasket)
