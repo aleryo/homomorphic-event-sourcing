@@ -17,6 +17,7 @@ import           Network.Wai.Handler.Warp                  (run)
 import           Network.Wai.Middleware.RequestLogger
 import           Network.Wai.Middleware.RequestLogger.JSON
 import           PetStore.Api
+import           PetStore.CORS
 import           PetStore.Handler
 import           PetStore.Store
 import           PetStore.Swagger
@@ -27,7 +28,7 @@ startServer devMode port = do
   putStrLn $ "Starting PetStore Server: " <> show port
   store <- makeStore
   logger <- doLog devMode
-  void $ run port $ logger $ server store devMode
+  void $ run port $ logger $ handleCors $ server store devMode
     where
       doLog _ = mkRequestLogger $ def { outputFormat = CustomOutputFormatWithDetails formatAsJSON }
 

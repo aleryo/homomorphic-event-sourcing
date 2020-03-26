@@ -17,6 +17,7 @@ import qualified IOAutomaton                          as A
 import           Network.Wai.Handler.Warp             (run)
 import           Network.Wai.Middleware.RequestLogger
 import           PetStore.Api
+import           PetStore.CORS
 import           PetStore.Messages
 import           PetStore.Model
 import           Servant
@@ -25,7 +26,7 @@ startMockServer :: Int -> IO ()
 startMockServer port = do
   store <- newMVar (PetStore [] [])
   putStrLn $ "starting mock HTTP PetStore on port " <> show port
-  void $ run port $ logStdoutDev $ (serve devPetStoreApi $ hoistServer devPetStoreApi (runServer store)  handler)
+  void $ run port $ logStdoutDev $ handleCors $ (serve devPetStoreApi $ hoistServer devPetStoreApi (runServer store)  handler)
     where
       runServer store = Handler . flip runReaderT store
 

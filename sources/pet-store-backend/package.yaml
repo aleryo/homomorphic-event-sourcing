@@ -2,6 +2,10 @@ name: pet-store-backend
 synopsis:  A Simple event-sourced server for Pet Store
 ghc-options: -Wall -fno-warn-orphans
 
+default-extensions:
+  - OverloadedStrings
+  - RecordWildCards
+  - ScopedTypeVariables
 
 library:
   source-dirs: src
@@ -22,16 +26,15 @@ library:
     - swagger2
     - text
     - time
+    - wai
     - wai-extra
+    - wai-cors
     - warp
   exposed-modules:
     - PetStore.Api
     - PetStore.Messages
     - PetStore.Server
-  default-extensions:
-    - OverloadedStrings
-    - RecordWildCards
-    - ScopedTypeVariables
+    - PetStore.CORS
 
 executables:
   pet-store-server:
@@ -48,6 +51,7 @@ executables:
       - http-types
       - mtl
       - network
+      - optparse-applicative
       - pet-store-backend
       - random
       - servant
